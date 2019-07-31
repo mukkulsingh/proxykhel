@@ -12,11 +12,15 @@ class UpcomingMatchModel{
   }
 
   Future<MatchData> fetchUpcomingMatch() async {
-    print('function called');
-    http.Response response = await http.get("https://proxykhel.com/android/upcomingmatch.php");
+    http.Response response = await http.post("https://www.proxykhel.com/android/upcomingmatch.php",
+    body: {
+      "type":"getMatches"
+    });
     if(response.statusCode == 200){
       final res = json.decode(response.body);
-      if(res['success']==true){
+      print(res);
+
+      if(res['success']== 'true' ){
         MatchData matchData = matchDataFromJson(response.body);
         return matchData;
       }

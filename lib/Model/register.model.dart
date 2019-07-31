@@ -20,6 +20,7 @@ class Model{
 
     http.Response response = await http.post(url,body:{'fullName':fullName, 'emailId':emailOrPhone,'password':password});
     if(response.statusCode == 200){
+
       final res = json.decode(response.body);
       if(res == 'invalidPhone'){
         return 1;
@@ -28,6 +29,7 @@ class Model{
         return 2;
       }
       else if(res['success'] == true){
+        print('here');
         final pref = await SharedPreferences.getInstance();
         register = registerFromJson(response.body);
         pref.setString('username', register.emailId);

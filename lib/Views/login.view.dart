@@ -15,6 +15,8 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController _username = new TextEditingController();
   TextEditingController _password = new TextEditingController();
 
+  static bool _isTextObsecured = false;
+
   bool _isLoading = false;
   String msg='';
 
@@ -22,6 +24,13 @@ class _LoginScreenState extends State<LoginScreen> {
   String endPointLogin ='android/final.php';
 
 
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _isTextObsecured = false;
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -101,6 +110,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             margin: const EdgeInsets.only(top: 20,left: 30.0,right: 30.0),
                             child: new TextField(
                               controller: _username,
+                              onChanged: (value){
+                                setState(() {
+                                  msg='';
+                                });
+                              },
                               decoration: InputDecoration(
                                   hintText: 'Phone Number OR Email Id',
                                   hintStyle: new TextStyle(fontWeight: FontWeight.bold),
@@ -114,9 +128,19 @@ class _LoginScreenState extends State<LoginScreen> {
                           new Container(
                             margin: const EdgeInsets.only(top: 20,left: 30.0,right: 30.0),
                             child: new TextField(
-                              obscureText: true,
+                              obscureText: _isTextObsecured,
+                              onChanged: (value){
+                                setState(() {
+                                  msg='';
+                                });
+                              },
                               controller: _password,
                               decoration: InputDecoration(
+                                  suffixIcon: IconButton(icon: Icon(Icons.remove_red_eye),onPressed: (){
+                                    setState(() {
+                                      _isTextObsecured = !_isTextObsecured;
+                                    });
+                                  },),
                                   hintText: 'Password',
                                   hintStyle: new TextStyle(fontWeight: FontWeight.bold),
                                   border: OutlineInputBorder(
@@ -142,26 +166,39 @@ class _LoginScreenState extends State<LoginScreen> {
                                     onPressed: () async  {
                                       var connectivityResult = await (Connectivity().checkConnectivity());
                                       if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
-                                        setState(() {
-                                          _isLoading = true;
-                                        });
+                                        if(_username.text != '' && _username.text != null && _password.text != '' && _password.text != null){
 
-                                        bool isLogin = await Controller.instance.loginRequest(BASE_URL+endPointLogin, _username.text, _password.text);
-                                        print(isLogin);
-                                        if(isLogin){
-                                          Navigator.pushAndRemoveUntil(context, SlideLeftRoute(widget:Dashboard()),(Route<dynamic> route)=>false);
+                                          setState(() {
+                                            _isLoading = true;
+                                          });
+
+                                          bool isLogin = await Controller.instance.loginRequest(BASE_URL+endPointLogin, _username.text, _password.text);
+
+                                          if(isLogin){
+                                            Navigator.pushAndRemoveUntil(context, SlideLeftRoute(widget:Dashboard()),(Route<dynamic> route)=>false);
+                                          }
+                                          else{
+                                            msg = 'Invalid username or password';
+                                          }
+                                          setState(() {
+                                            _password.clear();
+                                            _isLoading=false;
+                                          });
                                         }
                                         else{
-                                          msg = 'Invalid username or password';
+                                          setState(() {
+                                            msg = 'Username or Password can not be empty';
+                                          });
                                         }
-                                        setState(() {
-                                          _password.clear();
-                                          _isLoading=false;
-                                        });
+
                                       } else if (connectivityResult == ConnectivityResult.none) {
+                                        setState(() {
+                                          msg = '';
+                                        });
                                         final snackBar = SnackBar(
                                             content: Text('No internet connection'));
                                         Scaffold.of(context).showSnackBar(snackBar);
+
                                       }
 
 
