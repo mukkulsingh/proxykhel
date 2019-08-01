@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import './../temp/createContest.dart';
+import './../Views/createcontest.view.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import './../Model/upcomingmatches.model.dart';
+import './../Constants/slideTransitions.dart';
 
 class TabBarCricket extends StatefulWidget {
 
@@ -12,6 +13,7 @@ class TabBarCricket extends StatefulWidget {
 class _TabBarCricketState extends State<TabBarCricket> {
 
 
+  String timeRemaining = '';
 
   MatchData matchData = null;
   final RefreshController _matchController  = RefreshController();
@@ -25,111 +27,93 @@ class _TabBarCricketState extends State<TabBarCricket> {
     });
   }
 
+  void convertDateFromString(String matchDate){
+    final matchDatee = DateTime.parse(matchDate);
+    Duration difference = matchDatee.difference(DateTime.now());
+    String d = difference.toString();
+
+    String d1 = d.replaceFirst(':', ' h ');
+//    String d2  = d1.replaceFirst(':', "Min ");
+    List l1 = d1.split(':');
+    String d2 = l1[0].toString();
+    String finalDuration = d2+" m left";
+    timeRemaining = finalDuration;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SmartRefresher(
-      controller: _matchController,
-      header: defaultHeader,
-      onRefresh: ()async{
-        await Future.delayed(Duration(milliseconds: 10),_loadData);
-        _matchController.refreshCompleted();
-        _matchController.loadComplete();
-      },
-      enablePullDown: true,
-      child: FutureBuilder<MatchData>(
-        future: UpcomingMatchModel.instance.fetchUpcomingMatch(),
-        builder: (context, snapshot){
-          if(snapshot.connectionState != ConnectionState.done){
-            return new Center(child: new CircularProgressIndicator(),);
-          }
 
-          else if(!snapshot.hasData)  {
-            return new Center(child: Container(margin:EdgeInsets.only(top:
-            200.0),child: new Text('No match')));
-          }
-          else
-            return ListView.builder(
-              itemCount: snapshot.data.matchData.length,
-              itemBuilder: (BuildContext contex,int index){
-                return Container(
-                  margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                  height: 100,
-                  child: InkWell(
-                    onTap: () {
+    return FutureBuilder<MatchData>(
+      future: UpcomingMatchModel.instance.fetchUpcomingMatch(),
+      builder: (context, snapshot){
+        if(snapshot.connectionState != ConnectionState.done){
+          return new Center(child: new CircularProgressIndicator(),);
+        }
+
+        else if(!snapshot.hasData)  {
+          return new Center(child: Container(margin:EdgeInsets.only(top:
+          100.0),child: new Text('No match')));
+        }
+        else
+          return ListView.builder(
+            itemCount: snapshot.data.matchData.length,
+            itemBuilder: (BuildContext contex,int index){
+              String matchDateTime = snapshot.data.matchData[index].matchDateTime;
+              String formattedMatchDateTime = matchDateTime.replaceAll('/', '-');
+              convertDateFromString(formattedMatchDateTime);
+              return Container(
+                margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                height: 120,
+                child: InkWell(
+                  onTap: () {
+                    if(snapshot.data.matchData[index].visibility == '1'){
                       Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => CreateContest()));
-                    },
-                    child: new Card(
-                      elevation: 4,
-                      child: new Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                          SlideLeftRoute(
+                              widget: CreateContest(matchId: snapshot.data.matchData[index].id,)));
+                    }
+                    else{
+                      final snackbar = new SnackBar(content: Text('Match inactive'));
+                      Scaffold.of(context).showSnackBar(snackbar);
+                    }
+                  },
+                  child: new Card(
+                    elevation: 4,
+                    child: new Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        new Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
-                              new Image.asset(
-                                'assets/images/odi-logo.png',
-                                height: 55.0,
-                              )
-                            ],
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              new Image.asset(
-                                'assets/images/eng.png',
-                                width: 55.0,
-                                height: 55.0,
+                              new Column(
+                                children: <Widget>[
+                                  new Image(image: NetworkImage('https://www.proxykhel.com/public/teamLogo/'+snapshot.data.matchData[index].team1Image),height: 80,width: 80,),
+                                  new Text(snapshot.data.matchData[index].team1Name),
+                                ],
                               ),
-                              new Text('ENG')
-                            ],
-                          ),
-                          new SizedBox(
-                            width: 10.0,
-                          ),
-                          new Text(
-                            '2h 11m 7s',
-                            style: TextStyle(color: Colors.deepOrange),
-                          ),
-                          new SizedBox(
-                            width: 10.0,
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              new Image.asset(
-                                'assets/images/ind.png',
-                                width: 55.0,
-                                height: 55.0,
+                              new Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  new Text(timeRemaining,style: TextStyle(fontSize: 12.0,color: Colors.deepOrange,fontWeight: FontWeight.w900),),
+                                ],
                               ),
-                              new Text('IND')
-                            ],
-                          ),
-                          new SizedBox(
-                            width: 10.0,
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              new Text('Contest'),
-                              new Text(
-                                '20+',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              )
-                            ],
-                          ),
-//                          new Text('Context 20+'),
-                        ],
-                      ),
+                              new Column(
+                                children: <Widget>[
+                                  new Image(image: NetworkImage('https://www.proxykhel.com/public/teamLogo/'+snapshot.data.matchData[index].team2Image),height: 80,width: 80,),
+                                  new Text(snapshot.data.matchData[index].team2Name),
+                                ],
+                              ),
+                            ]
+                        ),
+                      ],
                     ),
                   ),
-                );
-              },
-            );
-        },
-      ),
+                ),
+              );
+            },
+          );
+      },
     );
   }
 }

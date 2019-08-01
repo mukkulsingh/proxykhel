@@ -1,8 +1,25 @@
 import 'package:flutter/material.dart';
 import './../main.dart';
 import './../Constants/theme.dart' as Theme;
+import './bottomnavbar.view.dart';
+import './../Constants/slideTransitions.dart';
+import './createteam.view.dart';
 
-class ContestDetails extends StatelessWidget {
+class ContestDetail extends StatefulWidget {
+  String contestId;
+  ContestDetail({@required this.contestId});
+  @override
+  _ContestDetailState createState() => _ContestDetailState();
+}
+
+class _ContestDetailState extends State<ContestDetail> {
+  static String contestId;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    contestId = widget.contestId;
+  }
   @override
   Widget build(BuildContext context) {
     void _showDialog() {
@@ -125,7 +142,7 @@ class ContestDetails extends StatelessWidget {
                                   width: 85,
                                   margin: EdgeInsets.all(8.0),
                                   child: new FlatButton(onPressed: (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>ContestDetails()));
+                                    Navigator.push(context, SlideLeftRoute(widget:CreateTeam()));
                                   },
                                     color: Colors.deepOrange,
                                     shape: RoundedRectangleBorder(
@@ -312,39 +329,7 @@ class ContestDetails extends StatelessWidget {
           ],
 
         ),
-        bottomNavigationBar:
-        BottomNavigationBar(items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.games,
-              color: Colors.black,
-            ),
-            title: Text(
-              'Games',
-              style: TextStyle(color: Colors.black, fontSize: 16.0),
-            ),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.input,
-              color: Colors.grey,
-            ),
-            title: Text(
-              'My contest',
-              style: TextStyle(color: Colors.grey, fontSize: 16.0),
-            ),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.notifications_active,
-              color: Colors.grey,
-            ),
-            title: Text(
-              'Notification',
-              style: TextStyle(color: Colors.grey, fontSize: 16.0),
-            ),
-          ),
-        ]),
+        bottomNavigationBar: BottomNavBar(),
       ),
     );
   }

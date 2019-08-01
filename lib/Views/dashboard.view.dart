@@ -8,8 +8,6 @@ import './tabBarHockey.view.dart';
 import './../Model/logout.model.dart';
 import './../Constants/slideTransitions.dart';
 import './../Views/login.view.dart';
-import './../Model/upcomingmatches.model.dart';
-
 void main() => runApp(Dashboard());
 
 class Dashboard extends StatefulWidget {
@@ -32,8 +30,7 @@ class _DashboardState extends State<Dashboard> {
 
 
 
-    void _showDialog(String title, String content) {
-      // flutter defined function
+    void _showLogoutDialog(String title, String content) {
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -79,14 +76,24 @@ class _DashboardState extends State<Dashboard> {
                       Icons.account_balance_wallet,
                       color: Colors.white,
                     )),
-                new IconButton(
-                    icon: Icon(
-                      Icons.exit_to_app,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
-                      _showDialog('Warning','You sure you want to logout?');
-                    })
+          new PopupMenuButton<int>(
+            icon: Icon(Icons.menu,color: Colors.white,),
+            itemBuilder: (context)=>[PopupMenuItem<int>(
+              value:1,
+              child: new Text('My Profile'),),
+              PopupMenuItem<int>(
+                value: 2,
+                child: new Text('Logout'),
+              ),
+            ],
+            onSelected: (value)async{
+              if(value == 2){
+                _showLogoutDialog('Warning','You sure you want to logout?');
+//
+              }
+            } ,
+          ),
+
               ],
               bottom: TabBar(
                 labelColor: Colors.white,

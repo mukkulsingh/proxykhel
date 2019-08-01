@@ -8,13 +8,9 @@ class BottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     int _selectedIndex = 0;
-
-
     void _onItemTapped(int index) {
       if (index == 0 && index == prevIndex){
-
       }
       else if (index == 0 && index < prevIndex) {
         Navigator.pushAndRemoveUntil(context,SlideRightRoute(widget:Dashboard()), (Route<dynamic> route)=>false);

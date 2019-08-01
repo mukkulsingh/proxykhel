@@ -29,7 +29,6 @@ class Model{
         return 2;
       }
       else if(res['success'] == true){
-        print('here');
         final pref = await SharedPreferences.getInstance();
         register = registerFromJson(response.body);
         pref.setString('username', register.emailId);

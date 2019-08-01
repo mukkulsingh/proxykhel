@@ -18,8 +18,6 @@ class UpcomingMatchModel{
     });
     if(response.statusCode == 200){
       final res = json.decode(response.body);
-      print(res);
-
       if(res['success']== 'true' ){
         MatchData matchData = matchDataFromJson(response.body);
         return matchData;

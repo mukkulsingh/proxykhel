@@ -27,6 +27,7 @@ dependencies:
   http: any
   connectivity: any
   pull_to_refresh: ^1.4.5
+  date_format: any
 
 dev_dependencies:
   flutter_test:

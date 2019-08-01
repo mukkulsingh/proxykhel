@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './../Constants//theme.dart' as Theme;
+import './../Constants/theme.dart' as Theme;
 import './../main.dart';
 import './bottomnavbar.view.dart';
 

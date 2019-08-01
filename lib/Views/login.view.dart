@@ -15,7 +15,7 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController _username = new TextEditingController();
   TextEditingController _password = new TextEditingController();
 
-  static bool _isTextObsecured = false;
+  static bool _isTextObsecured;
 
   bool _isLoading = false;
   String msg='';
@@ -29,7 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _isTextObsecured = false;
+    _isTextObsecured = true;
   }
   @override
   Widget build(BuildContext context) {
