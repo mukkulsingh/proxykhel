@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dashboard.view.dart';
 import './../Constants/theme.dart' as Theme;
-import './contestdetail.view.dart';
 import './bottomnavbar.view.dart';
 import './../Model/logout.model.dart';
 import './../Constants/slideTransitions.dart';

@@ -8,6 +8,7 @@ import './tabBarHockey.view.dart';
 import './../Model/logout.model.dart';
 import './../Constants/slideTransitions.dart';
 import './../Views/login.view.dart';
+
 void main() => runApp(Dashboard());
 
 class Dashboard extends StatefulWidget {

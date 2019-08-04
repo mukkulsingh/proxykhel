@@ -4,21 +4,21 @@ import './../Constants/theme.dart' as Theme;
 import './bottomnavbar.view.dart';
 import './../Constants/slideTransitions.dart';
 import './createteam.view.dart';
+import './../Views/tabBarMega.view.dart';
 
 class ContestDetail extends StatefulWidget {
-  String contestId;
-  ContestDetail({@required this.contestId});
+
+
   @override
   _ContestDetailState createState() => _ContestDetailState();
 }
 
 class _ContestDetailState extends State<ContestDetail> {
-  static String contestId;
+  ContestData contestData;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    contestId = widget.contestId;
   }
   @override
   Widget build(BuildContext context) {
