@@ -29,6 +29,8 @@ class Model{
         account = userAccountFromJson(response.body);
         if (account != null){
           pref.setString('emailId', account.emailId);
+          pref.setString('userId', account.id);
+          pref.setString('username', account.username);
           return true;
         }
         else{

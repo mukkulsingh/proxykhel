@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import './../Views/tabBarMega.view.dart';
 import './../Views/tabBarHtoH.view.dart';
 import './../Views/tabBarPartial.view.dart';
+
 class ContestDetailModel {
   static ContestDetailModel _instance;
   static ContestDetailModel get instance{
@@ -10,6 +11,14 @@ class ContestDetailModel {
       _instance = new ContestDetailModel();
     }
     return _instance;
+  }
+  static String contestDuration;
+  void setContestDuration(String  duration){
+    contestDuration = duration;
+  }
+
+  String getContestDuration(){
+    return contestDuration;
   }
 
   ContestData contestDetailModel;

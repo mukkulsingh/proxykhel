@@ -5,6 +5,8 @@ import './bottomnavbar.view.dart';
 import './../Constants/slideTransitions.dart';
 import './createteam.view.dart';
 import './../Views/tabBarMega.view.dart';
+import './../Model/contestdetail.model.dart';
+
 
 class ContestDetail extends StatefulWidget {
 
@@ -79,7 +81,7 @@ class _ContestDetailState extends State<ContestDetail> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   new Text('IND vs NZ',style: TextStyle(color: Colors.white),),
-                  new Text('19h 32m 42s',style: TextStyle(color: Colors.white),),
+                  new Text(ContestDetailModel.instance.getContestDuration(),style: TextStyle(color: Colors.white),),
                   new Text('(ODI)',style: TextStyle(color: Colors.white),),
                 ],
               ),

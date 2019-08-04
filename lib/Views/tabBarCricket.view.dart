@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import './../Views/createcontest.view.dart';
 import './../Model/upcomingmatches.model.dart';
 import './../Constants/slideTransitions.dart';
+import './../Model/contestdetail.model.dart';
 
 class TabBarCricket extends StatefulWidget {
 
@@ -26,7 +27,7 @@ class _TabBarCricketState extends State<TabBarCricket> {
 //    });
 //  }
 
-  void convertDateFromString(String matchDate){
+  String convertDateFromString(String matchDate){
     final matchDatee = DateTime.parse(matchDate);
     Duration difference = matchDatee.difference(DateTime.now());
     String d = difference.toString();
@@ -37,6 +38,7 @@ class _TabBarCricketState extends State<TabBarCricket> {
     String d2 = l1[0].toString();
     String finalDuration = d2+" m left";
     timeRemaining = finalDuration;
+    return timeRemaining;
   }
 
   @override
@@ -61,7 +63,7 @@ class _TabBarCricketState extends State<TabBarCricket> {
           else
             return ListView.builder(
               itemCount: snapshot.data.matchData.length,
-              itemBuilder: (BuildContext contex,int index){
+              itemBuilder: (BuildContext context,int index){
                 String matchDateTime = snapshot.data.matchData[index].matchDateTime;
                 String formattedMatchDateTime = matchDateTime.replaceAll('/', '-');
                 convertDateFromString(formattedMatchDateTime);
@@ -71,6 +73,10 @@ class _TabBarCricketState extends State<TabBarCricket> {
                   child: InkWell(
                     onTap: () {
                       if(snapshot.data.matchData[index].visibility == '1'){
+                        String matchDateTime = snapshot.data.matchData[index].matchDateTime;
+                        String formattedMatchDateTime = matchDateTime.replaceAll('/', '-');
+                        ContestDetailModel.instance.setContestDuration(convertDateFromString(formattedMatchDateTime)
+                        );
                         Navigator.push(
                             context,
                             SlideLeftRoute(
