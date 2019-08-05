@@ -75,8 +75,10 @@ class _TabBarCricketState extends State<TabBarCricket> {
                       if(snapshot.data.matchData[index].visibility == '1'){
                         String matchDateTime = snapshot.data.matchData[index].matchDateTime;
                         String formattedMatchDateTime = matchDateTime.replaceAll('/', '-');
-                        ContestDetailModel.instance.setContestDuration(convertDateFromString(formattedMatchDateTime)
-                        );
+                        ContestDetailModel.instance.setContestDuration(convertDateFromString(formattedMatchDateTime));
+                        ContestDetailModel.instance.setMatchId(snapshot.data.matchData[index].id);
+                        ContestDetailModel.instance.setTeam1Name(snapshot.data.matchData[index].team1Name);
+                        ContestDetailModel.instance.setTeam2Name(snapshot.data.matchData[index].team2Name);
                         Navigator.push(
                             context,
                             SlideLeftRoute(

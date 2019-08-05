@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import './../main.dart';
-import './../Constants/theme.dart' as Theme;
+import 'profile.view.dart';
+import './../Views/wallet.view.dart';
 import './bottomnavbar.view.dart';
 import './../Constants/slideTransitions.dart';
 import './createteam.view.dart';
 import './../Views/tabBarMega.view.dart';
+import './../Model/logout.model.dart';
 import './../Model/contestdetail.model.dart';
-
+import './../Views/login.view.dart';
 
 class ContestDetail extends StatefulWidget {
 
@@ -24,6 +25,37 @@ class _ContestDetailState extends State<ContestDetail> {
   }
   @override
   Widget build(BuildContext context) {
+
+    void _showLogoutDialog(String title, String content) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          // return object of type Dialog
+          return AlertDialog(
+            title: new Text(title),
+            content: new Text(content),
+            actions: <Widget>[
+              // usually buttons at the bottom of the dialog
+              new FlatButton(
+                child: new Text("Yes"),
+                onPressed: () async {
+                  await LogoutModel.instance.logoutRequest();
+                  Navigator.of(context).pushAndRemoveUntil(SlideRightRoute(widget: LoginScreen()), (Route<dynamic> route)=>false);
+                },
+              ),
+              new FlatButton(
+                child: new Text("no"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+
+
     void _showDialog() {
       // flutter defined function
       showDialog(
@@ -46,11 +78,11 @@ class _ContestDetailState extends State<ContestDetail> {
         },
       );
     }
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: Theme.ProxykhelThemeData,
-      home: Scaffold(
+    return Scaffold(
         appBar: new AppBar(
+          iconTheme: IconThemeData(
+            color: Colors.white,
+          ),
           title: Text('CONTEST DETAILS',style: TextStyle(fontSize: 16.0,color: Colors.white),),
           actions: <Widget>[
             new IconButton(
@@ -58,17 +90,29 @@ class _ContestDetailState extends State<ContestDetail> {
                 Icons.account_balance_wallet,
                 color: Colors.white,
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context,SlideLeftRoute(widget: Wallet()));
+              },
             ),
-            new IconButton(
-                icon: Icon(
-                  Icons.exit_to_app,
-                  color: Colors.white,
+            new PopupMenuButton<int>(
+              icon: Icon(Icons.menu,color: Colors.white,),
+              itemBuilder: (context)=>[PopupMenuItem<int>(
+                value:1,
+                child: new Text('My Profile'),),
+                PopupMenuItem<int>(
+                  value: 2,
+                  child: new Text('Logout'),
                 ),
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Login()));
-                })
+              ],
+              onSelected: (value)async{
+                if(value == 2){
+                  _showLogoutDialog('Warning','You sure you want to logout?');
+                }
+                else if(value == 1){
+                  Navigator.push(context,SlideLeftRoute(widget: Profile()));
+                }
+              } ,
+            )
           ],
         ),
         body: new Column(
@@ -332,7 +376,6 @@ class _ContestDetailState extends State<ContestDetail> {
 
         ),
         bottomNavigationBar: BottomNavBar(),
-      ),
-    );
+      );
   }
 }

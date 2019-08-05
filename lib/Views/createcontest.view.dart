@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './../Constants/theme.dart' as Theme;
+import 'wallet.view.dart';
 import './bottomnavbar.view.dart';
 import './../Model/logout.model.dart';
 import './../Constants/slideTransitions.dart';
@@ -7,6 +7,7 @@ import './login.view.dart';
 import './tabBarMega.view.dart';
 import './tabBarHtoH.view.dart';
 import './tabBarPartial.view.dart';
+import 'profile.view.dart';
 
 class CreateContest extends StatelessWidget {
 
@@ -117,15 +118,17 @@ class CreateContest extends StatelessWidget {
         },
       );
     }
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: Theme.ProxykhelThemeData,
-      home: DefaultTabController(length: 3,
+    return  DefaultTabController(length: 3,
         child: new Scaffold(
           appBar: new AppBar(
+            iconTheme: IconThemeData(
+              color: Colors.white,
+            ),
             title: Text('CONTEST CREATE',style: TextStyle(fontSize: 16.0,color: Colors.white),),
             actions: <Widget>[
-              new IconButton(icon: Icon(Icons.account_balance_wallet,color: Colors.white,),onPressed: (){},),
+              new IconButton(icon: Icon(Icons.account_balance_wallet,color: Colors.white,),onPressed: (){
+                Navigator.push(context,SlideLeftRoute(widget: Wallet()));
+              },),
 //
               new PopupMenuButton<int>(
                 icon: Icon(Icons.menu,color: Colors.white,),
@@ -140,6 +143,9 @@ class CreateContest extends StatelessWidget {
                 onSelected: (value)async{
                     if(value == 2){
                       _showLogoutDialog('Warning','You sure you want to logout?');
+                    }
+                    else if(value == 1){
+                      Navigator.push(context,SlideLeftRoute(widget: Profile()));
                     }
                 } ,
               )
@@ -160,105 +166,12 @@ class CreateContest extends StatelessWidget {
             ),
           ),
           body: TabBarView(children: [
-//            new Column(
-//              crossAxisAlignment: CrossAxisAlignment.stretch,
-//              children: <Widget>[
-//                Container(
-//                  margin:EdgeInsets.all(10.0),
-//                  child: new Text('upto 70% Winner',),
-//                ),
-//                new Container(
-//                  height: 110,
-//                  margin: EdgeInsets.all(8.0),
-//                  child: new Card(
-//                    child: new Column(
-//                      children: <Widget>[
-//                        LinearProgressIndicator(
-//                          value: 0.5,
-//                          backgroundColor: Colors.grey[300],
-//                        ),
-//                        new Column(
-//                          crossAxisAlignment: CrossAxisAlignment.stretch,
-//                          children: <Widget>[
-//                            new Row(
-//                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-//                              children: <Widget>[
-//                                Padding(
-//                                  padding: const EdgeInsets.all(8.0),
-//                                  child: new Column(
-//                                    mainAxisAlignment: MainAxisAlignment.center,
-//                                    children: <Widget>[
-//                                      new CircleAvatar(
-//                                        radius: 10.0,
-//                                        backgroundColor: Colors.deepOrange,
-//                                        child: new Text('M',style: TextStyle(color:Colors.white,fontSize: 10),),
-//                                      ),
-//                                      new InkWell(
-//                                          onTap: _showDialogWinningBreakdown,
-//                                          child:new Row(
-//                                            children: <Widget>[
-//                                              new Text('Winning'),
-//                                              new Icon(Icons.arrow_drop_down),
-//                                            ],
-//                                          )
-//                                      ),
-//                                      new Text('Rs. 0'),
-//                                    ],
-//                                  ),
-//                                ),
-//                                new Column(
-//                                  mainAxisAlignment: MainAxisAlignment.center,
-//                                  children: <Widget>[
-//                                    new Text('Winners'),
-//                                    new Text('3',style: TextStyle(fontWeight: FontWeight.bold),),
-//                                  ],
-//                                ),
-//                                Column(
-//                                  mainAxisAlignment: MainAxisAlignment.center,
-//                                  children: <Widget>[
-//                                    Padding(
-//                                      padding: const EdgeInsets.only(left:12.0),
-//                                      child: new Text('5/100 Joined',style: TextStyle(fontSize: 12.0),),
-//                                    ),
-//                                  ],
-//                                ),
-//                                new Column(
-//                                  mainAxisAlignment: MainAxisAlignment.center,
-//                                  children: <Widget>[
-//                                    new Text('Entry'),
-//                                    Padding(
-//                                      padding: EdgeInsets.all(8.0),
-//                                      child: new FlatButton(onPressed: (){
-////                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>ContestDetails()));
-//                                      },
-//                                        color: Colors.deepOrange,
-//                                        shape: RoundedRectangleBorder(
-//                                            borderRadius: BorderRadius.circular(32.0)
-//                                        ),
-//                                        child: Text('free',style: TextStyle(color: Colors.white),),
-//
-//                                      ),
-//                                    ),
-//                                  ],
-//                                ),
-//
-//                              ],
-//                            )
-//                          ],
-//                        )
-//                      ],
-//                    ),
-//                  ),
-//                )
-//              ],
-//            ),
             new TabBarMega(matchId:matchId),
             new TabBarPartial(matchId:matchId),
             new TabBarHtoH(matchId: matchId)
           ]),
           bottomNavigationBar:BottomNavBar(),
         ),
-      ),
-    );
+      );
   }
 }

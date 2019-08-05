@@ -6,6 +6,9 @@ final ThemeData ProxykhelThemeData = new ThemeData(
   primaryColor: ProxykhelColors.orange[500],
   primaryColorBrightness: Brightness.light,
   accentColorBrightness: Brightness.light,
+  iconTheme: IconThemeData(
+    color: Colors.white,
+  )
 
 );
 

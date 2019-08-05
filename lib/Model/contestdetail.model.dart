@@ -13,12 +13,35 @@ class ContestDetailModel {
     return _instance;
   }
   static String contestDuration;
+  static String currentmatchId;
+  static String teamname1;
+  static String teamname2;
   void setContestDuration(String  duration){
     contestDuration = duration;
   }
 
+  void setMatchId(String matchId){
+    currentmatchId = matchId;
+  }
+  void setTeam1Name(String team1name){
+    teamname1 = team1name;
+  }
+
+  void setTeam2Name(String team2name){
+    teamname2 = team2name;
+  }
+  String getMatchId(){
+    return currentmatchId;
+  }
+
   String getContestDuration(){
     return contestDuration;
+  }
+  String getTeam1Name(){
+    return teamname1;
+  }
+  String getTeam2Name(){
+    return teamname2;
   }
 
   ContestData contestDetailModel;
@@ -37,7 +60,6 @@ class ContestDetailModel {
     if(response.statusCode == 200){
       final res = json.decode(response.body);
       if(res['success']==true){
-        print(res);
         return contestDetailFromJson(response.body);
       }
       else{

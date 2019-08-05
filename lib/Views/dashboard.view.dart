@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-import './../Constants/theme.dart' as Theme;
+import './../Views/wallet.view.dart';
+import './../Constants/slideTransitions.dart';
+import './../Model/logout.model.dart';
+import './../Views/login.view.dart';
 import './bottomnavbar.view.dart';
 import './tabBarCricket.view.dart';
 import './tabBarFootball.view.dart';
-import './tabBarKabaddi.view.dart';
 import './tabBarHockey.view.dart';
-import './../Model/logout.model.dart';
-import './../Constants/slideTransitions.dart';
-import './../Views/login.view.dart';
+import './tabBarKabaddi.view.dart';
+import './profile.view.dart';
 
 void main() => runApp(Dashboard());
+
 
 class Dashboard extends StatefulWidget {
   @override
@@ -17,19 +19,19 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+
+  static final navKey = new GlobalKey<NavigatorState>();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
-
-
-    _onTap(int index) {
-      print(index);
-      if (index == 1) {
-//        Navigator.push(context,
-//            MaterialPageRoute(builder: (context) => ContestNav()));
-      }
-    }
-
-
 
     void _showLogoutDialog(String title, String content) {
       showDialog(
@@ -59,67 +61,75 @@ class _DashboardState extends State<Dashboard> {
         },
       );
     }
-
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: Theme.ProxykhelThemeData,
-        home: DefaultTabController(
-          length: 4,
-          child: new Scaffold(
-            appBar: new AppBar(
-              title: new Text(
-                'CONTEST MATCH',
-                style: TextStyle(fontSize: 16.0, color: Colors.white),
-              ),
-              actions: <Widget>[
-                new IconButton(
-                    icon: Icon(
-                      Icons.account_balance_wallet,
-                      color: Colors.white,
-                    )),
-          new PopupMenuButton<int>(
-            icon: Icon(Icons.menu,color: Colors.white,),
-            itemBuilder: (context)=>[PopupMenuItem<int>(
-              value:1,
-              child: new Text('My Profile'),),
-              PopupMenuItem<int>(
-                value: 2,
-                child: new Text('Logout'),
-              ),
-            ],
-            onSelected: (value)async{
-              if(value == 2){
-                _showLogoutDialog('Warning','You sure you want to logout?');
-//
-              }
-            } ,
-          ),
-
-              ],
-              bottom: TabBar(
-                labelColor: Colors.white,
-                labelStyle: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 11.5,
+    
+    return DefaultTabController(
+            length: 4,
+            child: new Scaffold(
+              appBar: new AppBar(
+                title: new Text(
+                  'CONTEST MATCH',
+                  style: TextStyle(fontSize: 16.0, color: Colors.white),
                 ),
-                tabs: [
-                  Tab(
-                    text: 'CRICKET',
+                actions: <Widget>[
+                  new IconButton(
+                      icon: Icon(
+                    Icons.account_balance_wallet,
+                    color: Colors.white,
                   ),
-                  Tab(text: 'FOOTBALL'),
-                  Tab(text: 'KABADDI'),
-                  Tab(text: 'HOCKEY'),
+                    onPressed: (){
+                        Navigator.push(context, SlideLeftRoute(widget: Wallet()));
+                    },
+                  ),
+                  new PopupMenuButton<int>(
+                    icon: Icon(
+                      Icons.menu,
+                      color: Colors.white,
+                    ),
+                    itemBuilder: (context) => [
+                          PopupMenuItem<int>(
+                            value: 1,
+                            child: new Text('My Profile'),
+                          ),
+                          PopupMenuItem<int>(
+                            value: 2,
+                            child: new Text('Logout'),
+                          ),
+                        ],
+                    onSelected: (value) async {
+                      if (value == 2) {
+                        _showLogoutDialog(
+                            'Warning', 'You sure you want to logout?');
+                      }
+                      else if(value == 1){
+                        Navigator.push(context,SlideLeftRoute(widget: Profile()));
+                      }
+                    },
+                  ),
                 ],
+                bottom: TabBar(
+                  labelColor: Colors.white,
+                  labelStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 11.5,
+                  ),
+                  tabs: [
+                    Tab(
+                      text: 'CRICKET',
+                    ),
+                    Tab(text: 'FOOTBALL'),
+                    Tab(text: 'KABADDI'),
+                    Tab(text: 'HOCKEY'),
+                  ],
+                ),
               ),
+              body: TabBarView(children: [
+                TabBarCricket(),
+                TabBarFootball(),
+                TabBarKabaddi(),
+                TabBarHockey()
+              ]),
+              bottomNavigationBar: BottomNavBar(),
             ),
-            body: TabBarView(children: [
-              TabBarCricket(),
-              TabBarFootball(),
-              TabBarKabaddi(),
-              TabBarHockey()
-            ]),
-            bottomNavigationBar: BottomNavBar(),
-          ),
-        ));
+          );
   }
 }
