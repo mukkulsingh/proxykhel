@@ -32,6 +32,7 @@ class  CreateTeamModel{
   }
 }
 
+
 MatchTeam matchTeamFromJson(String str) => MatchTeam.fromJson(json.decode(str));
 
 String matchTeamToJson(MatchTeam data) => json.encode(data.toJson());
@@ -57,34 +58,34 @@ class MatchTeam {
 }
 
 class Data {
-  Map<String, AllRounder> allRounder;
-  Map<String, AllRounder> supperSticker;
-  Map<String, AllRounder> bowler;
-  Map<String, AllRounder> wicketKeeper;
-  Map<String, AllRounder> batsman;
+  List<AllRounder> batsman;
+  List<AllRounder> supperSticker;
+  List<AllRounder> bowler;
+  List<AllRounder> allRounder;
+  List<AllRounder> wicketKeeper;
 
   Data({
-    this.allRounder,
+    this.batsman,
     this.supperSticker,
     this.bowler,
+    this.allRounder,
     this.wicketKeeper,
-    this.batsman,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => new Data(
-    allRounder: new Map.from(json["AllRounder"]).map((k, v) => new MapEntry<String, AllRounder>(k, AllRounder.fromJson(v))),
-    supperSticker: new Map.from(json["supperSticker"]).map((k, v) => new MapEntry<String, AllRounder>(k, AllRounder.fromJson(v))),
-    bowler: new Map.from(json["Bowler"]).map((k, v) => new MapEntry<String, AllRounder>(k, AllRounder.fromJson(v))),
-    wicketKeeper: new Map.from(json["WicketKeeper"]).map((k, v) => new MapEntry<String, AllRounder>(k, AllRounder.fromJson(v))),
-    batsman: new Map.from(json["Batsman"]).map((k, v) => new MapEntry<String, AllRounder>(k, AllRounder.fromJson(v))),
+    batsman: new List<AllRounder>.from(json["Batsman"].map((x) => AllRounder.fromJson(x))),
+    supperSticker: new List<AllRounder>.from(json["supperSticker"].map((x) => AllRounder.fromJson(x))),
+    bowler: new List<AllRounder>.from(json["Bowler"].map((x) => AllRounder.fromJson(x))),
+    allRounder: new List<AllRounder>.from(json["AllRounder"].map((x) => AllRounder.fromJson(x))),
+    wicketKeeper: new List<AllRounder>.from(json["WicketKeeper"].map((x) => AllRounder.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
-    "AllRounder": new Map.from(allRounder).map((k, v) => new MapEntry<String, dynamic>(k, v.toJson())),
-    "supperSticker": new Map.from(supperSticker).map((k, v) => new MapEntry<String, dynamic>(k, v.toJson())),
-    "Bowler": new Map.from(bowler).map((k, v) => new MapEntry<String, dynamic>(k, v.toJson())),
-    "WicketKeeper": new Map.from(wicketKeeper).map((k, v) => new MapEntry<String, dynamic>(k, v.toJson())),
-    "Batsman": new Map.from(batsman).map((k, v) => new MapEntry<String, dynamic>(k, v.toJson())),
+    "Batsman": new List<dynamic>.from(batsman.map((x) => x.toJson())),
+    "supperSticker": new List<dynamic>.from(supperSticker.map((x) => x.toJson())),
+    "Bowler": new List<dynamic>.from(bowler.map((x) => x.toJson())),
+    "AllRounder": new List<dynamic>.from(allRounder.map((x) => x.toJson())),
+    "WicketKeeper": new List<dynamic>.from(wicketKeeper.map((x) => x.toJson())),
   };
 }
 
@@ -95,7 +96,6 @@ class AllRounder {
   String imageUrl;
   String credit;
   Teamname teamname;
-  MatchRole matchRole;
 
   AllRounder({
     this.id,
@@ -104,7 +104,6 @@ class AllRounder {
     this.imageUrl,
     this.credit,
     this.teamname,
-    this.matchRole,
   });
 
   factory AllRounder.fromJson(Map<String, dynamic> json) => new AllRounder(
@@ -114,7 +113,6 @@ class AllRounder {
     imageUrl: json["imageURL"],
     credit: json["credit"],
     teamname: teamnameValues.map[json["teamname"]],
-    matchRole: matchRoleValues.map[json["matchRole"]],
   );
 
   Map<String, dynamic> toJson() => {
@@ -124,31 +122,21 @@ class AllRounder {
     "imageURL": imageUrl,
     "credit": credit,
     "teamname": teamnameValues.reverse[teamname],
-    "matchRole": matchRoleValues.reverse[matchRole],
   };
 }
 
-enum Country { DINDIGUL_DRAGONS, VB_KANCHI_VEERANS }
+enum Country { KARAIKUDI_KAALAI, LYCA_KOVAI_KINGS }
 
 final countryValues = new EnumValues({
-  "Dindigul Dragons": Country.DINDIGUL_DRAGONS,
-  "VB Kanchi Veerans": Country.VB_KANCHI_VEERANS
+  "Karaikudi Kaalai": Country.KARAIKUDI_KAALAI,
+  "Lyca Kovai Kings": Country.LYCA_KOVAI_KINGS
 });
 
-enum MatchRole { ALL_ROUNDER, BATSMAN, BOWLER, WICKET_KEEPER }
-
-final matchRoleValues = new EnumValues({
-  "AllRounder": MatchRole.ALL_ROUNDER,
-  "Batsman": MatchRole.BATSMAN,
-  "Bowler": MatchRole.BOWLER,
-  "WicketKeeper": MatchRole.WICKET_KEEPER
-});
-
-enum Teamname { DD, VKV }
+enum Teamname { IND, SL }
 
 final teamnameValues = new EnumValues({
-  "DD": Teamname.DD,
-  "VKV": Teamname.VKV
+  "ind": Teamname.IND,
+  "sl": Teamname.SL
 });
 
 class EnumValues<T> {

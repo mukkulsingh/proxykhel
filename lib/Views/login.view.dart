@@ -5,6 +5,8 @@ import './register.view.dart';
 import './../Constants/slideTransitions.dart';
 import 'package:connectivity/connectivity.dart';
 import './dashboard.view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -23,6 +25,35 @@ class _LoginScreenState extends State<LoginScreen> {
   String BASE_URL ='https://www.proxykhel.com/';
   String endPointLogin ='android/final.php';
 
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn googleSignIn = GoogleSignIn();
+
+  Future<String> signInWithGoogle() async {
+    final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+    final GoogleSignInAuthentication googleSignInAuthentication =
+    await googleSignInAccount.authentication;
+
+    final AuthCredential credential = GoogleAuthProvider.getCredential(
+      accessToken: googleSignInAuthentication.accessToken,
+      idToken: googleSignInAuthentication.idToken,
+    );
+
+    final FirebaseUser user = await _auth.signInWithCredential(credential);
+
+    assert(!user.isAnonymous);
+    assert(await user.getIdToken() != null);
+
+    final FirebaseUser currentUser = await _auth.currentUser();
+    assert(user.uid == currentUser.uid);
+
+    return 'signInWithGoogle succeeded: $user';
+  }
+
+  void signOutGoogle() async{
+    await googleSignIn.signOut();
+
+    print("User Sign Out");
+  }
 
 
   @override
@@ -68,6 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         color: Colors.white,
                                         elevation: 4.0,
                                         onPressed:(){
+
                                           print('Facebook login');
                                         },
 
@@ -91,6 +123,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                         elevation: 4.0,
                                         color: Colors.white,
                                         onPressed: (){
+                                          signInWithGoogle().whenComplete(() {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (context) {
+                                                  return Dashboard();
+                                                },
+                                              ),
+                                            );
+                                          });
                                           print('google login');
                                         },
                                         child: Row(

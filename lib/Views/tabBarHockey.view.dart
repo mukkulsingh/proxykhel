@@ -29,7 +29,6 @@ class _TabBarHockeyState extends State<TabBarHockey> {
   Widget build(BuildContext context) {
     return SmartRefresher(
       controller: _matchController,
-      header: defaultHeader,
       onRefresh: ()async{
         await Future.delayed(Duration(milliseconds: 10),_loadData);
         _matchController.refreshCompleted();
