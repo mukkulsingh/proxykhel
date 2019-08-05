@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'profile.view.dart';
 import './../Constants/slideTransitions.dart';
 import './../Model/logout.model.dart';
 import './../Views/login.view.dart';
@@ -165,7 +165,9 @@ class _CreateTeamState extends State<CreateTeam> {
               onSelected: (value) async {
                 if (value == 2) {
                   _showLogoutDialog('Warning', 'You sure you want to logout?');
-//
+                }
+                else if(value == 1){
+                  Navigator.push(context, SlideLeftRoute(widget: Profile()));
                 }
               },
             ),

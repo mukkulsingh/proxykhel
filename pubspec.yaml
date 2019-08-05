@@ -28,6 +28,8 @@ dependencies:
   connectivity: any
   pull_to_refresh: ^1.4.5
   date_format: any
+  flutter_country_picker: ^0.1.4
+  country_code_picker: ^1.1.7
 
 dev_dependencies:
   flutter_test:

@@ -9,9 +9,8 @@ import './../Model/logout.model.dart';
 import './../Model/contestdetail.model.dart';
 import './../Views/login.view.dart';
 
+
 class ContestDetail extends StatefulWidget {
-
-
   @override
   _ContestDetailState createState() => _ContestDetailState();
 }
@@ -23,6 +22,7 @@ class _ContestDetailState extends State<ContestDetail> {
     // TODO: implement initState
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
 

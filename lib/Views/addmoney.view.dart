@@ -60,7 +60,6 @@ class _AddMoneyState extends State<AddMoney> {
                 child: new Text('ADD MONEY',style: TextStyle(color: Colors.white),),
               ),
             )
-
           ],
         ),
       ),
