@@ -82,10 +82,12 @@ class MatchDatum {
   String ipAddress;
   String matchFinished;
   String description;
-  String team2Name;
-  String team1Name;
+  String matchDatumTeam2Name;
+  String matchDatumTeam1Name;
   String team2Image;
   String team1Image;
+  String team1Name;
+  String team2Name;
 
   MatchDatum({
     this.id,
@@ -108,10 +110,12 @@ class MatchDatum {
     this.ipAddress,
     this.matchFinished,
     this.description,
-    this.team2Name,
-    this.team1Name,
+    this.matchDatumTeam2Name,
+    this.matchDatumTeam1Name,
     this.team2Image,
     this.team1Image,
+    this.team1Name,
+    this.team2Name,
   });
 
   factory MatchDatum.fromJson(Map<String, dynamic> json) => new MatchDatum(
@@ -135,10 +139,12 @@ class MatchDatum {
     ipAddress: json["ipAddress"],
     matchFinished: json["matchFinished"],
     description: json["description"],
-    team2Name: json["team_2_name"],
-    team1Name: json["team_1_name"],
+    matchDatumTeam2Name: json["team_2_name"],
+    matchDatumTeam1Name: json["team_1_name"],
     team2Image: json["team_2_image"],
     team1Image: json["team_1_image"],
+    team1Name: json["team1name"],
+    team2Name: json["team2name"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -162,9 +168,11 @@ class MatchDatum {
     "ipAddress": ipAddress,
     "matchFinished": matchFinished,
     "description": description,
-    "team_2_name": team2Name,
-    "team_1_name": team1Name,
+    "team_2_name": matchDatumTeam2Name,
+    "team_1_name": matchDatumTeam1Name,
     "team_2_image": team2Image,
     "team_1_image": team1Image,
+    "team1name": team1Name,
+    "team2name": team2Name,
   };
 }

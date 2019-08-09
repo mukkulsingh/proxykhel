@@ -16,16 +16,6 @@ class _TabBarCricketState extends State<TabBarCricket> {
 
   MatchData matchData = null;
 
-  //  final RefreshController _matchController  = RefreshController();
-//  Future _loadData() async {
-//    // perform fetching data delay
-//    await new Future.delayed(new Duration(seconds: 1));
-//    matchData = await UpcomingMatchModel.instance.fetchUpcomingMatch();
-//    // update data and loading status
-//    setState(() {
-//
-//    });
-//  }
 
   String convertDateFromString(String matchDate){
     final matchDatee = DateTime.parse(matchDate);
@@ -93,7 +83,7 @@ class _TabBarCricketState extends State<TabBarCricket> {
                       elevation: 4,
                       child: new Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           new Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -101,19 +91,27 @@ class _TabBarCricketState extends State<TabBarCricket> {
                                 new Column(
                                   children: <Widget>[
                                     new Image(image: NetworkImage('https://www.proxykhel.com/public/teamLogo/'+snapshot.data.matchData[index].team1Image),height: 80,width: 80,),
-                                    new Text(snapshot.data.matchData[index].team1Name),
+                                    new Text(snapshot.data.matchData[index].team1Name,style: TextStyle(fontWeight: FontWeight.bold),),
                                   ],
                                 ),
                                 new Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.end,
                                   children: <Widget>[
+//                                    new SizedBox(
+//                                      height: 30,
+//                                      width: 50,
+//                                      child: Container(
+//                                        color: Colors.deepOrange,
+//                                        child: new Text(snapshot.data.matchData[index].matchType,style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
+//                                      ),
+//                                    ),
                                     new Text(timeRemaining,style: TextStyle(fontSize: 12.0,color: Colors.deepOrange,fontWeight: FontWeight.w900),),
                                   ],
                                 ),
                                 new Column(
                                   children: <Widget>[
                                     new Image(image: NetworkImage('https://www.proxykhel.com/public/teamLogo/'+snapshot.data.matchData[index].team2Image),height: 80,width: 80,),
-                                    new Text(snapshot.data.matchData[index].team2Name),
+                                    new Text(snapshot.data.matchData[index].team2Name,style: TextStyle(fontWeight: FontWeight.bold),),
                                   ],
                                 ),
                               ]
