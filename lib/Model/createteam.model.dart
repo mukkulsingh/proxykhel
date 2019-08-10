@@ -11,7 +11,7 @@ class  CreateTeamModel{
   }
 
 
-  Future<MatchTeam> getMatchTeam(String url, String matchId, String team1name, String team2name) async {
+  Future<CreateTeamDetails> getMatchTeam(String url, String matchId, String team1name, String team2name) async {
     http.Response response = await http.post(url,body: {
       "type":"getTeam",
       "matchId":matchId,
@@ -21,7 +21,7 @@ class  CreateTeamModel{
     if(response.statusCode == 200){
       final res = json.decode(response.body);
       if(res['success']==true){
-        return matchTeamFromJson(response.body);
+        return createTeamDetailsFromJson(response.body);
       }
       else{
         return null;
@@ -33,20 +33,20 @@ class  CreateTeamModel{
 }
 
 
-MatchTeam matchTeamFromJson(String str) => MatchTeam.fromJson(json.decode(str));
+CreateTeamDetails createTeamDetailsFromJson(String str) => CreateTeamDetails.fromJson(json.decode(str));
 
-String matchTeamToJson(MatchTeam data) => json.encode(data.toJson());
+String createTeamDetailsToJson(CreateTeamDetails data) => json.encode(data.toJson());
 
-class MatchTeam {
+class CreateTeamDetails {
   bool success;
   Data data;
 
-  MatchTeam({
+  CreateTeamDetails({
     this.success,
     this.data,
   });
 
-  factory MatchTeam.fromJson(Map<String, dynamic> json) => new MatchTeam(
+  factory CreateTeamDetails.fromJson(Map<String, dynamic> json) => new CreateTeamDetails(
     success: json["success"],
     data: Data.fromJson(json["data"]),
   );

@@ -522,10 +522,13 @@ class _CreateTeamState extends State<CreateTeam> {
                     case ConnectionState.done:
                       if (snapshot.hasError)
                         return Text('Error: ${snapshot.error}');
-                      return GridView.count(
-                        crossAxisCount: 2,
-                        children: _loadCategories(),
-                      );
+                      else {
+                        print(snapshot.hasData);
+                        return GridView.count(
+                          crossAxisCount: 3,
+                          children: _loadCategories(),
+                        );
+                      }
                   }
                 }
                 ),
