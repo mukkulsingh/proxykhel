@@ -57,6 +57,7 @@ class _CreateTeamState extends State<CreateTeam> {
         color: _cardBackgroundColor,
         child: InkWell(
           onTap: (){
+            print("Card tapped");
             if(_cardBackgroundColor == Colors.deepOrange){
               _cardBackgroundColor = Colors.white;
             }
@@ -95,11 +96,11 @@ class _CreateTeamState extends State<CreateTeam> {
     return categoryCells;
   }
 
-  List<Widget> _loadCategoriesAll(List playerType) {
+  List<Widget> _loadCategoriesAll(List<dynamic> playerList) {
     print('loadCategories');
-    print(playerType);
+    print(playerList);
     List<Widget> categoryCells = [];
-    List categories = playerType;
+    List categories = playerList;
     for (int i = 0; i < categories.length; i++) {
       categoryCells.add(Card(
         child: InkWell(
@@ -636,10 +637,11 @@ class _CreateTeamState extends State<CreateTeam> {
                             List playerList = snapshot.data.data.bowler;
                             playerList.add(snapshot.data.data.batsman);
                             playerList.add(snapshot.data.data.allRounder);
+                            print(playerList);
                             return GridView.count(
                               crossAxisCount: 3,
                               children:
-                              _loadCategories(playerList),
+                              _loadCategoriesAll(playerList),
                             );
                             break;
                           case 8:
