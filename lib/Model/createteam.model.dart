@@ -2,6 +2,15 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class  CreateTeamModel{
+
+  static int _batsMan;
+  static int _bowler;
+  static int _wicketKeeper;
+  static int _allRounder;
+  static int _starPlayer;
+  static int _xPlayer;
+  static List _superFive=[];
+
   static CreateTeamModel _instance;
   static CreateTeamModel get instance{
     if(_instance == null){
@@ -9,6 +18,7 @@ class  CreateTeamModel{
     }
     return _instance;
   }
+
 
 
   Future<CreateTeamDetails> getMatchTeam(String url, String matchId, String team1name, String team2name) async {
@@ -21,6 +31,7 @@ class  CreateTeamModel{
     if(response.statusCode == 200){
       final res = json.decode(response.body);
       if(res['success']==true){
+        print(res);
         return createTeamDetailsFromJson(response.body);
       }
       else{
@@ -30,8 +41,38 @@ class  CreateTeamModel{
       return null;
     }
   }
-}
 
+
+  void setBatsman(int id){
+    _batsMan = id;
+  }
+
+  void setBowler(int id){
+    _bowler = id;
+  }
+
+  void setWicketKeeper(int id){
+    _wicketKeeper = id;
+  }
+
+  void setAllRounder(int id){
+    _allRounder = id;
+  }
+
+  void setStarPlayer(int id){
+    _starPlayer = id;
+  }
+
+  void setXPlayer(int id){
+    _xPlayer = id;
+  }
+
+  void setSuperFive(List array){
+    _superFive=array;
+  }
+
+
+}
 
 CreateTeamDetails createTeamDetailsFromJson(String str) => CreateTeamDetails.fromJson(json.decode(str));
 
@@ -58,33 +99,33 @@ class CreateTeamDetails {
 }
 
 class Data {
-  List<AllRounder> batsman;
-  List<AllRounder> supperSticker;
   List<AllRounder> bowler;
+  List<AllRounder> supperSticker;
   List<AllRounder> allRounder;
+  List<AllRounder> batsman;
   List<AllRounder> wicketKeeper;
 
   Data({
-    this.batsman,
-    this.supperSticker,
     this.bowler,
+    this.supperSticker,
     this.allRounder,
+    this.batsman,
     this.wicketKeeper,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => new Data(
-    batsman: new List<AllRounder>.from(json["Batsman"].map((x) => AllRounder.fromJson(x))),
-    supperSticker: new List<AllRounder>.from(json["supperSticker"].map((x) => AllRounder.fromJson(x))),
     bowler: new List<AllRounder>.from(json["Bowler"].map((x) => AllRounder.fromJson(x))),
+    supperSticker: new List<AllRounder>.from(json["supperSticker"].map((x) => AllRounder.fromJson(x))),
     allRounder: new List<AllRounder>.from(json["AllRounder"].map((x) => AllRounder.fromJson(x))),
+    batsman: new List<AllRounder>.from(json["Batsman"].map((x) => AllRounder.fromJson(x))),
     wicketKeeper: new List<AllRounder>.from(json["WicketKeeper"].map((x) => AllRounder.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
-    "Batsman": new List<dynamic>.from(batsman.map((x) => x.toJson())),
-    "supperSticker": new List<dynamic>.from(supperSticker.map((x) => x.toJson())),
     "Bowler": new List<dynamic>.from(bowler.map((x) => x.toJson())),
+    "supperSticker": new List<dynamic>.from(supperSticker.map((x) => x.toJson())),
     "AllRounder": new List<dynamic>.from(allRounder.map((x) => x.toJson())),
+    "Batsman": new List<dynamic>.from(batsman.map((x) => x.toJson())),
     "WicketKeeper": new List<dynamic>.from(wicketKeeper.map((x) => x.toJson())),
   };
 }
@@ -92,10 +133,10 @@ class Data {
 class AllRounder {
   String id;
   String playerName;
-  Country country;
+  String country;
   String imageUrl;
   String credit;
-  Teamname teamname;
+  String teamname;
 
   AllRounder({
     this.id,
@@ -109,34 +150,27 @@ class AllRounder {
   factory AllRounder.fromJson(Map<String, dynamic> json) => new AllRounder(
     id: json["id"],
     playerName: json["playerName"],
-    country: countryValues.map[json["country"]],
-    imageUrl: json["imageURL"],
+    country: json["country"],
+    imageUrl: json["imageURL"] == null ? null : json["imageURL"],
     credit: json["credit"],
-    teamname: teamnameValues.map[json["teamname"]],
+    teamname: json["teamname"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
     "playerName": playerName,
-    "country": countryValues.reverse[country],
-    "imageURL": imageUrl,
+    "country": country,
+    "imageURL": imageUrl == null ? null : imageUrl,
     "credit": credit,
-    "teamname": teamnameValues.reverse[teamname],
+    "teamname": teamname,
   };
 }
 
-enum Country { KARAIKUDI_KAALAI, LYCA_KOVAI_KINGS }
+enum Country { CHEPAUK_SUPER_GILLIES, DINDIGUL_DRAGONS }
 
 final countryValues = new EnumValues({
-  "Karaikudi Kaalai": Country.KARAIKUDI_KAALAI,
-  "Lyca Kovai Kings": Country.LYCA_KOVAI_KINGS
-});
-
-enum Teamname { IND, SL }
-
-final teamnameValues = new EnumValues({
-  "ind": Teamname.IND,
-  "sl": Teamname.SL
+  "Chepauk Super Gillies": Country.CHEPAUK_SUPER_GILLIES,
+  "Dindigul Dragons": Country.DINDIGUL_DRAGONS
 });
 
 class EnumValues<T> {
@@ -152,3 +186,4 @@ class EnumValues<T> {
     return reverseMap;
   }
 }
+

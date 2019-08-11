@@ -13,6 +13,8 @@ class CreateTeam extends StatefulWidget {
 }
 
 class _CreateTeamState extends State<CreateTeam> {
+  static int _playerType;
+  static Color _cardBackgroundColor=Colors.white;
   static bool _isBatsman = false;
   static bool _isBowler = false;
   static bool _isWicketee = false;
@@ -45,28 +47,82 @@ class _CreateTeamState extends State<CreateTeam> {
     );
   }
 
-  List<Widget> _loadCategories() {
+  List<Widget> _loadCategories(List playerType) {
+    print('loadCategories');
+    print(playerType);
     List<Widget> categoryCells = [];
-    List<dynamic> categories = [
-      "abhishek",
-      "vivek",
-      "abhishek",
-      "vivie",
-      "vivek",
-      "abhishek",
-      "vivie",
-      "vivek",
-      "abhishek",
-      "vivie",
-      "vivek",
-      "abhishek",
-      "vivie",
-      "vivek",
-      "abhishek",
-      "vivie",
-    ];
+    List categories = playerType;
     for (int i = 0; i < categories.length; i++) {
-      categoryCells.add(getStructuredGridCell(categories[i]));
+      categoryCells.add(Card(
+        color: _cardBackgroundColor,
+        child: InkWell(
+          onTap: (){
+            if(_cardBackgroundColor == Colors.deepOrange){
+              _cardBackgroundColor = Colors.white;
+            }
+            else{
+              _cardBackgroundColor = Colors.deepOrange;
+
+            }
+          },
+          child: Column(
+            verticalDirection: VerticalDirection.down,
+            mainAxisSize:MainAxisSize.min ,
+            children: <Widget>[
+              Expanded(
+                flex: 4,
+                child: new CircleAvatar(
+//                child: Image(image: NetworkImage("https://www.proxykhel.com/public/player/${categories[i].imageUrl}")),
+                  radius: 22.0,
+                  backgroundColor: Colors.transparent,
+                  backgroundImage: NetworkImage("https://www.proxykhel.com/public/player/${categories[i].imageUrl}"),
+                ),
+              ),
+              Expanded(flex:2,child: Padding(
+                padding: const EdgeInsets.only(top:5.0),
+                child: new Text(categories[i].playerName,textAlign: TextAlign.center,textScaleFactor: 0.8,),
+              )),
+              Expanded(flex:1,child: Divider()),
+              Expanded(flex:2,child: new Text('Cr.${categories[i].credit}'))
+            ],
+          ),
+        ),
+      ));
+//      categoryCells.add(Image(image: NetworkImage("https://www.proxykhel.com/public/player/${categories[i].imageUrl}")));
+//      categoryCells.add(getStructuredGridCell(categories[i].playerName));
+    }
+
+    return categoryCells;
+  }
+
+  List<Widget> _loadCategoriesAll(List playerType) {
+    print('loadCategories');
+    print(playerType);
+    List<Widget> categoryCells = [];
+    List categories = playerType;
+    for (int i = 0; i < categories.length; i++) {
+      categoryCells.add(Card(
+        child: InkWell(
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                flex: 4,
+                child: new CircleAvatar(
+//                child: Image(image: NetworkImage("https://www.proxykhel.com/public/player/${categories[i].imageUrl}")),
+                  radius: 22.0,
+                  backgroundColor: Colors.transparent,
+                  backgroundImage: NetworkImage("https://www.proxykhel.com/public/player/${categories[i].imageUrl}"),
+                ),
+              ),
+              Expanded(flex:2,child: new Text(categories[i].playerName,textAlign: TextAlign.center,textScaleFactor: 0.8,)),
+              Expanded(flex:1,child: Divider()),
+              Expanded(flex:2,child: new Text('Cr.${categories[i].credit}'))
+            ],
+          ),
+        ),
+      ));
+//      categoryCells.add(Image(image: NetworkImage("https://www.proxykhel.com/public/player/${categories[i].imageUrl}")));
+//      categoryCells.add(getStructuredGridCell(categories[i].playerName));
     }
 
     return categoryCells;
@@ -88,6 +144,8 @@ class _CreateTeamState extends State<CreateTeam> {
     // TODO: implement initState
     super.initState();
     _isBatsman = true;
+    _playerType = 1;
+    _cardBackgroundColor=Colors.white;
   }
 
   @override
@@ -209,6 +267,7 @@ class _CreateTeamState extends State<CreateTeam> {
                                 resetAll();
                                 setState(() {
                                   _isBatsman = true;
+                                  _playerType = 1;
                                 });
                               },
                             ),
@@ -245,6 +304,7 @@ class _CreateTeamState extends State<CreateTeam> {
                                 resetAll();
                                 setState(() {
                                   _isBowler = true;
+                                  _playerType = 2;
                                 });
                               },
                             ),
@@ -281,6 +341,7 @@ class _CreateTeamState extends State<CreateTeam> {
                                 resetAll();
                                 setState(() {
                                   _isWicketee = true;
+                                  _playerType = 3;
                                 });
                               },
                             ),
@@ -317,6 +378,7 @@ class _CreateTeamState extends State<CreateTeam> {
                                 resetAll();
                                 setState(() {
                                   _isAllrounder = true;
+                                  _playerType = 4;
                                 });
                               },
                             ),
@@ -363,6 +425,7 @@ class _CreateTeamState extends State<CreateTeam> {
                                     resetAll();
                                     setState(() {
                                       _isStarplayer = true;
+                                      _playerType = 5;
                                     });
                                   },
                                 ),
@@ -399,6 +462,7 @@ class _CreateTeamState extends State<CreateTeam> {
                                     resetAll();
                                     setState(() {
                                       _isXpplayer = true;
+                                      _playerType = 6;
                                     });
                                   },
                                 ),
@@ -435,6 +499,7 @@ class _CreateTeamState extends State<CreateTeam> {
                                     resetAll();
                                     setState(() {
                                       _isSupefive = true;
+                                      _playerType = 7;
                                     });
                                   },
                                 ),
@@ -471,6 +536,7 @@ class _CreateTeamState extends State<CreateTeam> {
                                     resetAll();
                                     setState(() {
                                       _isChoosenplayer = true;
+                                      _playerType = 8;
                                     });
                                   },
                                 ),
@@ -503,7 +569,7 @@ class _CreateTeamState extends State<CreateTeam> {
                   ContestDetailModel.instance.getTeam2Name()
                 ),
                 builder: (context,snapshot) {
-                  print(snapshot.data);
+
                   switch (snapshot.connectionState) {
 
                     case ConnectionState.none:
@@ -523,11 +589,71 @@ class _CreateTeamState extends State<CreateTeam> {
                       if (snapshot.hasError)
                         return Text('Error: ${snapshot.error}');
                       else {
-                        print(snapshot.hasData);
-                        return GridView.count(
+                        print(_playerType);
+                        switch(_playerType){
+                          case 1:
+                          return GridView.count(
                           crossAxisCount: 3,
-                          children: _loadCategories(),
-                        );
+                          children:
+                          _loadCategories(snapshot.data.data.batsman),
+                          );
+                          break;
+                          case 2:
+                            return GridView.count(
+                              crossAxisCount: 3,
+                              children:_loadCategories(snapshot.data.data.bowler),
+                            );
+                            break;
+                          case 3:
+                            return GridView.count(
+                              crossAxisCount: 3,
+                              children:
+                              _loadCategories(snapshot.data.data.wicketKeeper),
+                            );
+                            break;
+                          case 4:
+                            return GridView.count(
+                              crossAxisCount: 3,
+                              children:
+                              _loadCategories(snapshot.data.data.allRounder),
+                            );
+                            break;
+                          case 5:
+                            return GridView.count(
+                              crossAxisCount: 3,
+                              children:
+                              _loadCategories(snapshot.data.data.supperSticker),
+                            );
+                            break;
+                          case 6:
+                            return GridView.count(
+                              crossAxisCount: 3,
+                              children:
+                              _loadCategories(snapshot.data.data.supperSticker),
+                            );
+                            break;
+                          case 7:
+                            List playerList = snapshot.data.data.bowler;
+                            playerList.add(snapshot.data.data.batsman);
+                            playerList.add(snapshot.data.data.allRounder);
+                            return GridView.count(
+                              crossAxisCount: 3,
+                              children:
+                              _loadCategories(playerList),
+                            );
+                            break;
+                          case 8:
+                            return GridView.count(
+                              crossAxisCount: 3,
+                              children:
+                              _loadCategories(snapshot.data.data.supperSticker),
+                            );
+                            break;
+
+                          default:
+                            new Container();
+                            break;
+                        }
                       }
                   }
                 }
