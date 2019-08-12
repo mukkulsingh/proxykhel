@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import './../Model/wallet.model.dart';
 
 class AddMoney extends StatefulWidget {
   @override
@@ -6,6 +7,30 @@ class AddMoney extends StatefulWidget {
 }
 
 class _AddMoneyState extends State<AddMoney> {
+
+
+  static int _amountToAdd;
+  static bool _isLowBalance;
+
+  TextEditingController _amountController;
+  static bool _amountToAddError;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _amountToAdd=0;
+    _amountController = TextEditingController();
+    _amountToAddError = false;
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _amountController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,17 +53,17 @@ class _AddMoneyState extends State<AddMoney> {
               child:
               new Text('LOW BALANCE',style: TextStyle(color:Colors.black,fontWeight: FontWeight.bold,fontSize: 20.0),),
             ),
-            Column(
+        new Column(
+          children: <Widget>[
+            new Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                new Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Container(margin:EdgeInsets.only(left: 20.0),child: new Text('Current balance',style: TextStyle(color: Colors.deepOrangeAccent, fontSize: 18.0,),)),
-                    Container(margin:EdgeInsets.only(right: 10.0),child: new Text('0 Rs.',style: TextStyle(color: Colors.deepOrangeAccent,fontSize: 16.0),)),
-                  ],
-                ),
+                Container(margin:EdgeInsets.only(left: 20.0),child: new Text('Current balance',style: TextStyle(color: Colors.deepOrangeAccent, fontSize: 18.0,),)),
+                Container(margin:EdgeInsets.only(right: 10.0),child: new Text(WalletModel.instance.getBalance(),style: TextStyle(color: Colors.deepOrangeAccent,fontSize: 16.0),)),
               ],
             ),
+          ],
+        ),
             Divider(),
 
         Container(
@@ -46,17 +71,42 @@ class _AddMoneyState extends State<AddMoney> {
           child: TextField(
             decoration: InputDecoration(
                 labelText: 'Amount To Add',
-                border: OutlineInputBorder()
+                border: OutlineInputBorder(),
+              errorText: _amountToAddError ? "Invalid Amount":null,
             ),
+            onChanged: (value){
+              if(value != '') {
+                _amountToAdd = int.parse(value);
+                setState(() {
+                  _amountToAddError = false;
+                });
+              }
+              else
+              setState(() {
+                _amountToAddError = true;
+              });
+            },
             keyboardType: TextInputType.number,
           ),
         ),
 
             new Container(
+              height: 45.0,
               margin: EdgeInsets.symmetric(horizontal: 100.0),
               child: new RaisedButton(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32.0),
+                ),
                 color: Colors.deepOrange,
-                onPressed: (){},
+                onPressed: (){
+                  if(_amountToAdd == 0 || _amountToAdd == null || _amountToAdd == ''){
+                    setState(() {
+                      _amountToAddError = true;
+                    });
+                  }else{
+                    WalletModel.instance.startPayment(_amountToAdd);
+                  }
+                },
                 child: new Text('ADD MONEY',style: TextStyle(color: Colors.white),),
               ),
             )

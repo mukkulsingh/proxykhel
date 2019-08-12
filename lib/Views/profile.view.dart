@@ -1,19 +1,28 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter_country_picker/flutter_country_picker.dart';
+import './../Model/kyc.model.dart';
+
 class Profile extends StatefulWidget {
   @override
   _ProfileState createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile> {
+
+
   static DateTime selectedDate = DateTime.now();
 
   static Country _selected ;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-
-
 
     Future<DateTime> _selectDate(BuildContext context) async {
       final DateTime picked = await showDatePicker(
@@ -28,6 +37,28 @@ class _ProfileState extends State<Profile> {
       return selectedDate;
     }
 
+    final pendingButton = new RaisedButton(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(32.0),
+      ),
+      onPressed: () {},
+      color: Colors.deepOrange,
+      child: new Text(
+        'KYC Verification Pending',
+        style: TextStyle(color: Colors.white),
+      ),
+    );
+
+    final completeButton = new RaisedButton(
+        onPressed: (){},
+        color: Colors.green,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(32.0),
+        ),
+        child: new Text(
+          'Verified',
+          style: TextStyle(color: Colors.white),
+        ));
 
     return Scaffold(
       appBar: new AppBar(
@@ -59,17 +90,41 @@ class _ProfileState extends State<Profile> {
                   'General Status: ',
                   style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
                 ),
-                new RaisedButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(32.0),
-                  ),
-                  onPressed: () {},
-                  color: Colors.deepOrange,
-                  child: new Text(
-                    'KYC Verification Pending',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                )
+pendingButton,
+//               FutureBuilder(
+//                   future: KycModel.instance.getKycStatus(),
+//                   builder: (context,snapshot){
+//                     switch(snapshot.connectionState){
+//                       case ConnectionState.none:
+//                         return new Stack(children: <Widget>[new Center(child: new CircularProgressIndicator(),)],);
+//                         break;
+//                       case ConnectionState.active:
+//                         return new Stack(children: <Widget>[new Center(child: new CircularProgressIndicator(),)],);
+//                         break;
+//                       case ConnectionState.waiting:
+//                         return new Stack(children: <Widget>[new Center(child: new CircularProgressIndicator(),)],);
+//                         break;
+//                       case ConnectionState.done:
+//                         new CircularProgressIndicator();
+//                         if(snapshot.hasError){
+//                           new Text('Something went wrong');
+//                         }
+//                         else if(!snapshot.hasData){
+//                          new Text("Error");
+//                         }
+//                         else if(snapshot.data.data.status == "0"){
+//                              return CircularProgressIndicator();
+//                          }
+//                         else if(snapshot.data == null){
+//                           return new Container();
+//
+//                         }
+//                         else{
+//                           return CircularProgressIndicator();
+//                         }
+//                         break;
+//                     }
+//                   }),
               ],
             ),
           ),
@@ -157,7 +212,12 @@ class _ProfileState extends State<Profile> {
             ),
           ),
           new Container(
+            height: 45.0,
+            margin: EdgeInsets.symmetric(horizontal: 100.0,vertical: 20.0),
             child: new RaisedButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(32.0),
+              ),
               onPressed: (){},
               child: new Text('UPDATE PROFILE',style: TextStyle(color: Colors.white),),
               color: Colors.deepOrange,

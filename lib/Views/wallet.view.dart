@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import './../Constants/slideTransitions.dart';
 import './../Views/addmoney.view.dart';
+import './../Model/wallet.model.dart';
 
 class Wallet extends StatefulWidget {
   @override
@@ -28,13 +29,44 @@ class _WalletState extends State<Wallet> {
               child: new Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  new RichText(
-                    text: TextSpan(
-                      children: <TextSpan>[
-                        TextSpan(text: "Total ",style: TextStyle(color:Colors.black,fontWeight: FontWeight.bold,fontSize: 18.0)),
-                        TextSpan(text: " 0",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 18.0))
-                      ]
-                    ),
+                  FutureBuilder(
+                    future: WalletModel.instance.getWalletBalance(),
+                    builder: (context, snapshot){
+                      switch(snapshot.connectionState){
+                        case ConnectionState.none:
+                          return new Stack(children: <Widget>[new Center(child: new CircularProgressIndicator(),)],);
+                          break;
+                        case ConnectionState.active:
+                          return new Stack(children: <Widget>[new Center(child: new CircularProgressIndicator(),)],);
+                          break;
+                        case ConnectionState.waiting:
+                          return new Stack(children: <Widget>[new Center(child: new CircularProgressIndicator(),)],);
+                          break;
+                        case ConnectionState.done:
+                          if(snapshot.hasError)
+                            return new Text("Something went wrong${snapshot.error.toString()}");
+                          else if(!snapshot.hasData)
+                            return new Text('Error fetching balance');
+                          else {
+                            WalletModel.instance.setBalance(
+                                snapshot.data.walletAmount);
+                            return new RichText(
+                              text: TextSpan(
+                                  children: <TextSpan>[
+                                    TextSpan(text: "Total ",
+                                        style: TextStyle(color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18.0)),
+                                    TextSpan(text: snapshot.data.walletAmount,
+                                        style: TextStyle(color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18.0))
+                                  ]
+                              ),
+                            );
+                          }
+                      }
+                    },
                   ),
                   new RaisedButton(
                     color: Colors.deepOrange,

@@ -1,7 +1,12 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:async/async.dart';
+import 'savedpref.model.dart';
 
 class  CreateTeamModel{
+
+  final AsyncMemoizer _memoizer = AsyncMemoizer();
+
 
   static int _batsMan;
   static int _bowler;
@@ -19,27 +24,35 @@ class  CreateTeamModel{
     return _instance;
   }
 
+  static int credit=100;
+
+  int getCredit(){
+    return credit;
+  }
 
 
-  Future<CreateTeamDetails> getMatchTeam(String url, String matchId, String team1name, String team2name) async {
-    http.Response response = await http.post(url,body: {
-      "type":"getTeam",
-      "matchId":matchId,
-      "team1name":team1name,
-      "team2name":team2name,
-    });
-    if(response.statusCode == 200){
-      final res = json.decode(response.body);
-      if(res['success']==true){
-        print(res);
-        return createTeamDetailsFromJson(response.body);
-      }
-      else{
+
+  Future getMatchTeam(String url, String matchId, String team1name, String team2name) async {
+    return this._memoizer.runOnce(()async{
+      http.Response response = await http.post(url,body: {
+        "type":"getTeam",
+        "matchId":matchId,
+        "team1name":team1name,
+        "team2name":team2name,
+      });
+      if(response.statusCode == 200){
+        final res = json.decode(response.body);
+        if(res['success']==true){
+          return createTeamDetailsFromJson(response.body);
+        }
+        else{
+          return null;
+        }
+      }else{
         return null;
       }
-    }else{
-      return null;
-    }
+    });
+
   }
 
 
@@ -71,6 +84,51 @@ class  CreateTeamModel{
     _superFive=array;
   }
 
+  int getBatsman(){
+    return _batsMan;
+  }
+
+
+  Future<dynamic> saveTeam(
+      int matchId,
+      int contestId,
+      int credit,
+      String country1,
+      String country2,
+      ) async {
+
+
+    String userId = await SavedPref.instance.getUserId();
+    http.Response response = await http.post("https://www.proxykhel.com/android/Createteam.php",body: json.encode(
+        {
+          "sportId":"1",
+          "matchId":matchId,
+          "contestId":contestId,
+          "userId":userId,
+          "batsman":_batsMan,
+          "bowler":_bowler,
+          "allrounder":_allRounder,
+          "wicketkeeper":_wicketKeeper,
+          "manofthematch":_starPlayer,
+          "superstriker":_xPlayer,
+          "credit":credit,
+          "player_session":_superFive
+        }
+    ),
+    headers: {'contect-type':'application/json'});
+    if(response.statusCode == 200){
+      final res = json.decode(response.body);
+      if(res['success']==true){
+        return true;
+      }
+      else{
+        return false;
+      }
+    }
+    else{
+      return false;
+    }
+  }
 
 }
 
