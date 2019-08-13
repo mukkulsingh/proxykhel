@@ -195,6 +195,7 @@ class AllRounder {
   String imageUrl;
   String credit;
   String teamname;
+  bool isSelected;
 
   AllRounder({
     this.id,
@@ -203,6 +204,7 @@ class AllRounder {
     this.imageUrl,
     this.credit,
     this.teamname,
+    this.isSelected,
   });
 
   factory AllRounder.fromJson(Map<String, dynamic> json) => new AllRounder(
@@ -212,6 +214,7 @@ class AllRounder {
     imageUrl: json["imageURL"] == null ? null : json["imageURL"],
     credit: json["credit"],
     teamname: json["teamname"],
+    isSelected: false,
   );
 
   Map<String, dynamic> toJson() => {
@@ -221,6 +224,7 @@ class AllRounder {
     "imageURL": imageUrl == null ? null : imageUrl,
     "credit": credit,
     "teamname": teamname,
+    "isSelected":isSelected,
   };
 }
 
