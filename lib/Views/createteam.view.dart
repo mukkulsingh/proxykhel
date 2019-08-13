@@ -124,7 +124,7 @@ class _CreateTeamState extends State<CreateTeam> {
               if(categories[j].isSelected) {
                 if (categories[j].id == categories[i].id) {
                   categories[i].isSelected = false;
-                  CreateTeamModel.instance.setBatsman(0);
+                  CreateTeamModel.instance.setBowler(0);
                   setState(() {
                   });
                   return;
@@ -140,7 +140,7 @@ class _CreateTeamState extends State<CreateTeam> {
             }
             else{
               categories[i].isSelected=true;
-              CreateTeamModel.instance.setBatsman(int.parse(categories[i].id));
+              CreateTeamModel.instance.setBowler(int.parse(categories[i].id));
               setState(() {
               });
             }
@@ -188,7 +188,7 @@ class _CreateTeamState extends State<CreateTeam> {
     List categories = playerType;
     for (int i = 0; i < categories.length; i++) {
       categoryCells.add(Card(
-        color: _cardBackgroundColor,
+        color: categories[i].isSelected?Colors.deepOrange:Colors.white,
         child: InkWell(
           onTap: () {
             int trueCounter=0;
@@ -198,7 +198,7 @@ class _CreateTeamState extends State<CreateTeam> {
               if(categories[j].isSelected) {
                 if (categories[j].id == categories[i].id) {
                   categories[i].isSelected = false;
-                  CreateTeamModel.instance.setBatsman(0);
+                  CreateTeamModel.instance.setWicketKeeper(0);
                   setState(() {
                   });
                   return;
@@ -214,7 +214,7 @@ class _CreateTeamState extends State<CreateTeam> {
             }
             else{
               categories[i].isSelected=true;
-              CreateTeamModel.instance.setBatsman(int.parse(categories[i].id));
+              CreateTeamModel.instance.setWicketKeeper(int.parse(categories[i].id));
               setState(() {
               });
             }
@@ -264,7 +264,8 @@ class _CreateTeamState extends State<CreateTeam> {
     List categories = playerType;
     for (int i = 0; i < categories.length; i++) {
       categoryCells.add(Card(
-        color: _cardBackgroundColor,
+        color: categories[i].isSelected?Colors.deepOrange:Colors.white,
+
         child: InkWell(
           onTap: () {
             int trueCounter=0;
@@ -274,7 +275,7 @@ class _CreateTeamState extends State<CreateTeam> {
               if(categories[j].isSelected) {
                 if (categories[j].id == categories[i].id) {
                   categories[i].isSelected = false;
-                  CreateTeamModel.instance.setBatsman(0);
+                  CreateTeamModel.instance.setAllRounder(0);
                   setState(() {
                   });
                   return;
@@ -290,7 +291,7 @@ class _CreateTeamState extends State<CreateTeam> {
             }
             else{
               categories[i].isSelected=true;
-              CreateTeamModel.instance.setBatsman(int.parse(categories[i].id));
+              CreateTeamModel.instance.setAllRounder(int.parse(categories[i].id));
               setState(() {
               });
             }
@@ -339,7 +340,7 @@ class _CreateTeamState extends State<CreateTeam> {
     List categories = playerType;
     for (int i = 0; i < categories.length; i++) {
       categoryCells.add(Card(
-        color: _cardBackgroundColor,
+        color: categories[i].isSelected?Colors.deepOrange:Colors.white,
         child: InkWell(
           onTap: () {
             int trueCounter=0;
@@ -349,7 +350,7 @@ class _CreateTeamState extends State<CreateTeam> {
               if(categories[j].isSelected) {
                 if (categories[j].id == categories[i].id) {
                   categories[i].isSelected = false;
-                  CreateTeamModel.instance.setBatsman(0);
+                  CreateTeamModel.instance.setStarPlayer(0);
                   setState(() {
                   });
                   return;
@@ -365,7 +366,7 @@ class _CreateTeamState extends State<CreateTeam> {
             }
             else{
               categories[i].isSelected=true;
-              CreateTeamModel.instance.setBatsman(int.parse(categories[i].id));
+              CreateTeamModel.instance.setStarPlayer(int.parse(categories[i].id));
               setState(() {
               });
             }
@@ -414,17 +415,16 @@ class _CreateTeamState extends State<CreateTeam> {
     List categories = playerType;
     for (int i = 0; i < categories.length; i++) {
       categoryCells.add(Card(
-        color: _cardBackgroundColor,
+        color: categories[i].isSelected?Colors.deepOrange:Colors.white,
         child: InkWell(
           onTap: () {
             int trueCounter=0;
             int selection = 1;
-
             for(int j=0; j < categories.length ;j++){
               if(categories[j].isSelected) {
                 if (categories[j].id == categories[i].id) {
                   categories[i].isSelected = false;
-                  CreateTeamModel.instance.setBatsman(0);
+                  CreateTeamModel.instance.setXPlayer(0);
                   setState(() {
                   });
                   return;
@@ -440,7 +440,7 @@ class _CreateTeamState extends State<CreateTeam> {
             }
             else{
               categories[i].isSelected=true;
-              CreateTeamModel.instance.setBatsman(int.parse(categories[i].id));
+              CreateTeamModel.instance.setXPlayer(int.parse(categories[i].id));
               setState(() {
               });
             }
@@ -490,6 +490,7 @@ class _CreateTeamState extends State<CreateTeam> {
     int credit;
     for (int i = 0; i < categories.length; i++) {
       categoryCells.add(Card(
+        color: categories[i].isSelected?Colors.deepOrange:Colors.white,
         child: InkWell(
           onTap: (){
             int trueCounter=0;
@@ -499,7 +500,7 @@ class _CreateTeamState extends State<CreateTeam> {
               if(categories[j].isSelected) {
                 if (categories[j].id == categories[i].id) {
                   categories[i].isSelected = false;
-                  CreateTeamModel.instance.setBatsman(0);
+                  CreateTeamModel.instance.setSuperFive(superFive);
                   setState(() {
                   });
                   return;
@@ -515,7 +516,8 @@ class _CreateTeamState extends State<CreateTeam> {
             }
             else{
               categories[i].isSelected=true;
-              CreateTeamModel.instance.setBatsman(int.parse(categories[i].id));
+              superFive.add(categories[i].id);
+              CreateTeamModel.instance.setSuperFive(superFive);
               setState(() {
               });
             }
