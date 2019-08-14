@@ -110,40 +110,40 @@ class _CreateTeamState extends State<CreateTeam> {
   List<Widget> _loadCategoriesBowler(List playerType) {
     List<Widget> categoryCells = [];
     List categories = playerType;
-    for (int i = 0; i < categories.length; i++) {
+    for (int i = 0; i < bowler.length; i++) {
       categoryCells.add(Card(
         color: categories[i].isSelected?Colors.deepOrange:Colors.white,
         child: InkWell(
           highlightColor: Colors.deepOrange,
           splashColor: Colors.deepOrange,
           onTap: () {
-            int trueCounter=0;
-            int selection = 1;
-
-            for(int j=0; j < categories.length ;j++){
-              if(categories[j].isSelected) {
-                if (categories[j].id == categories[i].id) {
-                  categories[i].isSelected = false;
-                  CreateTeamModel.instance.setBowler(0);
-                  setState(() {
-                  });
-                  return;
-                }else{
-                  trueCounter++;
-                }
-              }
-            }
-
-            if(trueCounter == selection){
-              SnackBar snackBar = new SnackBar(content: Text('You can choose only '+selection.toString()+' bowler'));
-              _scaffoldKey.currentState.showSnackBar(snackBar);
-            }
-            else{
-              categories[i].isSelected=true;
-              CreateTeamModel.instance.setBowler(int.parse(categories[i].id));
-              setState(() {
-              });
-            }
+//            int trueCounter=0;
+//            int selection = 1;
+//
+//            for(int j=0; j < categories.length ;j++){
+//              if(categories[j].isSelected) {
+//                if (categories[j].id == categories[i].id) {
+//                  categories[i].isSelected = false;
+//                  CreateTeamModel.instance.setBowler(0);
+//                  setState(() {
+//                  });
+//                  return;
+//                }else{
+//                  trueCounter++;
+//                }
+//              }
+//            }
+//
+//            if(trueCounter == selection){
+//              SnackBar snackBar = new SnackBar(content: Text('You can choose only '+selection.toString()+' bowler'));
+//              _scaffoldKey.currentState.showSnackBar(snackBar);
+//            }
+//            else{
+//              categories[i].isSelected=true;
+//              CreateTeamModel.instance.setBowler(int.parse(categories[i].id));
+//              setState(() {
+//              });
+//            }
           },
           child: Column(
             verticalDirection: VerticalDirection.down,
@@ -156,7 +156,7 @@ class _CreateTeamState extends State<CreateTeam> {
                   radius: 22.0,
                   backgroundColor: Colors.transparent,
                   backgroundImage: NetworkImage(
-                      "https://www.proxykhel.com/public/player/${categories[i].imageUrl}"),
+                      "https://www.proxykhel.com/public/player/${allPlayers[bowler[i]].imageUrl}"),
                 ),
               ),
               Expanded(
@@ -164,7 +164,7 @@ class _CreateTeamState extends State<CreateTeam> {
                   child: Padding(
                     padding: const EdgeInsets.only(top: 5.0),
                     child: new Text(
-                      categories[i].playerName,
+                      allPlayers[bowler[i]].playerName,
                       textAlign: TextAlign.center,
                       textScaleFactor: 0.8,
                       style: TextStyle(color:categories[i].isSelected?Colors.white:Colors.black),
@@ -230,7 +230,7 @@ class _CreateTeamState extends State<CreateTeam> {
                   radius: 22.0,
                   backgroundColor: Colors.transparent,
                   backgroundImage: NetworkImage(
-                      "https://www.proxykhel.com/public/player/${categories[i].imageUrl}"),
+                      "https://www.proxykhel.com/public/player/${allPlayers[wicketKeeper[i]].imageUrl}"),
                 ),
               ),
               Expanded(
@@ -238,7 +238,7 @@ class _CreateTeamState extends State<CreateTeam> {
                   child: Padding(
                     padding: const EdgeInsets.only(top: 5.0),
                     child: new Text(
-                      categories[i].playerName,
+                      allPlayers[wicketKeeper[i]].playerName,
                       textAlign: TextAlign.center,
                       textScaleFactor: 0.8,
                       style: TextStyle(color:categories[i].isSelected?Colors.white:Colors.black),
@@ -247,7 +247,7 @@ class _CreateTeamState extends State<CreateTeam> {
                   )),
               Expanded(flex: 1, child: Divider()),
               Expanded(flex: 2, child: new Text('Cr.${categories[i].credit}',
-                style: TextStyle(color:categories[i].isSelected?Colors.white:Colors.black),
+                style: TextStyle(color:allPlayers[wicketKeeper[i]].isSelected?Colors.white:Colors.black),
 
               ))
             ],
@@ -307,7 +307,7 @@ class _CreateTeamState extends State<CreateTeam> {
                   radius: 22.0,
                   backgroundColor: Colors.transparent,
                   backgroundImage: NetworkImage(
-                      "https://www.proxykhel.com/public/player/${categories[i].imageUrl}"),
+                      "https://www.proxykhel.com/public/player/${allPlayers[allRounder[i]].imageUrl}"),
                 ),
               ),
               Expanded(
@@ -315,7 +315,7 @@ class _CreateTeamState extends State<CreateTeam> {
                   child: Padding(
                     padding: const EdgeInsets.only(top: 5.0),
                     child: new Text(
-                      categories[i].playerName,
+                      allPlayers[allRounder[i]].playerName,
                       textAlign: TextAlign.center,
                       textScaleFactor: 0.8,
                       style: TextStyle(color:categories[i].isSelected?Colors.white:Colors.black),
@@ -323,7 +323,7 @@ class _CreateTeamState extends State<CreateTeam> {
                     ),
                   )),
               Expanded(flex: 1, child: Divider()),
-              Expanded(flex: 2, child: new Text('Cr.${categories[i].credit}',
+              Expanded(flex: 2, child: new Text('Cr.${allPlayers[allRounder[i]].credit}',
                 style: TextStyle(color:categories[i].isSelected?Colors.white:Colors.black),
               ))
             ],
@@ -366,7 +366,7 @@ class _CreateTeamState extends State<CreateTeam> {
             }
             else{
               categories[i].isSelected=true;
-              CreateTeamModel.instance.setStarPlayer(int.parse(categories[i].id));
+              CreateTeamModel.instance.setStarPlayer(int.parse(allPlayers[starPlayer[i]].id));
               setState(() {
               });
             }
@@ -382,7 +382,7 @@ class _CreateTeamState extends State<CreateTeam> {
                   radius: 22.0,
                   backgroundColor: Colors.transparent,
                   backgroundImage: NetworkImage(
-                      "https://www.proxykhel.com/public/player/${categories[i].imageUrl}"),
+                      "https://www.proxykhel.com/public/player/${allPlayers[starPlayer[i]].imageUrl}"),
                 ),
               ),
               Expanded(
@@ -390,7 +390,7 @@ class _CreateTeamState extends State<CreateTeam> {
                   child: Padding(
                     padding: const EdgeInsets.only(top: 5.0),
                     child: new Text(
-                      categories[i].playerName,
+                      allPlayers[starPlayer[i]].playerName,
                       textAlign: TextAlign.center,
                       textScaleFactor: 0.8,
                       style: TextStyle(color:categories[i].isSelected?Colors.white:Colors.black),
@@ -398,7 +398,7 @@ class _CreateTeamState extends State<CreateTeam> {
                     ),
                   )),
               Expanded(flex: 1, child: Divider()),
-              Expanded(flex: 2, child: new Text('Cr.${categories[i].credit}',
+              Expanded(flex: 2, child: new Text('Cr.${allPlayers[starPlayer[i]].credit}',
                 style: TextStyle(color:categories[i].isSelected?Colors.white:Colors.black),
               ))
             ],
@@ -456,7 +456,7 @@ class _CreateTeamState extends State<CreateTeam> {
                   radius: 22.0,
                   backgroundColor: Colors.transparent,
                   backgroundImage: NetworkImage(
-                      "https://www.proxykhel.com/public/player/${categories[i].imageUrl}"),
+                      "https://www.proxykhel.com/public/player/${allPlayers[xPlayer[i]].imageUrl}"),
                 ),
               ),
               Expanded(
@@ -464,14 +464,14 @@ class _CreateTeamState extends State<CreateTeam> {
                   child: Padding(
                     padding: const EdgeInsets.only(top: 5.0),
                     child: new Text(
-                      categories[i].playerName,
+                      allPlayers[xPlayer[i]].playerName,
                       textAlign: TextAlign.center,
                       textScaleFactor: 0.8,
                       style: TextStyle(color:categories[i].isSelected?Colors.white:Colors.black),
                     ),
                   )),
               Expanded(flex: 1, child: Divider()),
-              Expanded(flex: 2, child: new Text('Cr.${categories[i].credit}',
+              Expanded(flex: 2, child: new Text('Cr.${allPlayers[xPlayer[i]].credit}',
                 style: TextStyle(color:categories[i].isSelected?Colors.white:Colors.black),
               ))
             ],
@@ -531,19 +531,19 @@ class _CreateTeamState extends State<CreateTeam> {
                   radius: 22.0,
                   backgroundColor: Colors.transparent,
                   backgroundImage: NetworkImage(
-                      "https://www.proxykhel.com/public/player/${categories[i].imageUrl}"),
+                      "https://www.proxykhel.com/public/player/${allPlayers[xPlayer[i]].imageUrl}"),
                 ),
               ),
               Expanded(
                   flex: 2,
                   child: new Text(
-                    categories[i].playerName,
+                    allPlayers[xPlayer[i]].playerName,
                     textAlign: TextAlign.center,
                     textScaleFactor: 0.8,
                     style: TextStyle(color:categories[i].isSelected?Colors.white:Colors.black),
                   )),
               Expanded(flex: 1, child: Divider()),
-              Expanded(flex: 2, child: new Text('Cr.${categories[i].credit}',
+              Expanded(flex: 2, child: new Text('Cr.${allPlayers[xPlayer[i]].credit}',
                 style: TextStyle(color:categories[i].isSelected?Colors.white:Colors.black),
               ))
             ],
