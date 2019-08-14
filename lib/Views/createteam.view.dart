@@ -33,39 +33,39 @@ class _CreateTeamState extends State<CreateTeam> {
   List<Widget> _loadCategoriesBatsman(List playerType) {
     List<Widget> categoryCells = [];
     List categories = playerType;
-    for (int i = 0; i < categories.length; i++) {
+    for (int i = 0; i < batsMan.length; i++) {
       categoryCells.add(Container(
         margin: EdgeInsets.all(2.0),
         child: RaisedButton(
             onPressed: () {
 
-              int trueCounter=0;
-              int selection = 1;
-
-              for(int j=0; j < categories.length ;j++){
-                if(categories[j].isSelected) {
-                  if (categories[j].id == categories[i].id) {
-                    categories[i].isSelected = false;
-                    CreateTeamModel.instance.setBatsman(0);
-                    setState(() {
-                    });
-                    return;
-                  }else{
-                    trueCounter++;
-                  }
-                }
-              }
-
-              if(trueCounter == selection){
-                SnackBar snackBar = new SnackBar(content: Text('You can choose only '+selection.toString()+' batsman'));
-                _scaffoldKey.currentState.showSnackBar(snackBar);
-              }
-              else{
-                categories[i].isSelected=true;
-                CreateTeamModel.instance.setBatsman(int.parse(categories[i].id));
-                setState(() {
-                });
-              }
+//              int trueCounter=0;
+//              int selection = 1;
+//
+//              for(int j=0; j < categories.length ;j++){
+//                if(categories[j].isSelected) {
+//                  if (categories[j].id == categories[i].id) {
+//                    categories[i].isSelected = false;
+//                    CreateTeamModel.instance.setBatsman(0);
+//                    setState(() {
+//                    });
+//                    return;
+//                  }else{
+//                    trueCounter++;
+//                  }
+//                }
+//              }
+//
+//              if(trueCounter == selection){
+//                SnackBar snackBar = new SnackBar(content: Text('You can choose only '+selection.toString()+' batsman'));
+//                _scaffoldKey.currentState.showSnackBar(snackBar);
+//              }
+//              else{
+//                categories[i].isSelected=true;
+//                CreateTeamModel.instance.setBatsman(int.parse(categories[i].id));
+//                setState(() {
+//                });
+//              }
             },
             color: categories[i].isSelected?Colors.deepOrange:Colors.white,
             splashColor: Colors.deepOrange,
@@ -79,7 +79,7 @@ class _CreateTeamState extends State<CreateTeam> {
                   child: new CircleAvatar(
                     child: Image(
                         image: NetworkImage(
-                            "https://www.proxykhel.com/public/player/${categories[i].imageUrl}")),
+                            "https://www.proxykhel.com/public/player/${allPlayers[batsMan[i]].imageUrl}")),
                     radius: 22.0,
                     backgroundColor: Colors.white,
                   ),
@@ -89,14 +89,14 @@ class _CreateTeamState extends State<CreateTeam> {
                     child: Padding(
                       padding: const EdgeInsets.only(top: 5.0),
                       child: new Text(
-                        categories[i].playerName,
+                        allPlayers[batsMan[i]].playerName,
                         style: TextStyle(color:categories[i].isSelected?Colors.white:Colors.black),
                         textAlign: TextAlign.center,
                         textScaleFactor: 0.7,
                       ),
                     )),
                 Expanded(flex: 1, child: Divider()),
-                Expanded(flex: 2, child: new Text('Cr.${categories[i].credit}',
+                Expanded(flex: 2, child: new Text('Cr.${allPlayers[batsMan[i]].credit}',
                   style: TextStyle(color:categories[i].isSelected?Colors.white:Colors.black),
                 ))
               ],
@@ -591,6 +591,16 @@ class _CreateTeamState extends State<CreateTeam> {
     return categoryCells;
   }
 
+  List allPlayers;
+  List batsMan;
+  List bowler;
+  List allRounder;
+  List wicketKeeper;
+  List starPlayer;
+  List xPlayer;
+  List superFive;
+  List choosenPlayer;
+
   void resetAll() {
     _isBatsman = false;
     _isBowler = false;
@@ -615,6 +625,7 @@ class _CreateTeamState extends State<CreateTeam> {
 
   @override
   Widget build(BuildContext context) {
+
     void _showLogoutDialog(String title, String content) {
       showDialog(
         context: context,
@@ -1052,6 +1063,78 @@ class _CreateTeamState extends State<CreateTeam> {
                         if (snapshot.hasError)
                           return Text('Error: ${snapshot.error}');
                         else {
+                          allPlayers = snapshot.data.data.supperSticker;
+                          batsMan=[];
+                          bowler=[];
+                          allRounder=[];
+                          wicketKeeper=[];
+                          starPlayer=[];
+                          xPlayer=[];
+                          superFive=[];
+                          choosenPlayer=[];
+
+                          for(int i=0; i<snapshot.data.data.batsman.length;i++){
+                            for(int j=0; j<allPlayers.length;j++){
+                              if(snapshot.data.data.batsman[i].id == allPlayers[j].id){
+                                batsMan.add(j);
+                              }
+                            }
+                          }
+
+                          for(int i=0; i<snapshot.data.data.bowler.length;i++){
+                            for(int j=0; j<allPlayers.length;j++){
+                              if(snapshot.data.data.bowler[i].id == allPlayers[j].id){
+                                bowler.add(j);
+                              }
+                            }
+                          }
+
+                          for(int i=0; i<snapshot.data.data.allRounder.length;i++){
+                            for(int j=0; j<allPlayers.length;j++){
+                              if(snapshot.data.data.allRounder[i].id == allPlayers[j].id){
+                                allRounder.add(j);
+                              }
+                            }
+                          }
+
+                          for(int i=0; i<snapshot.data.data.wicketKeeper.length;i++){
+                            for(int j=0; j<allPlayers.length;j++){
+                              if(snapshot.data.data.wicketKeeper[i].id == allPlayers[j].id){
+                                wicketKeeper.add(j);
+                              }
+                            }
+                          }
+
+                          for(int i=0; i<snapshot.data.data.supperSticker.length;i++){
+                            for(int j=0; j<allPlayers.length;j++){
+                              if(snapshot.data.data.supperSticker[i].id == allPlayers[j].id){
+                                starPlayer.add(j);
+                              }
+                            }
+                          }
+
+                          for(int i=0; i<snapshot.data.data.supperSticker.length;i++){
+                            for(int j=0; j<allPlayers.length;j++){
+                              if(snapshot.data.data.supperSticker[i].id == allPlayers[j].id){
+                                xPlayer.add(j);
+                              }
+                            }
+                          }
+
+                          int counter =0;
+                          for(int i=0; i<allPlayers.length;i++){
+                            if(wicketKeeper.length>counter)
+                              if(wicketKeeper[counter] == i){
+                                counter++;
+                              }else{
+                                superFive.add(i);
+                              }
+                            else
+                              superFive.add(i);
+                          }
+
+
+
                           switch (_playerType) {
                             case 1:
                               return GridView.count(
