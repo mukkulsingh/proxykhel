@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import './../Views/tabBarMega.view.dart';
-import './../Views/tabBarHtoH.view.dart';
-import './../Views/tabBarPartial.view.dart';
+import './../Constants/contestdata.dart';
 
 class ContestDetailModel {
   static ContestDetailModel _instance;
@@ -48,6 +46,8 @@ class ContestDetailModel {
   void setContestDetail(contestDetail){
     contestDetailModel = contestDetail;
   }
+
+
 
   Future<ContestDetailPojo> getContestDetail(int contestId,int matchId) async {
     http.Response response = await http.post("https://www.proxykhel.com/android/contest.php",

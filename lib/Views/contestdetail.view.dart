@@ -8,7 +8,7 @@ import './../Views/tabBarMega.view.dart';
 import './../Model/logout.model.dart';
 import './../Model/contestdetail.model.dart';
 import './../Views/login.view.dart';
-
+import './../Constants/contestdata.dart';
 
 class ContestDetail extends StatefulWidget {
   @override

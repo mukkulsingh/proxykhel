@@ -4,6 +4,7 @@ import './../Constants/slideTransitions.dart';
 import './../Views/contestdetail.view.dart';
 import './../Model/contestdetail.model.dart';
 import './contestdetail.view.dart';
+import './../Constants/contestdata.dart';
 
 class TabBarMega extends StatefulWidget {
   String matchId;
@@ -231,36 +232,4 @@ class _TabBarMegaState extends State<TabBarMega> {
       ),
     );
   }
-}
-
-class ContestData{
-  String id;
-  String matchId;
-  String winnersAmt;
-  String maxTeam;
-  String totlaJoin;
-  String winner;
-  String proxyPercentage;
-  String singleEntry;
-  String multiEntry;
-  String winingAmtVary;
-  String opponent;
-  String contestCancel;
-  String entryfee;
-
-  ContestData({
-    @required this.id,
-    @required this.matchId,
-    @required this.winnersAmt,
-    @required  this.maxTeam,
-    @required this.totlaJoin,
-    @required  this.winner,
-    @required this.proxyPercentage,
-    @required  this.singleEntry,
-    @required this.multiEntry,
-    @required this.winingAmtVary,
-    @required this.opponent,
-    @required this.contestCancel,
-    @required this.entryfee,
-  });
 }

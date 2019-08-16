@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ContestModel{
+
   static ContestModel _instance;
 
   static ContestModel get instance {

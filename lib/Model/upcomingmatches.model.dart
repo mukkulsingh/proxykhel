@@ -1,7 +1,11 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:async/async.dart';
 
 class UpcomingMatchModel{
+
+  AsyncMemoizer _memoizer = new AsyncMemoizer();
+
   static UpcomingMatchModel _instance;
 
   static UpcomingMatchModel get instance{
@@ -13,9 +17,9 @@ class UpcomingMatchModel{
 
   Future<MatchData> fetchUpcomingMatch() async {
     http.Response response = await http.post("https://www.proxykhel.com/android/upcomingmatch.php",
-    body: {
-      "type":"getMatches"
-    });
+        body: {
+          "type":"getMatches"
+        });
     if(response.statusCode == 200){
       final res = json.decode(response.body);
       if(res['success']== 'true' ){

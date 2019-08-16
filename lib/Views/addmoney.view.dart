@@ -89,6 +89,9 @@ class _AddMoneyState extends State<AddMoney> {
 
   @override
   Widget build(BuildContext context) {
+    _isLoading=false;
+
+
     return Scaffold(
       appBar: new AppBar(
         title: Text(
@@ -115,7 +118,35 @@ class _AddMoneyState extends State<AddMoney> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Container(margin:EdgeInsets.only(left: 20.0),child: new Text('Current balance',style: TextStyle(color: Colors.deepOrangeAccent, fontSize: 18.0,),)),
-                Container(margin:EdgeInsets.only(right: 10.0),child: new Text(WalletModel.instance.getBalance()??"0",style: TextStyle(color: Colors.deepOrangeAccent,fontSize: 16.0),)),
+                Container(margin:EdgeInsets.only(right: 10.0),child: FutureBuilder(
+                  future: WalletModel.instance.getWalletBalance(),
+                  builder: (context, snapshot) {
+
+                    switch(snapshot.connectionState){
+                      case ConnectionState.none:
+                        return Center(child:new CircularProgressIndicator());
+                      case ConnectionState.active:
+                        return Center(child:new CircularProgressIndicator());
+                        break;
+                      case ConnectionState.waiting:
+                        return Center(child:new CircularProgressIndicator());
+                        break;
+                      case ConnectionState.done:
+                        if(snapshot.hasError){
+                          SnackBar snackbar = new SnackBar(content: Text('Error fetching balance'));
+                          Scaffold.of(context).showSnackBar(snackbar);
+                        }
+                        else if(!snapshot.hasData){
+                          SnackBar snackbar = new SnackBar(content: Text('Error fetching balance'));
+                          Scaffold.of(context).showSnackBar(snackbar);
+                        }
+                        else{
+                          return new Text(snapshot.data.walletAmount??"0",style: TextStyle(color: Colors.deepOrangeAccent,fontSize: 16.0),);
+                          break;
+                        }
+                    }
+                  }
+                )),
               ],
             ),
           ],
@@ -166,10 +197,7 @@ class _AddMoneyState extends State<AddMoney> {
                             setState(() {
                               _isLoading=true;
                             });
-//                    WalletModel.instance.startPayment(_amountToAdd);
                           initPayment(_amountToAdd);
-
-
                         }
                       },
                       child: new Text('ADD MONEY',style: TextStyle(color: Colors.white),),

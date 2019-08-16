@@ -7,19 +7,23 @@ import './../Views/wallet.view.dart';
 import './../Model/createteam.model.dart';
 import './../Model/contestdetail.model.dart';
 
-
 class CreateTeam extends StatefulWidget {
   @override
   _CreateTeamState createState() => _CreateTeamState();
 }
 
 class _CreateTeamState extends State<CreateTeam> {
-
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  static int _credit=100;
+  static String batsmanGroup = "batsman";
+  static String bowlerGroup = "bowler";
+  static String wkGroup = "wicketKeeper";
+  static String arGroup = "allRounder";
+  static String starPlayerGroup = "starPlayer";
+  static String xPlayerGroup = "XPlayer";
+  static String superFiveGroup = "superFive";
+
   static int _playerType;
-  static Color _cardBackgroundColor = Colors.white;
   static bool _isBatsman = false;
   static bool _isBowler = false;
   static bool _isWicketee = false;
@@ -28,48 +32,31 @@ class _CreateTeamState extends State<CreateTeam> {
   static bool _isXpplayer = false;
   static bool _isSupefive = false;
   static bool _isChoosenplayer = false;
-  static bool _color = false;
 
   List<Widget> _loadCategoriesBatsman(List playerType) {
     List<Widget> categoryCells = [];
     List categories = playerType;
+
+    Color color = Colors.white;
     for (int i = 0; i < batsMan.length; i++) {
+      int num = getPlayerColor(batsMan[i], batsmanGroup);
+      if (num == 0) {
+        color = Colors.white;
+      } else if (num == 1) {
+        color = Colors.deepOrangeAccent[100];
+      } else {
+        color = Colors.deepOrange;
+      }
       categoryCells.add(Container(
         margin: EdgeInsets.all(2.0),
-        child: RaisedButton(
-            onPressed: () {
-
-//              int trueCounter=0;
-//              int selection = 1;
-//
-//              for(int j=0; j < categories.length ;j++){
-//                if(categories[j].isSelected) {
-//                  if (categories[j].id == categories[i].id) {
-//                    categories[i].isSelected = false;
-//                    CreateTeamModel.instance.setBatsman(0);
-//                    setState(() {
-//                    });
-//                    return;
-//                  }else{
-//                    trueCounter++;
-//                  }
-//                }
-//              }
-//
-//              if(trueCounter == selection){
-//                SnackBar snackBar = new SnackBar(content: Text('You can choose only '+selection.toString()+' batsman'));
-//                _scaffoldKey.currentState.showSnackBar(snackBar);
-//              }
-//              else{
-//                categories[i].isSelected=true;
-//                CreateTeamModel.instance.setBatsman(int.parse(categories[i].id));
-//                setState(() {
-//                });
-//              }
-            },
-            color: categories[i].isSelected?Colors.deepOrange:Colors.white,
-            splashColor: Colors.deepOrange,
-            elevation: 2,
+        child: InkWell(
+          highlightColor: Colors.deepOrange,
+          splashColor: Colors.deepOrange,
+          onTap: () {
+            selectPlayer(batsMan, batsMan[i], batsmanGroup, 1);
+          },
+          child: Card(
+            color: color,
             child: Column(
               verticalDirection: VerticalDirection.down,
               mainAxisSize: MainAxisSize.min,
@@ -77,11 +64,11 @@ class _CreateTeamState extends State<CreateTeam> {
                 Expanded(
                   flex: 4,
                   child: new CircleAvatar(
-                    child: Image(
-                        image: NetworkImage(
-                            "https://www.proxykhel.com/public/player/${allPlayers[batsMan[i]].imageUrl}")),
+//                child: Image(image: NetworkImage("https://www.proxykhel.com/public/player/${categories[i].imageUrl}")),
                     radius: 22.0,
-                    backgroundColor: Colors.white,
+                    backgroundColor: Colors.transparent,
+                    backgroundImage: NetworkImage(
+                        "https://www.proxykhel.com/public/player/${allPlayers[batsMan[i]].imageUrl}"),
                   ),
                 ),
                 Expanded(
@@ -90,17 +77,25 @@ class _CreateTeamState extends State<CreateTeam> {
                       padding: const EdgeInsets.only(top: 5.0),
                       child: new Text(
                         allPlayers[batsMan[i]].playerName,
-                        style: TextStyle(color:categories[i].isSelected?Colors.white:Colors.black),
                         textAlign: TextAlign.center,
-                        textScaleFactor: 0.7,
+                        textScaleFactor: 0.8,
+                        style: TextStyle(
+                            color: categories[i].isSelected
+                                ? Colors.white
+                                : Colors.black),
                       ),
                     )),
                 Expanded(flex: 1, child: Divider()),
-                Expanded(flex: 2, child: new Text('Cr.${allPlayers[batsMan[i]].credit}',
-                  style: TextStyle(color:categories[i].isSelected?Colors.white:Colors.black),
-                ))
+                Expanded(
+                    flex: 2,
+                    child: new Text(
+                      'Cr.${allPlayers[batsMan[i]].credit}',
+                    ))
               ],
-            )),
+            ),
+          ),
+        ),
+
       ));
     }
 
@@ -110,71 +105,65 @@ class _CreateTeamState extends State<CreateTeam> {
   List<Widget> _loadCategoriesBowler(List playerType) {
     List<Widget> categoryCells = [];
     List categories = playerType;
+    Color color = Colors.white;
     for (int i = 0; i < bowler.length; i++) {
-      categoryCells.add(Card(
-        color: categories[i].isSelected?Colors.deepOrange:Colors.white,
+      int num = getPlayerColor(bowler[i], bowlerGroup);
+      if (num == 0) {
+        color = Colors.white;
+      } else if (num == 1) {
+        color = Colors.deepOrangeAccent[100];
+      } else {
+        color = Colors.deepOrange;
+      }
+      categoryCells.add(Container(
         child: InkWell(
           highlightColor: Colors.deepOrange,
           splashColor: Colors.deepOrange,
           onTap: () {
-//            int trueCounter=0;
-//            int selection = 1;
-//
-//            for(int j=0; j < categories.length ;j++){
-//              if(categories[j].isSelected) {
-//                if (categories[j].id == categories[i].id) {
-//                  categories[i].isSelected = false;
-//                  CreateTeamModel.instance.setBowler(0);
-//                  setState(() {
-//                  });
-//                  return;
-//                }else{
-//                  trueCounter++;
-//                }
-//              }
-//            }
-//
-//            if(trueCounter == selection){
-//              SnackBar snackBar = new SnackBar(content: Text('You can choose only '+selection.toString()+' bowler'));
-//              _scaffoldKey.currentState.showSnackBar(snackBar);
-//            }
-//            else{
-//              categories[i].isSelected=true;
-//              CreateTeamModel.instance.setBowler(int.parse(categories[i].id));
-//              setState(() {
-//              });
-//            }
+            selectPlayer(bowler, bowler[i], bowlerGroup, 1);
           },
-          child: Column(
-            verticalDirection: VerticalDirection.down,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Expanded(
-                flex: 4,
-                child: new CircleAvatar(
+          child: Card(
+            color: color,
+            child: Column(
+              verticalDirection: VerticalDirection.down,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Expanded(
+                  flex: 4,
+                  child: new CircleAvatar(
 //                child: Image(image: NetworkImage("https://www.proxykhel.com/public/player/${categories[i].imageUrl}")),
-                  radius: 22.0,
-                  backgroundColor: Colors.transparent,
-                  backgroundImage: NetworkImage(
-                      "https://www.proxykhel.com/public/player/${allPlayers[bowler[i]].imageUrl}"),
+                    radius: 22.0,
+                    backgroundColor: Colors.transparent,
+                    backgroundImage: NetworkImage(
+                        "https://www.proxykhel.com/public/player/${allPlayers[bowler[i]].imageUrl}"),
+                  ),
                 ),
-              ),
-              Expanded(
-                  flex: 2,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 5.0),
+                Expanded(
+                    flex: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 5.0),
+                      child: new Text(
+                        allPlayers[bowler[i]].playerName,
+                        textAlign: TextAlign.center,
+                        textScaleFactor: 0.8,
+                        style: TextStyle(
+                            color: categories[i].isSelected
+                                ? Colors.white
+                                : Colors.black),
+                      ),
+                    )),
+                Expanded(flex: 1, child: Divider()),
+                Expanded(
+                    flex: 2,
                     child: new Text(
-                      allPlayers[bowler[i]].playerName,
-                      textAlign: TextAlign.center,
-                      textScaleFactor: 0.8,
-                      style: TextStyle(color:categories[i].isSelected?Colors.white:Colors.black),
-                    ),
-                  )),
-              Expanded(flex: 1, child: Divider()),
-              Expanded(flex: 2, child: new Text('Cr.${categories[i].credit}',
-                style: TextStyle(color:categories[i].isSelected?Colors.white:Colors.black),
-              ))
-            ],
+                      'Cr.${categories[i].credit}',
+                      style: TextStyle(
+                          color: categories[i].isSelected
+                              ? Colors.white
+                              : Colors.black),
+                    ))
+              ],
+            ),
           ),
         ),
       ));
@@ -186,71 +175,63 @@ class _CreateTeamState extends State<CreateTeam> {
   List<Widget> _loadCategoriesWicketKeeper(List playerType) {
     List<Widget> categoryCells = [];
     List categories = playerType;
-    for (int i = 0; i < categories.length; i++) {
-      categoryCells.add(Card(
-        color: categories[i].isSelected?Colors.deepOrange:Colors.white,
+    Color color = Colors.white;
+    for (int i = 0; i < wicketKeeper.length; i++) {
+      int num = getPlayerColor(wicketKeeper[i], wkGroup);
+      if (num == 0) {
+        color = Colors.white;
+      } else if (num == 1) {
+        color = Colors.deepOrangeAccent[100];
+      } else {
+        color = Colors.deepOrange;
+      }
+      categoryCells.add(Container(
         child: InkWell(
           onTap: () {
-            int trueCounter=0;
-            int selection = 1;
-
-            for(int j=0; j < categories.length ;j++){
-              if(categories[j].isSelected) {
-                if (categories[j].id == categories[i].id) {
-                  categories[i].isSelected = false;
-                  CreateTeamModel.instance.setWicketKeeper(0);
-                  setState(() {
-                  });
-                  return;
-                }else{
-                  trueCounter++;
-                }
-              }
-            }
-
-            if(trueCounter == selection){
-              SnackBar snackBar = new SnackBar(content: Text('You can choose only '+selection.toString()+' wicket keeper'));
-              _scaffoldKey.currentState.showSnackBar(snackBar);
-            }
-            else{
-              categories[i].isSelected=true;
-              CreateTeamModel.instance.setWicketKeeper(int.parse(categories[i].id));
-              setState(() {
-              });
-            }
+            selectPlayer(wicketKeeper, wicketKeeper[i], wkGroup, 1);
           },
-          child: Column(
-            verticalDirection: VerticalDirection.down,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Expanded(
-                flex: 4,
-                child: new CircleAvatar(
+          child: Card(
+            color: color,
+            child: Column(
+              verticalDirection: VerticalDirection.down,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Expanded(
+                  flex: 4,
+                  child: new CircleAvatar(
 //                child: Image(image: NetworkImage("https://www.proxykhel.com/public/player/${categories[i].imageUrl}")),
-                  radius: 22.0,
-                  backgroundColor: Colors.transparent,
-                  backgroundImage: NetworkImage(
-                      "https://www.proxykhel.com/public/player/${allPlayers[wicketKeeper[i]].imageUrl}"),
+                    radius: 22.0,
+                    backgroundColor: Colors.transparent,
+                    backgroundImage: NetworkImage(
+                        "https://www.proxykhel.com/public/player/${allPlayers[wicketKeeper[i]].imageUrl}"),
+                  ),
                 ),
-              ),
-              Expanded(
-                  flex: 2,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 5.0),
+                Expanded(
+                    flex: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 5.0),
+                      child: new Text(
+                        allPlayers[wicketKeeper[i]].playerName,
+                        textAlign: TextAlign.center,
+                        textScaleFactor: 0.8,
+                        style: TextStyle(
+                            color: categories[i].isSelected
+                                ? Colors.white
+                                : Colors.black),
+                      ),
+                    )),
+                Expanded(flex: 1, child: Divider()),
+                Expanded(
+                    flex: 2,
                     child: new Text(
-                      allPlayers[wicketKeeper[i]].playerName,
-                      textAlign: TextAlign.center,
-                      textScaleFactor: 0.8,
-                      style: TextStyle(color:categories[i].isSelected?Colors.white:Colors.black),
-
-                    ),
-                  )),
-              Expanded(flex: 1, child: Divider()),
-              Expanded(flex: 2, child: new Text('Cr.${categories[i].credit}',
-                style: TextStyle(color:allPlayers[wicketKeeper[i]].isSelected?Colors.white:Colors.black),
-
-              ))
-            ],
+                      'Cr.${categories[i].credit}',
+                      style: TextStyle(
+                          color: allPlayers[wicketKeeper[i]].isSelected
+                              ? Colors.white
+                              : Colors.black),
+                    ))
+              ],
+            ),
           ),
         ),
       ));
@@ -262,71 +243,63 @@ class _CreateTeamState extends State<CreateTeam> {
   List<Widget> _loadCategoriesAllRounder(List playerType) {
     List<Widget> categoryCells = [];
     List categories = playerType;
-    for (int i = 0; i < categories.length; i++) {
-      categoryCells.add(Card(
-        color: categories[i].isSelected?Colors.deepOrange:Colors.white,
-
+    Color color = Colors.white;
+    for (int i = 0; i < allRounder.length; i++) {
+      int num = getPlayerColor(allRounder[i], arGroup);
+      if (num == 0) {
+        color = Colors.white;
+      } else if (num == 1) {
+        color = Colors.deepOrangeAccent[100];
+      } else {
+        color = Colors.deepOrange;
+      }
+      categoryCells.add(Container(
         child: InkWell(
           onTap: () {
-            int trueCounter=0;
-            int selection = 1;
-
-            for(int j=0; j < categories.length ;j++){
-              if(categories[j].isSelected) {
-                if (categories[j].id == categories[i].id) {
-                  categories[i].isSelected = false;
-                  CreateTeamModel.instance.setAllRounder(0);
-                  setState(() {
-                  });
-                  return;
-                }else{
-                  trueCounter++;
-                }
-              }
-            }
-
-            if(trueCounter == selection){
-              SnackBar snackBar = new SnackBar(content: Text('You can choose only '+selection.toString()+' all rounder'));
-              _scaffoldKey.currentState.showSnackBar(snackBar);
-            }
-            else{
-              categories[i].isSelected=true;
-              CreateTeamModel.instance.setAllRounder(int.parse(categories[i].id));
-              setState(() {
-              });
-            }
+            selectPlayer(allRounder, allRounder[i], arGroup, 1);
           },
-          child: Column(
-            verticalDirection: VerticalDirection.down,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Expanded(
-                flex: 4,
-                child: new CircleAvatar(
+          child: Card(
+            color: color,
+            child: Column(
+              verticalDirection: VerticalDirection.down,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Expanded(
+                  flex: 4,
+                  child: new CircleAvatar(
 //                child: Image(image: NetworkImage("https://www.proxykhel.com/public/player/${categories[i].imageUrl}")),
-                  radius: 22.0,
-                  backgroundColor: Colors.transparent,
-                  backgroundImage: NetworkImage(
-                      "https://www.proxykhel.com/public/player/${allPlayers[allRounder[i]].imageUrl}"),
+                    radius: 22.0,
+                    backgroundColor: Colors.transparent,
+                    backgroundImage: NetworkImage(
+                        "https://www.proxykhel.com/public/player/${allPlayers[allRounder[i]].imageUrl}"),
+                  ),
                 ),
-              ),
-              Expanded(
-                  flex: 2,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 5.0),
+                Expanded(
+                    flex: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 5.0),
+                      child: new Text(
+                        allPlayers[allRounder[i]].playerName,
+                        textAlign: TextAlign.center,
+                        textScaleFactor: 0.8,
+                        style: TextStyle(
+                            color: categories[i].isSelected
+                                ? Colors.white
+                                : Colors.black),
+                      ),
+                    )),
+                Expanded(flex: 1, child: Divider()),
+                Expanded(
+                    flex: 2,
                     child: new Text(
-                      allPlayers[allRounder[i]].playerName,
-                      textAlign: TextAlign.center,
-                      textScaleFactor: 0.8,
-                      style: TextStyle(color:categories[i].isSelected?Colors.white:Colors.black),
-
-                    ),
-                  )),
-              Expanded(flex: 1, child: Divider()),
-              Expanded(flex: 2, child: new Text('Cr.${allPlayers[allRounder[i]].credit}',
-                style: TextStyle(color:categories[i].isSelected?Colors.white:Colors.black),
-              ))
-            ],
+                      'Cr.${allPlayers[allRounder[i]].credit}',
+                      style: TextStyle(
+                          color: categories[i].isSelected
+                              ? Colors.white
+                              : Colors.black),
+                    ))
+              ],
+            ),
           ),
         ),
       ));
@@ -338,70 +311,63 @@ class _CreateTeamState extends State<CreateTeam> {
   List<Widget> _loadCategoriesStartPlayer(List playerType) {
     List<Widget> categoryCells = [];
     List categories = playerType;
-    for (int i = 0; i < categories.length; i++) {
-      categoryCells.add(Card(
-        color: categories[i].isSelected?Colors.deepOrange:Colors.white,
+    Color color = Colors.white;
+    for (int i = 0; i < starPlayer.length; i++) {
+      int num = getPlayerColor(starPlayer[i], starPlayerGroup);
+      if (num == 0) {
+        color = Colors.white;
+      } else if (num == 1) {
+        color = Colors.deepOrangeAccent[100];
+      } else {
+        color = Colors.deepOrange;
+      }
+      categoryCells.add(Container(
         child: InkWell(
           onTap: () {
-            int trueCounter=0;
-            int selection = 1;
-
-            for(int j=0; j < categories.length ;j++){
-              if(categories[j].isSelected) {
-                if (categories[j].id == categories[i].id) {
-                  categories[i].isSelected = false;
-                  CreateTeamModel.instance.setStarPlayer(0);
-                  setState(() {
-                  });
-                  return;
-                }else{
-                  trueCounter++;
-                }
-              }
-            }
-
-            if(trueCounter == selection){
-              SnackBar snackBar = new SnackBar(content: Text('You can choose only '+selection.toString()+' star player'));
-              _scaffoldKey.currentState.showSnackBar(snackBar);
-            }
-            else{
-              categories[i].isSelected=true;
-              CreateTeamModel.instance.setStarPlayer(int.parse(allPlayers[starPlayer[i]].id));
-              setState(() {
-              });
-            }
+            selectPlayer(starPlayer, starPlayer[i], starPlayerGroup, 1);
           },
-          child: Column(
-            verticalDirection: VerticalDirection.down,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Expanded(
-                flex: 4,
-                child: new CircleAvatar(
+          child: Card(
+            color: color,
+            child: Column(
+              verticalDirection: VerticalDirection.down,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Expanded(
+                  flex: 4,
+                  child: new CircleAvatar(
 //                child: Image(image: NetworkImage("https://www.proxykhel.com/public/player/${categories[i].imageUrl}")),
-                  radius: 22.0,
-                  backgroundColor: Colors.transparent,
-                  backgroundImage: NetworkImage(
-                      "https://www.proxykhel.com/public/player/${allPlayers[starPlayer[i]].imageUrl}"),
+                    radius: 22.0,
+                    backgroundColor: Colors.transparent,
+                    backgroundImage: NetworkImage(
+                        "https://www.proxykhel.com/public/player/${allPlayers[starPlayer[i]].imageUrl}"),
+                  ),
                 ),
-              ),
-              Expanded(
-                  flex: 2,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 5.0),
+                Expanded(
+                    flex: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 5.0),
+                      child: new Text(
+                        allPlayers[starPlayer[i]].playerName,
+                        textAlign: TextAlign.center,
+                        textScaleFactor: 0.8,
+                        style: TextStyle(
+                            color: categories[i].isSelected
+                                ? Colors.white
+                                : Colors.black),
+                      ),
+                    )),
+                Expanded(flex: 1, child: Divider()),
+                Expanded(
+                    flex: 2,
                     child: new Text(
-                      allPlayers[starPlayer[i]].playerName,
-                      textAlign: TextAlign.center,
-                      textScaleFactor: 0.8,
-                      style: TextStyle(color:categories[i].isSelected?Colors.white:Colors.black),
-
-                    ),
-                  )),
-              Expanded(flex: 1, child: Divider()),
-              Expanded(flex: 2, child: new Text('Cr.${allPlayers[starPlayer[i]].credit}',
-                style: TextStyle(color:categories[i].isSelected?Colors.white:Colors.black),
-              ))
-            ],
+                      'Cr.${allPlayers[starPlayer[i]].credit}',
+                      style: TextStyle(
+                          color: categories[i].isSelected
+                              ? Colors.white
+                              : Colors.black),
+                    ))
+              ],
+            ),
           ),
         ),
       ));
@@ -413,68 +379,63 @@ class _CreateTeamState extends State<CreateTeam> {
   List<Widget> _loadCategoriesXPlayer(List playerType) {
     List<Widget> categoryCells = [];
     List categories = playerType;
-    for (int i = 0; i < categories.length; i++) {
-      categoryCells.add(Card(
-        color: categories[i].isSelected?Colors.deepOrange:Colors.white,
+    Color color = Colors.white;
+    for (int i = 0; i < xPlayer.length; i++) {
+      int num = getPlayerColor(xPlayer[i], xPlayerGroup);
+      if (num == 0) {
+        color = Colors.white;
+      } else if (num == 1) {
+        color = Colors.deepOrangeAccent[100];
+      } else {
+        color = Colors.deepOrange;
+      }
+      categoryCells.add(Container(
         child: InkWell(
           onTap: () {
-            int trueCounter=0;
-            int selection = 1;
-            for(int j=0; j < categories.length ;j++){
-              if(categories[j].isSelected) {
-                if (categories[j].id == categories[i].id) {
-                  categories[i].isSelected = false;
-                  CreateTeamModel.instance.setXPlayer(0);
-                  setState(() {
-                  });
-                  return;
-                }else{
-                  trueCounter++;
-                }
-              }
-            }
-
-            if(trueCounter == selection){
-              SnackBar snackBar = new SnackBar(content: Text('Select only '+selection.toString()+' X player'));
-              _scaffoldKey.currentState.showSnackBar(snackBar);
-            }
-            else{
-              categories[i].isSelected=true;
-              CreateTeamModel.instance.setXPlayer(int.parse(categories[i].id));
-              setState(() {
-              });
-            }
+            selectPlayer(xPlayer, xPlayer[i], xPlayerGroup, 1);
           },
-          child: Column(
-            verticalDirection: VerticalDirection.down,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Expanded(
-                flex: 4,
-                child: new CircleAvatar(
+          child: Card(
+            color: color,
+            child: Column(
+              verticalDirection: VerticalDirection.down,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Expanded(
+                  flex: 4,
+                  child: new CircleAvatar(
 //                child: Image(image: NetworkImage("https://www.proxykhel.com/public/player/${categories[i].imageUrl}")),
-                  radius: 22.0,
-                  backgroundColor: Colors.transparent,
-                  backgroundImage: NetworkImage(
-                      "https://www.proxykhel.com/public/player/${allPlayers[xPlayer[i]].imageUrl}"),
+                    radius: 22.0,
+                    backgroundColor: Colors.transparent,
+                    backgroundImage: NetworkImage(
+                        "https://www.proxykhel.com/public/player/${allPlayers[xPlayer[i]].imageUrl}"),
+                  ),
                 ),
-              ),
-              Expanded(
-                  flex: 2,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 5.0),
+                Expanded(
+                    flex: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 5.0),
+                      child: new Text(
+                        allPlayers[xPlayer[i]].playerName,
+                        textAlign: TextAlign.center,
+                        textScaleFactor: 0.8,
+                        style: TextStyle(
+                            color: categories[i].isSelected
+                                ? Colors.white
+                                : Colors.black),
+                      ),
+                    )),
+                Expanded(flex: 1, child: Divider()),
+                Expanded(
+                    flex: 2,
                     child: new Text(
-                      allPlayers[xPlayer[i]].playerName,
-                      textAlign: TextAlign.center,
-                      textScaleFactor: 0.8,
-                      style: TextStyle(color:categories[i].isSelected?Colors.white:Colors.black),
-                    ),
-                  )),
-              Expanded(flex: 1, child: Divider()),
-              Expanded(flex: 2, child: new Text('Cr.${allPlayers[xPlayer[i]].credit}',
-                style: TextStyle(color:categories[i].isSelected?Colors.white:Colors.black),
-              ))
-            ],
+                      'Cr.${allPlayers[xPlayer[i]].credit}',
+                      style: TextStyle(
+                          color: categories[i].isSelected
+                              ? Colors.white
+                              : Colors.black),
+                    ))
+              ],
+            ),
           ),
         ),
       ));
@@ -486,67 +447,58 @@ class _CreateTeamState extends State<CreateTeam> {
   List<Widget> _loadCategoriesAll(List<dynamic> playerList) {
     List<Widget> categoryCells = [];
     List categories = playerList;
-    List superFive=[];
-    int credit;
-    for (int i = 0; i < categories.length; i++) {
-      categoryCells.add(Card(
-        color: categories[i].isSelected?Colors.deepOrange:Colors.white,
+    Color color = Colors.white;
+    for (int i = 0; i < superFive.length; i++) {
+      int num = getPlayerColor(superFive[i], superFiveGroup);
+      if (num == 0) {
+        color = Colors.white;
+      } else if (num == 1) {
+        color = Colors.deepOrangeAccent[100];
+      } else {
+        color = Colors.deepOrange;
+      }
+      categoryCells.add(Container(
         child: InkWell(
-          onTap: (){
-            int trueCounter=0;
-            int selection = 5;
-
-            for(int j=0; j < categories.length ;j++){
-              if(categories[j].isSelected) {
-                if (categories[j].id == categories[i].id) {
-                  categories[i].isSelected = false;
-                  CreateTeamModel.instance.setSuperFive(superFive);
-                  setState(() {
-                  });
-                  return;
-                }else{
-                  trueCounter++;
-                }
-              }
-            }
-
-            if(trueCounter == selection){
-              SnackBar snackBar = new SnackBar(content: Text('Select only '+selection.toString()+' players'));
-              _scaffoldKey.currentState.showSnackBar(snackBar);
-            }
-            else{
-              categories[i].isSelected=true;
-              superFive.add(categories[i].id);
-              CreateTeamModel.instance.setSuperFive(superFive);
-              setState(() {
-              });
-            }
+          onTap: () {
+            selectPlayer(superFive, superFive[i], superFiveGroup, 5);
           },
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                flex: 4,
-                child: new CircleAvatar(
+          child: Card(
+            color: color,
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  flex: 4,
+                  child: new CircleAvatar(
 //                child: Image(image: NetworkImage("https://www.proxykhel.com/public/player/${categories[i].imageUrl}")),
-                  radius: 22.0,
-                  backgroundColor: Colors.transparent,
-                  backgroundImage: NetworkImage(
-                      "https://www.proxykhel.com/public/player/${allPlayers[xPlayer[i]].imageUrl}"),
+                    radius: 22.0,
+                    backgroundColor: Colors.transparent,
+                    backgroundImage: NetworkImage(
+                        "https://www.proxykhel.com/public/player/${allPlayers[xPlayer[i]].imageUrl}"),
+                  ),
                 ),
-              ),
-              Expanded(
-                  flex: 2,
-                  child: new Text(
-                    allPlayers[xPlayer[i]].playerName,
-                    textAlign: TextAlign.center,
-                    textScaleFactor: 0.8,
-                    style: TextStyle(color:categories[i].isSelected?Colors.white:Colors.black),
-                  )),
-              Expanded(flex: 1, child: Divider()),
-              Expanded(flex: 2, child: new Text('Cr.${allPlayers[xPlayer[i]].credit}',
-                style: TextStyle(color:categories[i].isSelected?Colors.white:Colors.black),
-              ))
-            ],
+                Expanded(
+                    flex: 2,
+                    child: new Text(
+                      allPlayers[xPlayer[i]].playerName,
+                      textAlign: TextAlign.center,
+                      textScaleFactor: 0.8,
+                      style: TextStyle(
+                          color: categories[i].isSelected
+                              ? Colors.white
+                              : Colors.black),
+                    )),
+                Expanded(flex: 1, child: Divider()),
+                Expanded(
+                    flex: 2,
+                    child: new Text(
+                      'Cr.${allPlayers[xPlayer[i]].credit}',
+                      style: TextStyle(
+                          color: categories[i].isSelected
+                              ? Colors.white
+                              : Colors.black),
+                    ))
+              ],
+            ),
           ),
         ),
       ));
@@ -558,9 +510,15 @@ class _CreateTeamState extends State<CreateTeam> {
   List<Widget> _loadCategoriesChoosenPlayer(List<dynamic> playerList) {
     List<Widget> categoryCells = [];
     List categories = playerList;
-    for (int i = 0; i < categories.length; i++) {
-      categoryCells.add(Card(
-        child: InkWell(
+    if (chosenPlayer == []) {
+      new Center(child: new Text('Please select 11 players'));
+    }
+    Color color = Colors.deepOrangeAccent;
+    for (int i = 0; i < chosenPlayer.length; i++) {
+      categoryCells.add(Container(
+        child: Card(
+          elevation: 4,
+          color: color,
           child: Column(
             children: <Widget>[
               Expanded(
@@ -570,18 +528,22 @@ class _CreateTeamState extends State<CreateTeam> {
                   radius: 22.0,
                   backgroundColor: Colors.transparent,
                   backgroundImage: NetworkImage(
-                      "https://www.proxykhel.com/public/player/${categories[i].imageUrl}"),
+                      "https://www.proxykhel.com/public/player/${allPlayers[int.parse(chosenPlayer[i]['playerIndex'])].imageUrl}"),
                 ),
               ),
               Expanded(
                   flex: 2,
                   child: new Text(
-                    categories[i].playerName,
+                    allPlayers[int.parse(chosenPlayer[i]['playerIndex'])]
+                        .playerName,
                     textAlign: TextAlign.center,
                     textScaleFactor: 0.8,
                   )),
               Expanded(flex: 1, child: Divider()),
-              Expanded(flex: 2, child: new Text('Cr.${categories[i].credit}'))
+              Expanded(
+                  flex: 2,
+                  child: new Text(
+                      'Cr.${allPlayers[int.parse(chosenPlayer[i]['playerIndex'])].credit}'))
             ],
           ),
         ),
@@ -599,7 +561,71 @@ class _CreateTeamState extends State<CreateTeam> {
   List starPlayer;
   List xPlayer;
   List superFive;
-  List choosenPlayer;
+  List chosenPlayer;
+
+  int getPlayerColor(int playerIndex, String groupName) {
+    for (int i = 0; i < chosenPlayer.length; i++) {
+      if (int.parse(chosenPlayer[i]['playerIndex']) == playerIndex &&
+          chosenPlayer[i]['groupName'] == groupName)
+        return 2;
+      else if (int.parse(chosenPlayer[i]['playerIndex']) == playerIndex)
+        return 1;
+    }
+    return 0;
+  }
+
+  int getPlayerCount(String groupName) {
+    int count = 0;
+    for (int i = 0; i < chosenPlayer.length; i++)
+      if (chosenPlayer[i]['groupName'] == groupName) count++;
+    return count;
+  }
+
+  double getTotalCreditOfTeam() {
+    double credit = 0;
+    for (int i = 0; i < chosenPlayer.length; i++)
+      credit += double.parse(
+          allPlayers[int.parse(chosenPlayer[i]['playerIndex'])].credit);
+    return credit;
+  }
+
+  void selectPlayer(List playerList, int playerIndex, String groupName,
+      int allowedSelection) {
+    int colorCode = getPlayerColor(playerIndex, groupName);
+
+    if (colorCode == 2) {
+      for (int i = 0; i < chosenPlayer.length; i++) {
+        if (playerIndex == int.parse(chosenPlayer[i]['playerIndex'])) {
+          chosenPlayer.removeAt(i);
+        }
+      }
+      setState(() {});
+    } else if (colorCode == 1) {
+      SnackBar snackBar =
+          new SnackBar(content: Text('Player already selected'));
+      _scaffoldKey.currentState.showSnackBar(snackBar);
+    } else {
+      if (allowedSelection == getPlayerCount(groupName)) {
+        // show("that this many batsman already selected");
+        SnackBar snackBar = new SnackBar(
+            content: Text('you can pick only $allowedSelection $groupName'));
+        _scaffoldKey.currentState.showSnackBar(snackBar);
+      } else if (getTotalCreditOfTeam() +
+              double.parse(allPlayers[playerIndex].credit) >
+          100) {
+        //show('credit limit exeed');
+        SnackBar snackBar = new SnackBar(content: Text('low credit'));
+        _scaffoldKey.currentState.showSnackBar(snackBar);
+      } else {
+        //show('select that player and add it into chosenPlayer');
+        Map playerMap = new Map();
+        playerMap['playerIndex'] = playerIndex.toString();
+        playerMap['groupName'] = groupName;
+        chosenPlayer.add(playerMap);
+        setState(() {});
+      }
+    }
+  }
 
   void resetAll() {
     _isBatsman = false;
@@ -617,15 +643,19 @@ class _CreateTeamState extends State<CreateTeam> {
     // TODO: implement initState
     super.initState();
     _isBatsman = true;
+    _isAllrounder = false;
+    _isBowler = false;
+    _isChoosenplayer = false;
+    _isStarplayer = false;
+    _isSupefive = false;
+    _isWicketee = false;
+    _isXpplayer = false;
     _playerType = 1;
-    _cardBackgroundColor = Colors.white;
-    _color = false;
-    _credit=100;
+    chosenPlayer = [];
   }
 
   @override
   Widget build(BuildContext context) {
-
     void _showLogoutDialog(String title, String content) {
       showDialog(
         context: context,
@@ -658,7 +688,7 @@ class _CreateTeamState extends State<CreateTeam> {
     }
 
     return Builder(
-      builder: (context)=> Scaffold(
+      builder: (context) => Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
             iconTheme: IconThemeData(
@@ -700,7 +730,8 @@ class _CreateTeamState extends State<CreateTeam> {
                 ],
                 onSelected: (value) async {
                   if (value == 2) {
-                    _showLogoutDialog('Warning', 'You sure you want to logout?');
+                    _showLogoutDialog(
+                        'Warning', 'You sure you want to logout?');
                   } else if (value == 1) {
                     Navigator.push(context, SlideLeftRoute(widget: Profile()));
                   }
@@ -1064,76 +1095,90 @@ class _CreateTeamState extends State<CreateTeam> {
                           return Text('Error: ${snapshot.error}');
                         else {
                           allPlayers = snapshot.data.data.supperSticker;
-                          batsMan=[];
-                          bowler=[];
-                          allRounder=[];
-                          wicketKeeper=[];
-                          starPlayer=[];
-                          xPlayer=[];
-                          superFive=[];
-                          choosenPlayer=[];
-
-                          for(int i=0; i<snapshot.data.data.batsman.length;i++){
-                            for(int j=0; j<allPlayers.length;j++){
-                              if(snapshot.data.data.batsman[i].id == allPlayers[j].id){
+                          batsMan = [];
+                          bowler = [];
+                          allRounder = [];
+                          wicketKeeper = [];
+                          starPlayer = [];
+                          xPlayer = [];
+                          superFive = [];
+                          for (int i = 0;
+                              i < snapshot.data.data.batsman.length;
+                              i++) {
+                            for (int j = 0; j < allPlayers.length; j++) {
+                              if (snapshot.data.data.batsman[i].id ==
+                                  allPlayers[j].id) {
                                 batsMan.add(j);
                               }
                             }
                           }
 
-                          for(int i=0; i<snapshot.data.data.bowler.length;i++){
-                            for(int j=0; j<allPlayers.length;j++){
-                              if(snapshot.data.data.bowler[i].id == allPlayers[j].id){
+                          for (int i = 0;
+                              i < snapshot.data.data.bowler.length;
+                              i++) {
+                            for (int j = 0; j < allPlayers.length; j++) {
+                              if (snapshot.data.data.bowler[i].id ==
+                                  allPlayers[j].id) {
                                 bowler.add(j);
                               }
                             }
                           }
 
-                          for(int i=0; i<snapshot.data.data.allRounder.length;i++){
-                            for(int j=0; j<allPlayers.length;j++){
-                              if(snapshot.data.data.allRounder[i].id == allPlayers[j].id){
+                          for (int i = 0;
+                              i < snapshot.data.data.allRounder.length;
+                              i++) {
+                            for (int j = 0; j < allPlayers.length; j++) {
+                              if (snapshot.data.data.allRounder[i].id ==
+                                  allPlayers[j].id) {
                                 allRounder.add(j);
                               }
                             }
                           }
 
-                          for(int i=0; i<snapshot.data.data.wicketKeeper.length;i++){
-                            for(int j=0; j<allPlayers.length;j++){
-                              if(snapshot.data.data.wicketKeeper[i].id == allPlayers[j].id){
+                          for (int i = 0;
+                              i < snapshot.data.data.wicketKeeper.length;
+                              i++) {
+                            for (int j = 0; j < allPlayers.length; j++) {
+                              if (snapshot.data.data.wicketKeeper[i].id ==
+                                  allPlayers[j].id) {
                                 wicketKeeper.add(j);
                               }
                             }
                           }
 
-                          for(int i=0; i<snapshot.data.data.supperSticker.length;i++){
-                            for(int j=0; j<allPlayers.length;j++){
-                              if(snapshot.data.data.supperSticker[i].id == allPlayers[j].id){
+                          for (int i = 0;
+                              i < snapshot.data.data.supperSticker.length;
+                              i++) {
+                            for (int j = 0; j < allPlayers.length; j++) {
+                              if (snapshot.data.data.supperSticker[i].id ==
+                                  allPlayers[j].id) {
                                 starPlayer.add(j);
                               }
                             }
                           }
 
-                          for(int i=0; i<snapshot.data.data.supperSticker.length;i++){
-                            for(int j=0; j<allPlayers.length;j++){
-                              if(snapshot.data.data.supperSticker[i].id == allPlayers[j].id){
+                          for (int i = 0;
+                              i < snapshot.data.data.supperSticker.length;
+                              i++) {
+                            for (int j = 0; j < allPlayers.length; j++) {
+                              if (snapshot.data.data.supperSticker[i].id ==
+                                  allPlayers[j].id) {
                                 xPlayer.add(j);
                               }
                             }
                           }
 
-                          int counter =0;
-                          for(int i=0; i<allPlayers.length;i++){
-                            if(wicketKeeper.length>counter)
-                              if(wicketKeeper[counter] == i){
-                                counter++;
-                              }else{
-                                superFive.add(i);
-                              }
+                          int counter = 0;
+                          for (int i = 0; i < allPlayers.length; i++) {
+                            if (wicketKeeper.length >
+                                counter) if (wicketKeeper[counter] == i) {
+                              counter++;
+                            } else {
+                              superFive.add(i);
+                            }
                             else
                               superFive.add(i);
                           }
-
-
 
                           switch (_playerType) {
                             case 1:
@@ -1188,7 +1233,8 @@ class _CreateTeamState extends State<CreateTeam> {
                               for (int i = 0;
                                   i < snapshot.data.data.allRounder.length;
                                   i++) {
-                                playerList.add(snapshot.data.data.allRounder[i]);
+                                playerList
+                                    .add(snapshot.data.data.allRounder[i]);
                               }
                               return GridView.count(
                                 crossAxisCount: 3,
@@ -1219,7 +1265,8 @@ class _CreateTeamState extends State<CreateTeam> {
             children: <Widget>[
               new OutlineButton(
                 onPressed: () async {
-                  bool check = await CreateTeamModel.instance.saveTeam(1723, 14821, 2, "VK", "WH");
+                  bool check = await CreateTeamModel.instance
+                      .saveTeam(1723, 14821, 2, "VK", "WH");
                 },
                 child: Text("Save Team"),
                 shape: new RoundedRectangleBorder(
@@ -1236,8 +1283,8 @@ class _CreateTeamState extends State<CreateTeam> {
                 children: <Widget>[
                   Padding(
                     padding: EdgeInsets.only(right: 5),
-                    child: new Text(
-                        '${_credit} Credit left'),
+                    child: new Text((100 - getTotalCreditOfTeam()).toString() +
+                        ' Credit left'),
                   ),
                 ],
               )

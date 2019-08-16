@@ -21,50 +21,6 @@ class WalletModel{
   }
 
 
-  Future startPayment(int amount)async {
-    String userId = await SavedPref.instance.getUserId();
-    final response = await http.post("https://www.proxykhel.com/android/generateChecksum.php",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: {
-        "mId": 'WGlUpt31068318705253',
-        "CHANNEL_ID": "WAP",
-        'INDUSTRY_TYPE_ID': 'Retail',
-        'WEBSITE': 'APPSTAGING',
-        'PAYTM_MERCHANT_KEY': '0AVJYh@7jLL37Q79',
-        'TXN_AMOUNT': amount.toString(),
-        'ORDER_ID': "12142",
-        'CUST_ID': '122'
-      }
-    );
-
-    if(response.statusCode == 200){
-      var checksum = response.body;
-      print(checksum);
-
-      var paytmResponse = Paytm.startPaytmPayment(
-          false,
-          'WGlUpt31068318705253',
-          "12142",
-          "122",
-          "WAP",
-          amount.toString(),
-          'APPSTAGING',
-          "https://www.proxykhel.com/android/verifyChecksum.php",
-          'Retail',
-          checksum);
-
-      paytmResponse.then((value) {
-
-         final payment_response = value.toString();
-        print(payment_response);
-      });
-    }
-    print(response.statusCode);
-  }
-
-
   Future getWalletBalance() async {
     return this._memoizer.runOnce(()async {
       String userId = await SavedPref.instance.getUserId();
