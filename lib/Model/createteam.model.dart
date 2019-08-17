@@ -100,38 +100,27 @@ class  CreateTeamModel{
 
     String userId = await SavedPref.instance.getUserId();
 
-    print('$_batsMan  $_bowler $_allRounder $_wicketKeeper $_starPlayer $_xPlayer ');
-    for(int i=0;i<_superFive.length;i++){
-      print(_superFive[i]);
-    }
 
-    print(credit);
-    print(matchId);
-    print(contestId);
-    print(userId);
-    print(country1);
-    print(country2);
 
 
     http.Response response = await http.post("https://www.proxykhel.com/android/Createteam.php",
         body: {
           "type":"saveTeam",
-          "matchId":matchId,
-          "contestId":contestId,
-          "userId":userId,
-          "batsman":_batsMan,
-          "bowler":_bowler,
-          "allrounder":_allRounder,
-          "wicketkeeper":_wicketKeeper,
-          "manofthematch":_starPlayer,
-          "superstriker":_xPlayer,
-          "credit":credit,
+          "matchId":matchId.toString(),
+          "contestId":contestId.toString(),
+          "userId":userId.toString(),
+          "batsman":_batsMan.toString(),
+          "bowler":_bowler.toString(),
+          "allrounder":_allRounder.toString(),
+          "wicketkeeper":_wicketKeeper.toString(),
+          "manofthematch":_starPlayer.toString(),
+          "superstriker":_xPlayer.toString(),
+          "credit":credit.toString(),
           "player_session":_superFive.toString()
         }
     );
     if(response.statusCode == 200){
       final res = json.decode(response.body);
-      print(res);
       if(res['success']=='true' && res['msg']=='ok'){
         return true;
       }

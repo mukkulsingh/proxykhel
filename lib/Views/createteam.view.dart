@@ -1309,6 +1309,14 @@ class _CreateTeamState extends State<CreateTeam> {
                       ContestModel.instance.getTeamOneName(),
                       ContestModel.instance.getTeamTwoName()
                     );
+
+                    if(check){
+                      Navigator.of(context).pop();
+                    }
+                    else{
+                      SnackBar snackbar = new SnackBar(content: Text('Something went wrong.Try again'),duration: const Duration(seconds: 1),);
+                      _scaffoldKey.currentState.showSnackBar(snackbar);
+                    }
                   }
 
                 },
