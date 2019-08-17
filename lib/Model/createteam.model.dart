@@ -96,7 +96,6 @@ class  CreateTeamModel{
       String country1,
       String country2,
       ) async {
-    print('here');
 
 
     String userId = await SavedPref.instance.getUserId();
