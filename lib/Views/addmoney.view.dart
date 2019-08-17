@@ -65,7 +65,7 @@ class _AddMoneyState extends State<AddMoney> {
         industryTypeId: "Retail", // default: Retail (STAGING value)
         website: "DEFAULT", // default: APPSTAGING (STAGING value)
         staging: false, // default: true (by default paytm staging environment is used)
-        showToast: true, // default: true (by default shows callback messages from paytm in Android Toasts)
+        showToast: false, // default: true (by default shows callback messages from paytm in Android Toasts)
       );
 
     } on Exception {

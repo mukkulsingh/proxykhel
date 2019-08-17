@@ -1266,7 +1266,6 @@ class _CreateTeamState extends State<CreateTeam> {
             children: <Widget>[
               new OutlineButton(
                 onPressed: () async {
-                  print(chosenPlayer);
                   if(chosenPlayer.length != 11){
                     SnackBar snackbar = new SnackBar(content: Text('Please choose 11 players'),duration: const Duration(seconds: 1));
                    _scaffoldKey.currentState.showSnackBar(snackbar);
