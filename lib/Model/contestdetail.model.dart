@@ -18,6 +18,14 @@ class ContestDetailModel {
   static String currentmatchId;
   static String teamname1;
   static String teamname2;
+  static String _matchType;
+  void setMatchType(String matchType){
+    _matchType = matchType;
+  }
+
+  String getMatchType(){
+    return _matchType;
+  }
 
 
   void setContestDuration(String  duration){
@@ -57,9 +65,14 @@ class ContestDetailModel {
     return teamname2;
   }
 
-  ContestData contestDetailModel;
+  ContestData contestDataModel;
   void setContestDetail(contestDetail){
-    contestDetailModel = contestDetail;
+
+    contestDataModel = contestDetail;
+  }
+
+  ContestData getContestData(){
+    return contestDataModel;
   }
 
   Future<ContestDetailPojo> getContestDetail(int contestId,int matchId) async {

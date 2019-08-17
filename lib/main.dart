@@ -1,10 +1,10 @@
 import "package:flutter/material.dart";
-import './Controller/login.controller.dart';
+import './Model/login.model.dart';
 import './Views/login.view.dart';
 import './Views/dashboard.view.dart';
 import './Constants/theme.dart' as Theme;
 void main() async {
-  bool isLoggedIn = await Controller.instance.isLoggedIn();
+  bool isLoggedIn = await Model.instance.checkIfLoggedIn();
   if(isLoggedIn){
     runApp(DashboardScreen());
   }

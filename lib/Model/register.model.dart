@@ -1,7 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import './../Model/verifyphone.model.dart';
 
 class Model{
   static Register register;
@@ -18,22 +18,29 @@ class Model{
 
   Future<int> registeringNewUser(String fullName, String emailOrPhone, String password, String url) async{
 
-    http.Response response = await http.post(url,body:{'fullName':fullName, 'emailId':emailOrPhone,'password':password});
+    http.Response response = await http.post(url,body:{'type':"register",'fullName':fullName, 'emailId':emailOrPhone.toString(),'password':password.toString()});
     if(response.statusCode == 200){
-
       final res = json.decode(response.body);
-      if(res == 'invalidPhone'){
+      print(res);
+
+      if(res['data'] == 'invalidPhone'){
         return 1;
       }
-      else if(res == 'invalidEmail'){
+      else if(res['data'] == 'invalidEmail'){
         return 2;
       }
-      else if(res['success'] == true){
-        final pref = await SharedPreferences.getInstance();
-        register = registerFromJson(response.body);
-        pref.setString('username', register.emailId);
-        pref.setString('fullName', register.fullName);
+      else if(res['data'] == 'UserExits'){
         return 3;
+      }
+      else if(res["success"]=="true") {
+        register = registerFromJson(response.body);
+        VerifyPhoneModel.instance.setOTP(register.data.otp);
+        VerifyPhoneModel.instance.setContact(int.parse(register.data.emailId));
+        VerifyPhoneModel.instance.setFullName(register.data.fullName);
+        VerifyPhoneModel.instance.setEmailId(register.data.emailId);
+        VerifyPhoneModel.instance.setUsername(register.data.username);
+        VerifyPhoneModel.instance.setUserId(register.data.id);
+        return 4;
       }
       else{
         return 0;
@@ -51,6 +58,26 @@ Register registerFromJson(String str) => Register.fromJson(json.decode(str));
 String registerToJson(Register data) => json.encode(data.toJson());
 
 class Register {
+  String success;
+  Data data;
+
+  Register({
+    this.success,
+    this.data,
+  });
+
+  factory Register.fromJson(Map<String, dynamic> json) => new Register(
+    success: json["success"],
+    data: Data.fromJson(json["data"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "success": success,
+    "data": data.toJson(),
+  };
+}
+
+class Data {
   String id;
   String fullName;
   String emailId;
@@ -68,8 +95,9 @@ class Register {
   String username;
   String teamname;
   String eemailerror;
+  int otp;
 
-  Register({
+  Data({
     this.id,
     this.fullName,
     this.emailId,
@@ -87,9 +115,10 @@ class Register {
     this.username,
     this.teamname,
     this.eemailerror,
+    this.otp,
   });
 
-  factory Register.fromJson(Map<String, dynamic> json) => new Register(
+  factory Data.fromJson(Map<String, dynamic> json) => new Data(
     id: json["id"],
     fullName: json["fullName"],
     emailId: json["emailId"],
@@ -107,6 +136,7 @@ class Register {
     username: json["username"],
     teamname: json["teamname"],
     eemailerror: json["eemailerror"],
+    otp: json["otp"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -127,5 +157,6 @@ class Register {
     "username": username,
     "teamname": teamname,
     "eemailerror": eemailerror,
+    "otp": otp,
   };
 }

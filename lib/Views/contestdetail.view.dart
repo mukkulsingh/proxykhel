@@ -4,7 +4,6 @@ import './../Views/wallet.view.dart';
 import './bottomnavbar.view.dart';
 import './../Constants/slideTransitions.dart';
 import './createteam.view.dart';
-import './../Views/tabBarMega.view.dart';
 import './../Model/logout.model.dart';
 import './../Model/contestdetail.model.dart';
 import './../Views/login.view.dart';
@@ -25,6 +24,8 @@ class _ContestDetailState extends State<ContestDetail> {
 
   @override
   Widget build(BuildContext context) {
+    
+    contestData = ContestDetailModel.instance.getContestData();
 
     void _showLogoutDialog(String title, String content) {
       showDialog(
@@ -124,9 +125,18 @@ class _ContestDetailState extends State<ContestDetail> {
               child: new Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  new Text('IND vs NZ',style: TextStyle(color: Colors.white),),
+                  new Container(
+                    child: new Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        new Text(ContestDetailModel.instance.getTeam1Name(),style: TextStyle(color: Colors.white)),
+                        new Text(' vs ',style: TextStyle(color: Colors.white),),
+                        new Text(ContestDetailModel.instance.getTeam2Name(),style: TextStyle(color: Colors.white)),
+                      ],
+                    ),
+                  ),
                   new Text(ContestDetailModel.instance.getContestDuration(),style: TextStyle(color: Colors.white),),
-                  new Text('(ODI)',style: TextStyle(color: Colors.white),),
+                  new Text(ContestDetailModel.instance.getMatchType(),style: TextStyle(color: Colors.white),),
                 ],
               ),
             ),
@@ -136,7 +146,7 @@ class _ContestDetailState extends State<ContestDetail> {
                 child: new Column(
                   children: <Widget>[
                     new LinearProgressIndicator(
-                      value: 0.3,
+                      value: (int.parse(contestData.totlaJoin) / int.parse(contestData.maxTeam)),
                       backgroundColor: Colors.grey[300],
                     ),
                     new Column(
@@ -160,29 +170,33 @@ class _ContestDetailState extends State<ContestDetail> {
                                       child:new Row(
                                         children: <Widget>[
                                           new Text('Winning',style: TextStyle(fontSize: 12.0),),
-                                          new Icon(Icons.arrow_drop_down),
+                                          new Icon(Icons.arrow_drop_down,color: Colors.black,),
                                         ],
                                       )
                                   ),
-                                  new Text('Rs. 0'),
+                                 new Row(
+                                   children: <Widget>[
+                                     new Text('₹'),
+                                     new Text(contestData.entryfee),
+                                   ],
+                                 )
                                 ],
                               ),
                             ),
                             new Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
+                                new Text(''),
                                 new Text('Winners',style: TextStyle(fontSize: 12.0),),
-                                new Text('3',style: TextStyle(fontWeight: FontWeight.bold),),
+                                new Text(contestData.winner??'0',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0),),
+                                new Text(''),
+                                new Text(contestData.totlaJoin+'/'+contestData.maxTeam+' Joined',style: TextStyle(fontSize: 12.0),),
+                                new Text(''),
                               ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left:12.0),
-                              child: new Text('5/100 Joined',style: TextStyle(fontSize: 12.0),),
                             ),
                             new Column(
                               mainAxisAlignment: MainAxisAlignment  .center,
                               children: <Widget>[
-                                new Text('Entry'),
+                                new Text('Entry ₹ ${contestData.entryfee} '),
                                 Container(
                                   height: 30.0,
                                   width: 85,

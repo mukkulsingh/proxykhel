@@ -5,13 +5,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 class Model{
-
-  static UserAccount account = null;
-
-  UserAccount userAccountFromJson(String str) => UserAccount.fromJson(json.decode(str));
-
-  String userAccountToJson(UserAccount data) => json.encode(data.toJson());
-
   static Model _instance;
 
   static Model get instance  {
@@ -21,24 +14,27 @@ class Model{
     return _instance;
   }
 
-  Future<bool> logginIn(String username, String password, String url) async {
+  Future<int> logginIn(String username, String password) async {
     final pref = await SharedPreferences.getInstance();
-    http.Response response = await http.post(url, body: {'username': username, 'password':password});
+    http.Response response = await http.post("https://www.proxykhel.com/android/final.php", body: {'username': username.toString(), 'password':password.toString()});
     if(response.statusCode == 200){
       if(json.decode(response.body) != false){
-        account = userAccountFromJson(response.body);
-        if (account != null){
+        UserAccount account = userAccountFromJson(response.body);
+        if(account.status == '0'){
+          return 2;
+        }
+        if (account.status == '1'){
           pref.setString('emailId', account.emailId);
           pref.setString('userId', account.id);
           pref.setString('username', account.username);
-          return true;
+          return 1;
         }
         else{
-          return false;
+          return 0;
         }
       }
       else {
-        return false;
+        return 0;
       }
     }
   }
@@ -60,7 +56,9 @@ class Model{
 
 }
 
+UserAccount userAccountFromJson(String str) => UserAccount.fromJson(json.decode(str));
 
+String userAccountToJson(UserAccount data) => json.encode(data.toJson());
 
 class UserAccount {
   String id;
@@ -71,7 +69,15 @@ class UserAccount {
   String dateofbirth;
   String state;
   String socialId;
+  String socialInfo;
+  String status;
+  DateTime insertDatetime;
+  dynamic ipAddress;
+  String password;
+  DateTime linkdatetime;
   String username;
+  String teamname;
+  String eemailerror;
 
   UserAccount({
     this.id,
@@ -82,7 +88,15 @@ class UserAccount {
     this.dateofbirth,
     this.state,
     this.socialId,
+    this.socialInfo,
+    this.status,
+    this.insertDatetime,
+    this.ipAddress,
+    this.password,
+    this.linkdatetime,
     this.username,
+    this.teamname,
+    this.eemailerror,
   });
 
   factory UserAccount.fromJson(Map<String, dynamic> json) => new UserAccount(
@@ -94,7 +108,15 @@ class UserAccount {
     dateofbirth: json["dateofbirth"],
     state: json["state"],
     socialId: json["socialId"],
+    socialInfo: json["socialInfo"],
+    status: json["status"],
+    insertDatetime: DateTime.parse(json["insertDatetime"]),
+    ipAddress: json["ipAddress"],
+    password: json["password"],
+    linkdatetime: DateTime.parse(json["linkdatetime"]),
     username: json["username"],
+    teamname: json["teamname"],
+    eemailerror: json["eemailerror"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -106,6 +128,14 @@ class UserAccount {
     "dateofbirth": dateofbirth,
     "state": state,
     "socialId": socialId,
+    "socialInfo": socialInfo,
+    "status": status,
+    "insertDatetime": insertDatetime.toIso8601String(),
+    "ipAddress": ipAddress,
+    "password": password,
+    "linkdatetime": linkdatetime.toIso8601String(),
     "username": username,
+    "teamname": teamname,
+    "eemailerror": eemailerror,
   };
 }

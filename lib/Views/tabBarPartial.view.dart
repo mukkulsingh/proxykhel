@@ -161,7 +161,7 @@ class _TabBarPartialState extends State<TabBarPartial> {
                                                 child:new Row(
                                                   children: <Widget>[
                                                     new Text('Winning'),
-                                                    new Icon(Icons.arrow_drop_down),
+                                                    new Icon(Icons.arrow_drop_down,color: Colors.black,),
                                                   ],
                                                 )
                                             ),

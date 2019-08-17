@@ -90,6 +90,7 @@ class _TabBarCricketState extends State<TabBarCricket> {
                         ContestDetailModel.instance.setTeam2Name(snapshot.data.matchData[index].team2Name);
                         ContestModel.instance.setTeamName(snapshot.data.matchData[index].team1Name
                             , snapshot.data.matchData[index].team2Name);
+                        ContestDetailModel.instance.setMatchType(snapshot.data.matchData[index].matchType);
                         Navigator.push(
                             context,
                             SlideLeftRoute(

@@ -3,7 +3,8 @@ import './../Constants/theme.dart' as Theme;
 import './../Constants/slideTransitions.dart';
 import 'package:connectivity/connectivity.dart';
 import './../Model/register.model.dart';
-import './../Views/dashboard.view.dart';
+import './verifyphone.view.dart';
+import './../Views/login.view.dart';
 
 
 class Register extends StatefulWidget {
@@ -39,6 +40,7 @@ class _RegisterState extends State<Register> {
     emailOrPhoneController = new TextEditingController();
     passwordController = new TextEditingController();
     fullNameController = new TextEditingController();
+    print(_isLoading);
   }
 
 
@@ -58,9 +60,7 @@ class _RegisterState extends State<Register> {
         builder:(context)=> new Scaffold(
           key: _scaffoldKey,
           body: new Center(
-            child: Hero(
-              tag: 'loginToRegister',
-              child: new Container(
+            child: new Container(
                 child: new ListView(
                     children: <Widget>[
                       new Container(
@@ -125,14 +125,14 @@ class _RegisterState extends State<Register> {
                         child: new TextField(
                           controller: fullNameController,
                           onChanged:(value){
-                            _fullName : value;
+                            _fullName = value;
                             setState(() {
                               _fullNameError = false;
                             });
                           },
                           decoration: InputDecoration(
                               hintText: 'Full Name',
-                              errorText: _fullNameError?new Text('invalid name'):'',
+                              errorText: _fullNameError? 'Invalid input':'',
                               errorStyle: TextStyle(color:Colors.red),
                               hintStyle: new TextStyle(color:Colors.black,fontWeight: FontWeight.bold),
                               border: OutlineInputBorder(
@@ -152,7 +152,7 @@ class _RegisterState extends State<Register> {
                             });
                           },
                           decoration: InputDecoration(
-                            errorText: _emailOrPhoneError?new Text('Invalid input'):'',
+                            errorText: _emailOrPhoneError ? 'Invalid input': '',
                               errorStyle: TextStyle(color:Colors.red),
                               hintText: 'Phone Number OR Email ID',
                               hintStyle: new TextStyle(color:Colors.black,fontWeight: FontWeight.bold),
@@ -175,7 +175,7 @@ class _RegisterState extends State<Register> {
                           },
                           decoration: InputDecoration(
                               hintText: 'Password',
-                              errorText: _passwordError?new Text('invalid password'):'',
+                              errorText: _passwordError? 'invalid password':'',
                               errorStyle: TextStyle(color:Colors.red),
                               hintStyle: new TextStyle(color:Colors.black,fontWeight: FontWeight.bold),
                               border: OutlineInputBorder(
@@ -186,21 +186,7 @@ class _RegisterState extends State<Register> {
                         ),
                       ),
 
-//                      new Container(
-//                        margin: const EdgeInsets.only(top: 20,left: 15.0,right: 15.0),
-//                        child: new TextField(
-//                          decoration: InputDecoration(
-//                              hintText: 'Referral Code',
-//                              hintStyle: new TextStyle(color:Colors.black,fontWeight: FontWeight.bold),
-//                              border: OutlineInputBorder(
-//                                  borderRadius: BorderRadius.circular(30.0),
-//                                  borderSide: BorderSide(color: Colors.black,width: 20.0)
-//                              )
-//                          ),
-//                        ),
-//                      ),
-
-                      new Container(
+                      _isLoading ?  new Center(child: new Stack(children: <Widget>[new CircularProgressIndicator()],),): new Container(
                         margin: EdgeInsets.all(20.0),
                         padding: EdgeInsets.only(left: 50.0,right: 50),
                         child: SizedBox(
@@ -217,11 +203,10 @@ class _RegisterState extends State<Register> {
                                   _isLoading = true;
                                 });
                                 int num = await Model.instance.registeringNewUser(
-                                    fullNameController.text,
-                                    emailOrPhoneController.text,
+                                   _fullName,
+                                    _emailOrPhone,
                                     _password,
                                     "https://www.proxykhel.com/android/reg.php");
-
                                 switch(num){
                                   case 1:
                                     setState(() {
@@ -237,10 +222,22 @@ class _RegisterState extends State<Register> {
                                     break;
                                   case 3:
                                     final snackBar = SnackBar(
+                                        content: Text('User Exists'),duration: const Duration(milliseconds: 1500),);
+                                    _scaffoldKey.currentState.showSnackBar(snackBar);
+                                    emailOrPhoneController.clear();
+//                                    fullNameController.clear();
+//                                    passwordController.clear();
+                                    await new Future.delayed(const Duration(seconds: 2),);
+                                    setState(() {
+                                      _isLoading=false;
+                                    });
+                                    break;
+                                  case 4:
+                                    final snackBar = SnackBar(
                                         content: Text('Successfully registered'));
                                     _scaffoldKey.currentState.showSnackBar(snackBar);
                                     await new Future.delayed(const Duration(seconds: 2),);
-                                    Navigator.pushAndRemoveUntil(context, SlideLeftRoute(widget: Dashboard()), (Route<dynamic> route)=>false);
+                                    Navigator.pushAndRemoveUntil(context, SlideLeftRoute(widget: VerifyPhone()), (Route<dynamic> route)=>false);
                                     break;
                                   default:
                                     final snackBar = SnackBar(
@@ -266,6 +263,8 @@ class _RegisterState extends State<Register> {
                           ),
                         ),
                       ),
+
+
                       new Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
@@ -278,10 +277,6 @@ class _RegisterState extends State<Register> {
                         ],
                       ),
 
-//                        new Container(
-//                          margin: EdgeInsets.only(top:20.0),
-//                          child: new Text('OR',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16.0),textAlign: TextAlign.center,),
-//                        ),
 
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -296,8 +291,7 @@ class _RegisterState extends State<Register> {
                               child: new Text('Login!',style: TextStyle(fontSize: 16.0,fontWeight: FontWeight.bold,color: Colors.deepOrange),),
                             ),
                             onTap: (){
-//                              Navigator.of(context).pushAndRemoveUntil(SlideLeftRoute(widget: LoginScreen()),(Route<dynamic> route)=>false);
-                                Navigator.of(context).maybePop(true);
+                                Navigator.of(context).pushAndRemoveUntil(SlideLeftRoute(widget: LoginScreen()), (Route<dynamic> route)=>false);
                             },
                           ),
 
@@ -307,7 +301,6 @@ class _RegisterState extends State<Register> {
                     ]
                 ),
               ),
-            ) ,
           ),
         ),
       ),
