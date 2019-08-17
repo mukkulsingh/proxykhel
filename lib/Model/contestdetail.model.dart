@@ -3,20 +3,35 @@ import 'package:http/http.dart' as http;
 import './../Constants/contestdata.dart';
 
 class ContestDetailModel {
+
+
   static ContestDetailModel _instance;
+
   static ContestDetailModel get instance{
     if(_instance == null){
       _instance = new ContestDetailModel();
     }
     return _instance;
   }
+  static String contestId;
   static String contestDuration;
   static String currentmatchId;
   static String teamname1;
   static String teamname2;
+
+
   void setContestDuration(String  duration){
     contestDuration = duration;
   }
+
+  void setContestId(String contestID){
+    contestId = contestID;
+  }
+
+  String getContestId(){
+    return contestId;
+  }
+
 
   void setMatchId(String matchId){
     currentmatchId = matchId;
@@ -46,8 +61,6 @@ class ContestDetailModel {
   void setContestDetail(contestDetail){
     contestDetailModel = contestDetail;
   }
-
-
 
   Future<ContestDetailPojo> getContestDetail(int contestId,int matchId) async {
     http.Response response = await http.post("https://www.proxykhel.com/android/contest.php",

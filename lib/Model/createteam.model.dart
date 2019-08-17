@@ -90,16 +90,21 @@ class  CreateTeamModel{
 
 
   Future<dynamic> saveTeam(
-      int matchId,
-      int contestId,
-      int credit,
+      String matchId,
+      String contestId,
+      String credit,
       String country1,
       String country2,
       ) async {
+    print('here');
 
 
     String userId = await SavedPref.instance.getUserId();
-    http.Response response = await http.post("https://www.proxykhel.com/android/Createteam.php",body: json.encode(
+
+    print('$_batsMan  $_bowler $_allRounder $_wicketKeeper $_starPlayer $_xPlayer ${_superFive.length}');
+    http.Response response = await http.post("https://www.proxykhel.com/android/Createteam.php",
+        headers: {'contect-type':'application/json'},
+        body: json.encode(
         {
           "sportId":"1",
           "matchId":matchId,
@@ -115,9 +120,10 @@ class  CreateTeamModel{
           "player_session":_superFive
         }
     ),
-    headers: {'contect-type':'application/json'});
+    );
     if(response.statusCode == 200){
       final res = json.decode(response.body);
+      print(res);
       if(res['success']==true){
         return true;
       }

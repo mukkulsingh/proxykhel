@@ -211,6 +211,8 @@ class _TabBarPartialState extends State<TabBarPartial> {
                                                   entryfee: snapshot.data.data[index].entryfee,
                                                   opponent: snapshot.data.data[index].opponent
                                               );
+                                              ContestDetailModel.instance.setContestId(snapshot.data.data[index].id);
+
                                               ContestDetailModel.instance.setContestDetail(contestData);
                                               Navigator.push(context, SlideLeftRoute(widget:ContestDetail()));
                                             },

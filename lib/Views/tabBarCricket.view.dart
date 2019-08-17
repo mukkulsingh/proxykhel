@@ -3,6 +3,7 @@ import './../Views/createcontest.view.dart';
 import './../Model/upcomingmatches.model.dart';
 import './../Constants/slideTransitions.dart';
 import './../Model/contestdetail.model.dart';
+import './../Model/contest.model.dart';
 
 class TabBarCricket extends StatefulWidget {
 
@@ -87,6 +88,8 @@ class _TabBarCricketState extends State<TabBarCricket> {
                         ContestDetailModel.instance.setMatchId(snapshot.data.matchData[index].id);
                         ContestDetailModel.instance.setTeam1Name(snapshot.data.matchData[index].team1Name);
                         ContestDetailModel.instance.setTeam2Name(snapshot.data.matchData[index].team2Name);
+                        ContestModel.instance.setTeamName(snapshot.data.matchData[index].team1Name
+                            , snapshot.data.matchData[index].team2Name);
                         Navigator.push(
                             context,
                             SlideLeftRoute(

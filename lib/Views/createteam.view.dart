@@ -5,6 +5,7 @@ import './../Model/logout.model.dart';
 import './../Views/login.view.dart';
 import './../Views/wallet.view.dart';
 import './../Model/createteam.model.dart';
+import './../Model/contest.model.dart';
 import './../Model/contestdetail.model.dart';
 
 class CreateTeam extends StatefulWidget {
@@ -15,13 +16,13 @@ class CreateTeam extends StatefulWidget {
 class _CreateTeamState extends State<CreateTeam> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  static String batsmanGroup = "batsman";
-  static String bowlerGroup = "bowler";
-  static String wkGroup = "wicketKeeper";
-  static String arGroup = "allRounder";
-  static String starPlayerGroup = "starPlayer";
-  static String xPlayerGroup = "XPlayer";
-  static String superFiveGroup = "superFive";
+  static String batsmanGroup = "Batsman";
+  static String bowlerGroup = "Bowler";
+  static String wkGroup = "Wicket Keeper";
+  static String arGroup = "All Rounder";
+  static String starPlayerGroup = "Star Player";
+  static String xPlayerGroup = "X Player";
+  static String superFiveGroup = "Super Five";
 
   static int _playerType;
   static bool _isBatsman = false;
@@ -509,7 +510,6 @@ class _CreateTeamState extends State<CreateTeam> {
 
   List<Widget> _loadCategoriesChoosenPlayer(List<dynamic> playerList) {
     List<Widget> categoryCells = [];
-    List categories = playerList;
     if (chosenPlayer == []) {
       new Center(child: new Text('Please select 11 players'));
     }
@@ -602,23 +602,24 @@ class _CreateTeamState extends State<CreateTeam> {
       setState(() {});
     } else if (colorCode == 1) {
       SnackBar snackBar =
-          new SnackBar(content: Text('Player already selected'));
+          new SnackBar(content: Text('Player already selected'),duration: const Duration(seconds: 1),);
       _scaffoldKey.currentState.showSnackBar(snackBar);
     } else {
       if (allowedSelection == getPlayerCount(groupName)) {
         // show("that this many batsman already selected");
         SnackBar snackBar = new SnackBar(
-            content: Text('you can pick only $allowedSelection $groupName'));
+            content: Text('you can pick only $allowedSelection $groupName'),duration: const Duration(seconds: 1));
         _scaffoldKey.currentState.showSnackBar(snackBar);
       } else if (getTotalCreditOfTeam() +
               double.parse(allPlayers[playerIndex].credit) >
           100) {
         //show('credit limit exeed');
-        SnackBar snackBar = new SnackBar(content: Text('low credit'));
+        SnackBar snackBar = new SnackBar(content: Text('low credit'),duration: const Duration(seconds: 1));
         _scaffoldKey.currentState.showSnackBar(snackBar);
       } else {
         //show('select that player and add it into chosenPlayer');
         Map playerMap = new Map();
+        playerMap['playerId'] = allPlayers[playerIndex].id;
         playerMap['playerIndex'] = playerIndex.toString();
         playerMap['groupName'] = groupName;
         chosenPlayer.add(playerMap);
@@ -1265,8 +1266,52 @@ class _CreateTeamState extends State<CreateTeam> {
             children: <Widget>[
               new OutlineButton(
                 onPressed: () async {
-                  bool check = await CreateTeamModel.instance
-                      .saveTeam(1723, 14821, 2, "VK", "WH");
+                  print(chosenPlayer);
+                  if(chosenPlayer.length != 11){
+                    SnackBar snackbar = new SnackBar(content: Text('Please choose 11 players'),duration: const Duration(seconds: 1));
+                   _scaffoldKey.currentState.showSnackBar(snackbar);
+                  }else{
+                    List superFive = [];
+                    for(int i=0;i<chosenPlayer.length;i++){
+                      if(chosenPlayer[i]['groupName'] == 'Batsman'){
+                        CreateTeamModel.instance.setBatsman(int.parse(chosenPlayer[i]['playerId']));
+                      }
+                      else if(chosenPlayer[i]['groupName'] == 'Bowler'){
+                        CreateTeamModel.instance.setBowler(int.parse(chosenPlayer[i]['playerId']));
+
+                      }
+                      else if(chosenPlayer[i]['groupName'] == 'Wicket Keeper'){
+                        CreateTeamModel.instance.setWicketKeeper(int.parse(chosenPlayer[i]['playerId']));
+
+                      }
+                      else if(chosenPlayer[i]['groupName'] == 'All Rounder'){
+                        CreateTeamModel.instance.setAllRounder(int.parse(chosenPlayer[i]['playerId']));
+
+                      }
+                      else if(chosenPlayer[i]['groupName'] == 'Star Player'){
+                        CreateTeamModel.instance.setStarPlayer(int.parse(chosenPlayer[i]['playerId']));
+
+                      }
+                      else if(chosenPlayer[i]['groupName'] == 'X Player'){
+                        CreateTeamModel.instance.setXPlayer(int.parse(chosenPlayer[i]['playerId']));
+
+                      }
+                      else if(chosenPlayer[i]['groupName'] == 'Super Five'){
+                        superFive.add(int.parse(chosenPlayer[i]['playerId']));
+                        CreateTeamModel.instance.setSuperFive(superFive);
+                      }
+                    }
+                    String matchId = ContestDetailModel.instance.getMatchId();
+                    String contestId = ContestDetailModel.instance.getContestId();
+                    bool check = await CreateTeamModel.instance.saveTeam(
+                      matchId,
+                      contestId,
+                      getTotalCreditOfTeam().toString(),
+                      ContestModel.instance.getTeamOneName(),
+                      ContestModel.instance.getTeamTwoName()
+                    );
+                  }
+
                 },
                 child: Text("Save Team"),
                 shape: new RoundedRectangleBorder(

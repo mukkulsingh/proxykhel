@@ -198,6 +198,8 @@ class _TabBarMegaState extends State<TabBarMega> {
                                                   entryfee: snapshot.data.data[index].entryfee,
                                                   opponent: snapshot.data.data[index].opponent
                                               );
+                                              ContestDetailModel.instance.setContestId(snapshot.data.data[index].id);
+
                                               ContestDetailModel.instance.setContestDetail(contestData);
                                               Navigator.push(context, SlideLeftRoute(widget:ContestDetail()));
                                             },

@@ -5,13 +5,28 @@ class ContestModel{
 
   static ContestModel _instance;
 
+  static String teamOneName;
+  static String teamTwoName;
+
   static ContestModel get instance {
     if(_instance == null){
       _instance = new ContestModel();
     }
     return _instance;
   }
-  
+
+  void setTeamName(String team1, String team2){
+    teamOneName = team1;
+    teamTwoName = team2;
+  }
+
+  String getTeamOneName(){
+    return teamOneName;
+  }
+  String getTeamTwoName(){
+    return teamTwoName;
+  }
+
   Future<ContestList> getContestList(String matchId) async {
     http.Response response = await http.post("https://www.proxykhel.com/android/contest.php",body: {"matchId":matchId,"type":"getContests"});
     if(response.statusCode == 200){
