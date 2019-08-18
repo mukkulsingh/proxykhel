@@ -30,13 +30,14 @@ class Model{
           if(account.data.logontype == 'mobile'){
             int min = 1000;
             int max = 9999;
-            int otp = min + (Random(1).nextInt(max-min));
+            int otp = min + (Random().nextInt(max-min));
             VerifyPhoneModel.instance.setOTP(otp);
-            var msg = "Dear USER, your OTP is $otp to activate your account on Proxy Khel.";
+            VerifyPhoneModel.instance.setUserId(account.data.id);
+            var msg = "Dear USER, your OTP is ${VerifyPhoneModel.instance.getOTP()} to activate your account on Proxy Khel.";
 
 
     http.Response response = await http.get("https://api.msg91.com/api/sendhttp.php?mobiles=${account.data.emailId}&authkey=281414AsacFSKmekD5d0773a5&route=4&sender=PRKHEL&message=$msg&country=91");
-            print(response.statusCode);
+print(response.statusCode);
             return 2;
           }else{
             return 3;

@@ -43,24 +43,31 @@ class VerifyPhoneModel{
 
       if(response.statusCode == 200){
         final res = json.decode(response.body);
-        if(res['suucess']==true && res['msg']=='ok'){
+        if(res['success']=='true' && res['msg']=='ok'){
           final pref = await SharedPreferences.getInstance();
           pref.setString('username',_username);
           pref.setString('userId', _userId);
           pref.setString('emailId', _emailId);
           pref.setString('fullName', _fullName);
+          print('true45');
           return true;
         }
         else{
+          print('true0');
+
           return false;
         }
       }
       else{
+        print('true1');
+
         return false;
       }
 
     }
     else{
+      print('true2');
+
       return false;
     }
   }
@@ -73,8 +80,8 @@ class VerifyPhoneModel{
     return _contact;
   }
 
-  void setOTP(int otp){
-    otp = otp;
+  void setOTP(int OTP){
+    otp = OTP;
   }
 
   int getOTP(){

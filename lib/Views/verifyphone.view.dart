@@ -34,6 +34,13 @@ class _VerifyPhoneState extends State<VerifyPhone> {
 
   @override
   Widget build(BuildContext context) {
+
+    Future.delayed(const Duration(seconds: 10), () {
+      setState(() {
+        _resendOtpVisibility=true;
+      });
+    });
+
     _textOnButton = "SUBMIT";
     return MaterialApp(
       title: 'ProxyKhel',
@@ -74,9 +81,6 @@ class _VerifyPhoneState extends State<VerifyPhone> {
                       errorText: _isOtpError?"Invalid OTP":''
                     ),
                   ),
-                  new SizedBox(height: 20.0,),
-
-                  new SizedBox(height: 20.0,),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal:60.0),
                     child: Stack(
@@ -93,24 +97,27 @@ class _VerifyPhoneState extends State<VerifyPhone> {
                                   });
 
                                 }
-                                else if( await VerifyPhoneModel.instance.verifyOTP(_OTP)){
-                                  setState(() {
-                                    _isSubmitButtonLoading = true;
-                                  });
-                                  SnackBar snackBar = new SnackBar(content: Text('OTP verified'),duration: const Duration(microseconds: 1500),);
-                                  _scaffoldKey.currentState.showSnackBar(snackBar);
+                                else{
 
-                                  Future.delayed(const Duration(milliseconds: 1700), () {
-                                    Navigator.of(context).pushAndRemoveUntil(SlideLeftRoute(widget: Dashboard()), (Route<dynamic> route)=>false);
-                                  });
-                                }else{
+                                  if( await VerifyPhoneModel.instance.verifyOTP(_OTP)){
+                                    setState(() {
+                                      _isSubmitButtonLoading = true;
+                                    });
+                                    SnackBar snackBar = new SnackBar(content: Text('OTP verified'),duration: const Duration(milliseconds: 1500),);
+                                    _scaffoldKey.currentState.showSnackBar(snackBar);
 
-                                  _resendOtpVisibility = true;
-                                  SnackBar snackBar = new SnackBar(content: Text('OTP verification failed. Try again'),duration: const Duration(microseconds: 1500),);
-                                  _scaffoldKey.currentState.showSnackBar(snackBar);
-                                  setState(() {
-                                    _isSubmitButtonLoading = false;
-                                  });
+                                    Future.delayed(const Duration(milliseconds: 1700), () {
+                                      Navigator.of(context).pushAndRemoveUntil(SlideLeftRoute(widget: Dashboard()), (Route<dynamic> route)=>false);
+                                    });
+                                  }else if(!await VerifyPhoneModel.instance.verifyOTP(_OTP)){
+
+                                    SnackBar snackBar = new SnackBar(content: Text('OTP verification failed. Try again'),duration: const Duration(milliseconds: 1000),);
+                                    _scaffoldKey.currentState.showSnackBar(snackBar);
+                                    setState(() {
+                                      _resendOtpVisibility = true;
+                                      _isSubmitButtonLoading = false;
+                                    });
+                                  }
                                 }
                               },
                               color: Colors.deepOrange,
@@ -145,33 +152,34 @@ class _VerifyPhoneState extends State<VerifyPhone> {
 
                               int min = 1000;
                               int max = 9999;
-                              int otp = min + (Random(1).nextInt(max-min));
+                              int otp = min + (Random().nextInt(max-min));
 
                               VerifyPhoneModel.instance.setOTP(otp);
 
                               int contact = VerifyPhoneModel.instance.getContact();
 
-                              var msg = "Dear USER, your OTP is $otp to activate your account on Proxy Khel.";
+                              var msg = "Dear USER, your OTP is ${VerifyPhoneModel.instance.getOTP()} to activate your account on Proxy Khel.";
 
                               http.Response response = await http.get
                                   ("https://api.msg91.com/api/sendhttp.php?mobiles=${contact.toString()}&authkey=281414AsacFSKmekD5d0773a5&route=4&sender=PRKHEL&message=$msg&country=91");
 
                               if(response.statusCode == 200){
                                 SnackBar snackBar = new SnackBar(content: Text('OTP sent'),duration: const Duration(milliseconds: 500),);
-                                Scaffold.of(context).showSnackBar(snackBar);
-                                _isResendButtonLoading = false;
-                                _isSubmitButtonLoading = false;
-                                setState(() {
 
+                                _scaffoldKey.currentState.showSnackBar(snackBar);
+
+                                setState(() {
+                                  _isResendButtonLoading = false;
+                                  _isSubmitButtonLoading = false;
                                 });
                               }
                               else{
                                 SnackBar snackBar = new SnackBar(content: Text('OTP not sent. Try again!'),duration: const Duration(milliseconds: 500),);
                                 Scaffold.of(context).showSnackBar(snackBar);
-                                _isResendButtonLoading = false;
-                                _isSubmitButtonLoading = false;
-                                setState(() {
 
+                                setState(() {
+                                  _isResendButtonLoading = false;
+                                  _isSubmitButtonLoading = false;
                                 });
                               }
                             },
