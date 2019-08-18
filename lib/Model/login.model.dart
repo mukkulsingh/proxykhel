@@ -4,6 +4,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dart:convert';
 
+import 'dart:math';
+
+import './../Model/verifyphone.model.dart';
+
 class Model{
   static Model _instance;
 
@@ -20,13 +24,28 @@ class Model{
     if(response.statusCode == 200){
       if(json.decode(response.body) != false){
         UserAccount account = userAccountFromJson(response.body);
-        if(account.status == '0'){
-          return 2;
+
+        if(account.data.status == '0'){
+
+          if(account.data.logontype == 'mobile'){
+            int min = 1000;
+            int max = 9999;
+            int otp = min + (Random(1).nextInt(max-min));
+            VerifyPhoneModel.instance.setOTP(otp);
+            var msg = "Dear USER, your OTP is $otp to activate your account on Proxy Khel.";
+
+
+    http.Response response = await http.get("https://api.msg91.com/api/sendhttp.php?mobiles=${account.data.emailId}&authkey=281414AsacFSKmekD5d0773a5&route=4&sender=PRKHEL&message=$msg&country=91");
+            print(response.statusCode);
+            return 2;
+          }else{
+            return 3;
+          }
         }
-        if (account.status == '1'){
-          pref.setString('emailId', account.emailId);
-          pref.setString('userId', account.id);
-          pref.setString('username', account.username);
+        if (account.data.status == '1'){
+          pref.setString('emailId', account.data.emailId);
+          pref.setString('userId', account.data.id);
+          pref.setString('username', account.data.username);
           return 1;
         }
         else{
@@ -61,6 +80,27 @@ UserAccount userAccountFromJson(String str) => UserAccount.fromJson(json.decode(
 String userAccountToJson(UserAccount data) => json.encode(data.toJson());
 
 class UserAccount {
+  String success;
+  Data data;
+
+  UserAccount({
+    this.success,
+    this.data,
+  });
+
+  factory UserAccount.fromJson(Map<String, dynamic> json) => new UserAccount(
+    success: json["success"],
+    data: Data.fromJson(json["data"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "success": success,
+    "data": data.toJson(),
+  };
+}
+
+class Data {
+  dynamic the0;
   String id;
   String fullName;
   String emailId;
@@ -78,8 +118,10 @@ class UserAccount {
   String username;
   String teamname;
   String eemailerror;
+  String logontype;
 
-  UserAccount({
+  Data({
+    this.the0,
     this.id,
     this.fullName,
     this.emailId,
@@ -97,9 +139,11 @@ class UserAccount {
     this.username,
     this.teamname,
     this.eemailerror,
+    this.logontype,
   });
 
-  factory UserAccount.fromJson(Map<String, dynamic> json) => new UserAccount(
+  factory Data.fromJson(Map<String, dynamic> json) => new Data(
+    the0: json["0"],
     id: json["id"],
     fullName: json["fullName"],
     emailId: json["emailId"],
@@ -117,9 +161,11 @@ class UserAccount {
     username: json["username"],
     teamname: json["teamname"],
     eemailerror: json["eemailerror"],
+    logontype: json["logontype"],
   );
 
   Map<String, dynamic> toJson() => {
+    "0": the0,
     "id": id,
     "fullName": fullName,
     "emailId": emailId,
@@ -137,5 +183,6 @@ class UserAccount {
     "username": username,
     "teamname": teamname,
     "eemailerror": eemailerror,
+    "logontype": logontype,
   };
 }

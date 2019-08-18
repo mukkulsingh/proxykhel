@@ -5,7 +5,10 @@ import './register.view.dart';
 import './../Constants/slideTransitions.dart';
 import 'package:connectivity/connectivity.dart';
 import './dashboard.view.dart';
+import './verifyphoneafterlogin.view.dart';
+
 import './verifyphone.view.dart';
+import './../Model/verifyphone.model.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -178,8 +181,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                             Navigator.pushAndRemoveUntil(context, SlideLeftRoute(widget:Dashboard()),(Route<dynamic> route)=>false);
                                           }
                                           else if(isLogin == 2){
-                                            Navigator.pushAndRemoveUntil(context, SlideLeftRoute(widget:VerifyPhone()),(Route<dynamic> route)=>false);
+                                            VerifyPhoneModel.instance.setContact(int.parse(_username.text));
+                                            Navigator.push(context, SlideLeftRoute(widget:VerifyPhone()));
 
+                                          }
+                                          else if(isLogin == 3){
+                                            Navigator.push(context, SlideLeftRoute(widget:VerifyPhoneAfterLogin()));
                                           }
                                           else{
                                             msg = 'Invalid username or password';
