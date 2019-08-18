@@ -18,5 +18,14 @@ class SavedPref{
     return pref.getString("username");
   }
 
+  Future<String> getEmailId() async {
+    final pref = await SharedPreferences.getInstance();
+    return pref.getString('emailId');
+  }
+
+  Future<String> getFullName() async {
+    final pref = await SharedPreferences.getInstance();
+    return pref.getString('fullName');
+  }
 
 }

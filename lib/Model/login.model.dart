@@ -37,9 +37,9 @@ class Model{
 
 
     http.Response response = await http.get("https://api.msg91.com/api/sendhttp.php?mobiles=${account.data.emailId}&authkey=281414AsacFSKmekD5d0773a5&route=4&sender=PRKHEL&message=$msg&country=91");
-print(response.statusCode);
             return 2;
           }else{
+            VerifyPhoneModel.instance.setUserId(account.data.id);
             return 3;
           }
         }
@@ -47,6 +47,7 @@ print(response.statusCode);
           pref.setString('emailId', account.data.emailId);
           pref.setString('userId', account.data.id);
           pref.setString('username', account.data.username);
+          pref.setString('fullName', account.data.fullName);
           return 1;
         }
         else{

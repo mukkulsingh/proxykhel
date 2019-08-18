@@ -2,10 +2,12 @@ import 'package:http/http.dart'as http;
 import 'dart:async';
 import 'dart:convert';
 import 'savedpref.model.dart';
-
+import 'package:async/async.dart';
 class KycModel{
 
   static KycModel _instance;
+
+  AsyncMemoizer _memoizer = new AsyncMemoizer();
 
   static KycModel get instance{
     if(_instance == null){
@@ -14,29 +16,32 @@ class KycModel{
     return _instance;
   }
 
+  static KycStatus kycStatusData;
+
+  KycStatus getKycStatusData(){
+    return kycStatusData;
+  }
+
   Future<KycStatus> getKycStatus() async {
     String userId = await SavedPref.instance.getUserId();
     http.Response response = await http.post(
       "https://www.proxykhel.com/android/kycCheck.php",
-      headers: {'content-type':'application/json'},
-      body: json.encode({
+      body: {
         "type":"checkKyc",
         "userId":userId,
-      }),
+      },
     );
 
     if(response.statusCode == 200){
       final res = json.decode(response.body);
       if(res['success']==true){
-        print('here');
-        return kycStatusFromJson(response.body);
+        kycStatusData = kycStatusFromJson(response.body);
+        return kycStatusData;
       }
       else{
-        print('false');
         return null;
       }
     }else{
-      print('false');
 
       return null;
     }
