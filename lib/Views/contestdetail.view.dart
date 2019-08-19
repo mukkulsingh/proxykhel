@@ -8,6 +8,7 @@ import './../Model/logout.model.dart';
 import './../Model/contestdetail.model.dart';
 import './../Views/login.view.dart';
 import './../Constants/contestdata.dart';
+import './../Model/getalluserteam.model.dart';
 
 class ContestDetail extends StatefulWidget {
   @override
@@ -119,272 +120,382 @@ class _ContestDetailState extends State<ContestDetail> {
         body: new Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Container(
-              height: 65.0,
-              color: Color(0XFFc4301e),
-              child: new Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  new Container(
-                    child: new Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        new Text(ContestDetailModel.instance.getTeam1Name(),style: TextStyle(color: Colors.white)),
-                        new Text(' vs ',style: TextStyle(color: Colors.white),),
-                        new Text(ContestDetailModel.instance.getTeam2Name(),style: TextStyle(color: Colors.white)),
-                      ],
+            Expanded(
+              flex:1,
+              child: Container(
+                height: 65.0,
+                color: Color(0XFFc4301e),
+                child: new Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    new Container(
+                      child: new Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          new Text(ContestDetailModel.instance.getTeam1Name(),style: TextStyle(color: Colors.white)),
+                          new Text(' vs ',style: TextStyle(color: Colors.white),),
+                          new Text(ContestDetailModel.instance.getTeam2Name(),style: TextStyle(color: Colors.white)),
+                        ],
+                      ),
                     ),
-                  ),
-                  new Text(ContestDetailModel.instance.getContestDuration(),style: TextStyle(color: Colors.white),),
-                  new Text(ContestDetailModel.instance.getMatchType(),style: TextStyle(color: Colors.white),),
-                ],
+                    new Text(ContestDetailModel.instance.getContestDuration(),style: TextStyle(color: Colors.white),),
+                    new Text(ContestDetailModel.instance.getMatchType(),style: TextStyle(color: Colors.white),),
+                  ],
+                ),
               ),
             ),
-            new Container(
-              height: 110,
-              child: Card(
-                child: new Column(
-                  children: <Widget>[
-                    new LinearProgressIndicator(
-                      value: (int.parse(contestData.totlaJoin) / int.parse(contestData.maxTeam)),
-                      backgroundColor: Colors.grey[300],
-                    ),
-                    new Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        new Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: new Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+            Expanded(
+              flex:2,
+              child: new Container(
+                height: 110,
+                child: Card(
+                  child: new Column(
+                    children: <Widget>[
+                      new LinearProgressIndicator(
+                        value: (int.parse(contestData.totlaJoin) / int.parse(contestData.maxTeam)),
+                        backgroundColor: Colors.grey[300],
+                      ),
+                      new Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          new Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: new Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  children: <Widget>[
+                                    new CircleAvatar(
+                                      radius: 10.0,
+                                      backgroundColor: Colors.deepOrange,
+                                      child: new Text('M',style: TextStyle(color:Colors.white,fontSize: 10),),
+                                    ),
+                                    new InkWell(
+                                        onTap: _showDialog,
+                                        child:new Row(
+                                          children: <Widget>[
+                                            new Text('Winning',style: TextStyle(fontSize: 12.0),),
+                                            new Icon(Icons.arrow_drop_down,color: Colors.black,),
+                                          ],
+                                        )
+                                    ),
+                                   new Row(
+                                     children: <Widget>[
+                                       new Text('₹'),
+                                       new Text(contestData.entryfee),
+                                     ],
+                                   )
+                                  ],
+                                ),
+                              ),
+                              new Column(
                                 children: <Widget>[
-                                  new CircleAvatar(
-                                    radius: 10.0,
-                                    backgroundColor: Colors.deepOrange,
-                                    child: new Text('M',style: TextStyle(color:Colors.white,fontSize: 10),),
-                                  ),
-                                  new InkWell(
-                                      onTap: _showDialog,
-                                      child:new Row(
-                                        children: <Widget>[
-                                          new Text('Winning',style: TextStyle(fontSize: 12.0),),
-                                          new Icon(Icons.arrow_drop_down,color: Colors.black,),
-                                        ],
-                                      )
-                                  ),
-                                 new Row(
-                                   children: <Widget>[
-                                     new Text('₹'),
-                                     new Text(contestData.entryfee),
-                                   ],
-                                 )
+                                  new Text(''),
+                                  new Text('Winners',style: TextStyle(fontSize: 12.0),),
+                                  new Text(contestData.winner??'0',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0),),
+                                  new Text(''),
+                                  new Text(contestData.totlaJoin+'/'+contestData.maxTeam+' Joined',style: TextStyle(fontSize: 12.0),),
+                                  new Text(''),
                                 ],
                               ),
-                            ),
-                            new Column(
-                              children: <Widget>[
-                                new Text(''),
-                                new Text('Winners',style: TextStyle(fontSize: 12.0),),
-                                new Text(contestData.winner??'0',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0),),
-                                new Text(''),
-                                new Text(contestData.totlaJoin+'/'+contestData.maxTeam+' Joined',style: TextStyle(fontSize: 12.0),),
-                                new Text(''),
-                              ],
-                            ),
-                            new Column(
-                              mainAxisAlignment: MainAxisAlignment  .center,
-                              children: <Widget>[
-                                new Text('Entry ₹ ${contestData.entryfee} '),
-                                Container(
-                                  height: 30.0,
-                                  width: 85,
-                                  margin: EdgeInsets.all(8.0),
-                                  child: new FlatButton(onPressed: (){
-                                    Navigator.push(context, SlideLeftRoute(widget:CreateTeam()));
-                                  },
-                                    color: Colors.deepOrange,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(32.0)
+                              new Column(
+                                mainAxisAlignment: MainAxisAlignment  .center,
+                                children: <Widget>[
+                                  new Text('Entry ₹ ${contestData.entryfee} '),
+                                  Container(
+                                    height: 30.0,
+                                    width: 85,
+                                    margin: EdgeInsets.all(8.0),
+                                    child: new FlatButton(onPressed: (){
+                                      Navigator.push(context, SlideLeftRoute(widget:CreateTeam()));
+                                    },
+                                      color: Colors.deepOrange,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(32.0)
+                                      ),
+                                      child: Text('CREATE TEAM',style: TextStyle(color: Colors.white,fontSize: 8.0),),
+
                                     ),
-                                    child: Text('CREATE TEAM',style: TextStyle(color: Colors.white,fontSize: 8.0),),
-
                                   ),
-                                ),
-                              ],
-                            ),
+                                ],
+                              ),
 
+                            ],
+                          )
+                        ],
+                      ),
+
+                    ],
+
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              flex:1,
+              child: new Container(
+                margin: EdgeInsets.only(top: 8.0),
+                child: new Column(
+                  children: <Widget>[
+                    new Text('OR JOIN WITH SAVED TEAM',textAlign: TextAlign.start,style: TextStyle(color: Colors.deepOrange),),
+                    Divider(),
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 5,
+              child: new FutureBuilder(
+                  future: GetAllUserTeamModel.instance.getAllUserTeam(),
+                  builder: (context,snapshot){
+                    switch(snapshot.connectionState){
+                      case ConnectionState.none:
+                        return new Stack(
+                          children: <Widget>[
+                            new Center(child: new CircularProgressIndicator(),),
                           ],
-                        )
-                      ],
-                    ),
+                        );
+                        break;
+                      case ConnectionState.active:
+                        return new Stack(
+                          children: <Widget>[
+                            new Center(child: new CircularProgressIndicator(),),
+                          ],
+                        );
+                        break;
+                      case ConnectionState.waiting:
+                        return new Stack(
+                          children: <Widget>[
+                            new Center(child: new CircularProgressIndicator(),),
+                          ],
+                        );
+                        break;
+                      case ConnectionState.done:
+                        if(snapshot.hasData){
+                          return MediaQuery.removePadding(
+                            context: context,
+                            removeBottom: true,
+                            removeTop: true,
+                            child: new ListView.builder(
+                              padding: EdgeInsets.zero,
+                                itemCount: snapshot.data.data.length,
+                                itemBuilder: (BuildContext context, int index){
+                                bool _isJoined = false;
+                                String _buttonText = 'JOIN';
+                                Color _buttonColor = Colors.deepOrange;
+                                if(snapshot.data.data[index].joined !=null){
+                                  if(snapshot.data.data[index].joined == 1){
+                                    _isJoined = true;
+                                    _buttonText = "JOINED";
+                                    _buttonColor = Colors.deepOrange[200];
+                                  }
+                                  else{
+                                    _isJoined = false;
+                                    _buttonText = "JOIN";
+                                    _buttonColor = Colors.deepOrange;
+                                  }
+                                }
+                                else{
+                                  _isJoined = false;
+                                }
+                                  return MediaQuery.removePadding(
+                                    context: context,
+                                    removeTop: true,
+                                    removeBottom: true,
+                                    child: Padding(
+                                      padding: EdgeInsets.zero,
+                                      child: new Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                                        children: <Widget>[
+                                          Container(
+                                            height:60,
+                                            child: new Card(
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(top:12.0,left: 12.0),
+                                                child: new Text('${snapshot.data.data[index].teamname}',style: TextStyle(fontSize: 18.0),),
+                                              ),
+                                            ),
+                                          ),
+                                          new Container(
+                                            height: 80.0,
+                                            child: new Card(
+                                              child:new Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: <Widget>[
+                                                  Expanded(
+                                                    flex:1,
+                                                    child: Row(
+                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                      children: <Widget>[
+                                                        new Column(
+                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                          children: <Widget>[
+                                                            Container(padding:EdgeInsets.only(left:18.0),child: new Text('Star Player',style: TextStyle(color: Colors.grey,fontSize:16.0),)),
+                                                            Padding(
+                                                              padding: const EdgeInsets.only(left:18.0),
+                                                              child: new Text('${snapshot.data.data[index].starplayer}',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16.0),),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: new Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                      children: <Widget>[
+                                                        new Column(
+                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                          children: <Widget>[
+                                                            new Text('WK',style: TextStyle(fontSize: 10),),
+                                                            new Text('1',style: TextStyle(fontWeight: FontWeight.bold),),
+                                                          ],
+                                                        ),
+                                                        new Column(
+                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                          children: <Widget>[
+                                                            new Text('BWL',style:TextStyle(fontSize: 10),),
+                                                            new Text('${snapshot.data.data[index].bowlcount}',style: TextStyle(fontWeight: FontWeight.bold),),
+                                                          ],
+                                                        ),
+                                                        new Column(
+                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                          children: <Widget>[
+                                                            new Text('ALLR',style:TextStyle(fontSize: 10),),
+                                                            new Text('1',style: TextStyle(fontWeight: FontWeight.bold),),
+                                                          ],
+                                                        ),
+                                                        new Column(
+                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                          children: <Widget>[
+                                                            new Text('BAT',style:TextStyle(fontSize: 10),),
+                                                            new Text('${snapshot.data.data[index].batcount}',style: TextStyle(fontWeight: FontWeight.bold),),
+                                                          ],
+                                                        ),
+                                                        Container(
+                                                          height: 30.0,
+                                                          width: 60.0,
+                                                          child: new FlatButton(onPressed: (){
+                                                            if(_isJoined){
+                                                              SnackBar snackbar = new SnackBar(content: Text("Already joined witht this team"),duration: Duration(seconds: 1),);
+                                                              Scaffold.of(context).showSnackBar(snackbar);
+                                                            }
+                                                          }, child: new Text(_buttonText,style: TextStyle(color:Colors.white,fontSize: 8.0),),
+                                                            color: _buttonColor,
+                                                            shape: RoundedRectangleBorder(
+                                                              borderRadius: BorderRadius.circular(32.0),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          new Container(
+                                            height: 60.0,
+                                            child: new Card(
+                                              child: new Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: <Widget>[
+                                                  Container(
+                                                    child: Column(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: <Widget>[
+                                                        new Text('X Player',style: TextStyle(color: Colors.grey,fontSize:16.0),),
+                                                        Padding(
+                                                          padding: const EdgeInsets.only(left:18.0),
+                                                          child: new Text('${snapshot.data.data[index].xplayer}',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16.0),),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
 
-                  ],
+//                                            Container(
+//                                              child: Row(
+//                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                                                children: <Widget>[
+//                                                  new Column(
+//                                                    mainAxisAlignment: MainAxisAlignment.center,
+//                                                    children: <Widget>[
+//                                                      new Icon(Icons.edit),
+//                                                      SizedBox(
+//                                                        height: 3.0,
+//                                                      ),
+//                                                      new Text('EDIT',style: TextStyle(fontSize: 12.0),)
+//                                                    ],
+//                                                  ),
+//                                                  SizedBox(
+//                                                    width: 10.0,
+//                                                  ),
+//                                                  new Column(
+//                                                    mainAxisAlignment: MainAxisAlignment.center,
+//                                                    children: <Widget>[
+//                                                      new Icon(Icons.remove_red_eye),
+//                                                      SizedBox(
+//                                                        height: 3.0,
+//                                                      ),
+//                                                      new Text('VIEW',style: TextStyle(fontSize: 12.0),)
+//                                                    ],
+//                                                  ),
+//                                                  SizedBox(
+//                                                    width: 10.0,
+//                                                  ),
+//                                                  new Column(
+//                                                    mainAxisAlignment: MainAxisAlignment.center,
+//                                                    children: <Widget>[
+//                                                      new Icon(Icons.content_copy),
+//                                                      SizedBox(
+//                                                        height: 3.0,
+//                                                      ),
+//                                                      new Text('COPY',style: TextStyle(fontSize: 12.0),)
+//                                                    ],
+//                                                  ),
+//                                                  SizedBox(
+//                                                    width: 10.0,
+//                                                  ),
+//                                                ],
+//                                              ),
+//                                            ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          Divider(),
+                                        ],
+                                      ),
+                                    ),
+                                  );
 
-                ),
-              ),
-            ),
-            new Container(
-              margin: EdgeInsets.all(12.0),
-              child: new Text('OR JOIN THE SAVE TEAM'),
-            ),
-            new Container(
-              height: 60,
-              child: new Card(
-                child: new Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(18.0),
-                      child: new Text('abhishek798#1',style: TextStyle(color: Colors.grey,fontSize: 16.0),),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            new Container(
-              height: 80.0,
-              child: new Card(
-                child:new Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Expanded(
-                      flex:1,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          new Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Container(padding:EdgeInsets.only(left:18.0),child: new Text('Star Player',style: TextStyle(color: Colors.grey,fontSize:16.0),)),
-                              Padding(
-                                padding: const EdgeInsets.only(left:18.0),
-                                child: new Text('Rishab Pant',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16.0),),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: new Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          new Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              new Text('WK',style: TextStyle(fontSize: 10),),
-                              new Text('1',style: TextStyle(fontWeight: FontWeight.bold),),
-                            ],
-                          ),
-                          new Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              new Text('BWL',style:TextStyle(fontSize: 10),),
-                              new Text('2',style: TextStyle(fontWeight: FontWeight.bold),),
-                            ],
-                          ),
-                          new Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              new Text('ALLR',style:TextStyle(fontSize: 10),),
-                              new Text('3',style: TextStyle(fontWeight: FontWeight.bold),),
-                            ],
-                          ),
-                          new Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              new Text('BAT',style:TextStyle(fontSize: 10),),
-                              new Text('3',style: TextStyle(fontWeight: FontWeight.bold),),
-                            ],
-                          ),
-                          Container(
-                            height: 30.0,
-                            width: 60.0,
-                            child: new FlatButton(onPressed: (){}, child: new Text('JOINED',style: TextStyle(color:Colors.white,fontSize: 8.0),),
-                              color: Colors.deepOrange[200],
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(32.0),
-                              ),
+                                }
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+                          );
+                        }
+                        else if(snapshot.hasError){
+                          return new Stack(
+                            children: <Widget>[
+                              new Center(child: new Text("Error fetching teams"),),
+                            ],
+                          );
+                        }
+                        else{
+                          return new Stack(
+                            children: <Widget>[
+                              new Center(child: new CircularProgressIndicator(),),
+                            ],
+                          );
+                        }
+                        break;
+
+                    }
+                  }),
             ),
-            new Container(
-              height: 60.0,
-              child: new Card(
-                child: new Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Container(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          new Text('X Player',style: TextStyle(color: Colors.grey,fontSize:16.0),),
-                          Padding(
-                            padding: const EdgeInsets.only(left:18.0),
-                            child: new Text('Mitchell Santner',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16.0),),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          new Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              new Icon(Icons.edit),
-                              SizedBox(
-                                height: 3.0,
-                              ),
-                              new Text('EDIT',style: TextStyle(fontSize: 12.0),)
-                            ],
-                          ),
-                          SizedBox(
-                            width: 10.0,
-                          ),
-                          new Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              new Icon(Icons.remove_red_eye),
-                              SizedBox(
-                                height: 3.0,
-                              ),
-                              new Text('VIEW',style: TextStyle(fontSize: 12.0),)
-                            ],
-                          ),
-                          SizedBox(
-                            width: 10.0,
-                          ),
-                          new Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              new Icon(Icons.content_copy),
-                              SizedBox(
-                                height: 3.0,
-                              ),
-                              new Text('COPY',style: TextStyle(fontSize: 12.0),)
-                            ],
-                          ),
-                          SizedBox(
-                            width: 10.0,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            )
 
           ],
 
