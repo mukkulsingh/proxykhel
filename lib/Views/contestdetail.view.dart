@@ -279,6 +279,7 @@ class _ContestDetailState extends State<ContestDetail> {
                             removeTop: true,
                             child: new ListView.builder(
                               padding: EdgeInsets.zero,
+
                                 itemCount: snapshot.data.data.length,
                                 itemBuilder: (BuildContext context, int index){
                                 bool _isJoined = false;
