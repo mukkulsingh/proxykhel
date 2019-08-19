@@ -35,13 +35,11 @@ class VerifyPhoneModel{
 
   Future<bool> verifyOTP(int OTP) async  {
     if(otp == OTP){
-      print('$_userId $_contact');
       http.Response response = await http.post("https://www.proxykhel.com/android/updateUserStatus.php",body: {
         "type":"updateUserStatus",
         "userId":_userId,
         "mobileNo":_contact.toString(),
       });
-        print(response.statusCode);
       if(response.statusCode == 200){
         final res = json.decode(response.body);
         if(res['success']=='true' && res['msg']=='ok'){
@@ -50,17 +48,14 @@ class VerifyPhoneModel{
           pref.setString('userId', _userId);
           pref.setString('emailId', _emailId);
           pref.setString('fullName', _fullName);
-          print('true45');
           return true;
         }
         else{
-          print('true0');
 
           return false;
         }
       }
       else{
-        print('true1');
 
         return false;
       }

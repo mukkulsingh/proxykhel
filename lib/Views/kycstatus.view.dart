@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import './../Model/savedpref.model.dart';
 import './../Model/kyc.model.dart';
+import './kycphoneverification.view.dart';
+import './../Constants/slideTransitions.dart';
 import 'package:http/http.dart' as http;
+import 'dart:math';
 
 class KycStatusView extends StatefulWidget {
   @override
@@ -9,9 +12,12 @@ class KycStatusView extends StatefulWidget {
 }
 
 class _KycStatusViewState extends State<KycStatusView> {
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   
   static bool _verify;
   static String emailId;
+  static bool _isLoading=false;
   
   @override
   void initState() {
@@ -24,6 +30,7 @@ class _KycStatusViewState extends State<KycStatusView> {
     else{
       _verify = false;
     }
+    _isLoading = false;
   }
   
   @override
@@ -46,16 +53,104 @@ class _KycStatusViewState extends State<KycStatusView> {
           borderRadius: BorderRadius.circular(32.0),
         ),
         color: Colors.yellow[700],
-          onPressed: (){
-
+          onPressed: () async {
             if(emailId.contains('@')){
-              print('email');
+              //send verification email todo
+
+              setState(() {
+                _isLoading = true;
+              });
+
+              http.Response response = await http.post("https://www.proxykhel.com/android/sendverificationmail.php",body: {
+                "userId":emailId
+              });
+              if(response.statusCode == 200){
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text('Mail Sent',style: TextStyle(color: Colors.red,fontSize: 22.0),),
+                        content:  Text('Check your email to verify your account',style: TextStyle(fontSize: 18.0),),
+
+                        actions: <Widget>[
+                          Row(
+
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              new InkWell(
+                                onTap:(){Navigator.of(context).pop();},
+                                child: new Text("Ok",style: TextStyle(fontSize: 18.0,color: Colors.deepOrange),textAlign: TextAlign.center,),
+                              ),
+
+                              new Container(child: new Text("                                        "),),
+
+                            ],
+
+                          ),
+
+
+                        ],
+                      );
+                    });
+                setState(() {
+                  _isLoading = false;
+                });
+              }else{
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text('Mail Error',style: TextStyle(color: Colors.red,fontSize: 22.0),),
+                        content: Row(
+                          children: <Widget>[
+                            Text('Mail not sent. Try again',style: TextStyle(fontSize: 18.0),),
+                          ],
+                        ),
+                        actions: <Widget>[
+                          new InkWell(
+                            onTap:(){Navigator.of(context).pop();},
+                            child: new Text("Ok",style: TextStyle(fontSize: 18.0,color: Colors.deepOrange),),
+                          )
+
+                        ],
+                      );
+                    });
+              }
+
+
             }else{
-              print('phone');
+
+              setState(() {
+                _isLoading = true;
+              });
+
+              //send otp todo
+              int min = 1000;
+              int max = 9999;
+              int otp = min + (Random().nextInt(max-min));
+              var msg = "Dear USER, your OTP is $otp to activate your account on Proxy Khel.";
+
+
+              http.Response response = await http.get("https://api.msg91.com/api/sendhttp.php?mobiles=$emailId&authkey=281414AsacFSKmekD5d0773a5&route=4&sender=PRKHEL&message=$msg&country=91");
+              if(response.statusCode == 200){
+                SnackBar snackBar = new SnackBar(content: Text("OTP sent"),duration: Duration(seconds: 1),);
+               _scaffoldKey.currentState.showSnackBar(snackBar);
+                Future.delayed(const Duration(milliseconds: 1500), () {
+                  Navigator.push(context,SlideLeftRoute(widget: KycPhoneVerification(contact: emailId, otp: otp,)) );
+                });
+
+              }else{
+
+                SnackBar snackBar = new SnackBar(content: Text("OTP not sent . Try again"),duration: Duration(seconds: 1),);
+                _scaffoldKey.currentState.showSnackBar(snackBar);
+                setState(() {
+                  _isLoading = false;
+                });
+              }
             }
 
           },
-          child: new Text('!Verify',style: TextStyle(color: Colors.black),),
+          child: new Text('Verify!',style: TextStyle(color: Colors.black),),
       ),
     );
 
@@ -138,7 +233,7 @@ class _KycStatusViewState extends State<KycStatusView> {
               ),
               new Expanded(
                 flex: 1,
-                child: Padding(padding: EdgeInsets.only(right: 12.0),child: _verify?verifyButton:new Icon(Icons.verified_user,color: Colors.green,),),
+                child: Padding(padding: EdgeInsets.only(right: 12.0),child: _verify? _isLoading?new Center(child: new CircularProgressIndicator(),):verifyButton:new Icon(Icons.verified_user,color: Colors.green,),),
               )
             ],
           ),
@@ -146,6 +241,7 @@ class _KycStatusViewState extends State<KycStatusView> {
       ),
     );
     return Scaffold(
+      key: _scaffoldKey,
       appBar: new AppBar(
         iconTheme: IconThemeData(
           color: Colors.white,
@@ -155,7 +251,12 @@ class _KycStatusViewState extends State<KycStatusView> {
       body: new ListView(
         shrinkWrap: true,
         children: <Widget>[
-          contactVerify
+          new Stack(
+            children: <Widget>[
+              contactVerify,
+//              _isLoading?new Center(child: new CircularProgressIndicator(),):verifyButton,
+            ],
+          )
         ],
       )
     );
