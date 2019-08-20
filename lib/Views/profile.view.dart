@@ -151,13 +151,14 @@ class _ProfileState extends State<Profile> {
               Navigator.push(context, SlideLeftRoute(widget: BankDetails()));
             },
           ),
-          ListTile(
-            title: new Text('Invite Friends'),
-            trailing: new Icon(Icons.chevron_right),
-            onTap: (){
-              Navigator.push(context, SlideLeftRoute(widget: InviteFriends()));
-            },
-          ),
+//          ListTile(
+        //TODO
+//            title: new Text('Invite Friends'),
+//            trailing: new Icon(Icons.chevron_right),
+//            onTap: (){
+//              Navigator.push(context, SlideLeftRoute(widget: InviteFriends()));
+//            },
+//          ),
 
 //        ListTile(
         //TODO
