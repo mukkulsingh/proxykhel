@@ -9,6 +9,9 @@ import './../Model/contestdetail.model.dart';
 import './../Views/login.view.dart';
 import './../Constants/contestdata.dart';
 import './../Model/getalluserteam.model.dart';
+import 'package:http/http.dart' as http;
+import './../Model/savedpref.model.dart';
+import 'dart:convert';
 
 class ContestDetail extends StatefulWidget {
   @override
@@ -367,7 +370,7 @@ class _ContestDetailState extends State<ContestDetail> {
                                                           mainAxisAlignment: MainAxisAlignment.center,
                                                           children: <Widget>[
                                                             new Text('ALLR',style:TextStyle(fontSize: 10),),
-                                                            new Text('1',style: TextStyle(fontWeight: FontWeight.bold),),
+                                                            new Text('${snapshot.data.data[index].allcount}',style: TextStyle(fontWeight: FontWeight.bold),),
                                                           ],
                                                         ),
                                                         new Column(
@@ -380,10 +383,52 @@ class _ContestDetailState extends State<ContestDetail> {
                                                         Container(
                                                           height: 30.0,
                                                           width: 60.0,
-                                                          child: new FlatButton(onPressed: (){
+                                                          child: new FlatButton(onPressed: () async {
                                                             if(_isJoined){
                                                               SnackBar snackbar = new SnackBar(content: Text("Already joined witht this team"),duration: Duration(seconds: 1),);
                                                               Scaffold.of(context).showSnackBar(snackbar);
+                                                            }else{
+                                                              print('here');
+                                                              String userId = await SavedPref.instance.getUserId();
+                                                              http.Response response  = await http.post("https://www.proxykhel.com/android/contest.php",body:{
+                                                                "type":"joinUserTeam",
+                                                              "matchId":ContestDetailModel.instance.getMatchId(),
+                                                                "contestId":ContestDetailModel.instance.getContestId(),
+                                                                "userId":userId,
+                                                                "squadId":snapshot.data.data[index].id,
+                                                                "contestAmt":contestData.entryfee,
+                                                                "team_1_name":ContestDetailModel.instance.getTeam1Name(),
+                                                                "team_2_name":ContestDetailModel.instance.getTeam2Name(),
+                                                                "matchType":ContestDetailModel.instance.getMatchType(),
+                                                                "matchtime":ContestDetailModel.instance.getContestDuration(),
+                                                              });
+
+                                                              if(response.statusCode == 200){
+                                                                final res = json.decode(response.body);
+                                                                if(res == 1){
+                                                                  SnackBar snackbar = new SnackBar(content: Text("Contest joined"),duration: Duration(seconds: 1),);
+                                                                  Scaffold.of(context).showSnackBar(snackbar);
+                                                                }
+                                                                else if(res == 'not enough money'){
+                                                                  SnackBar snackbar = new SnackBar(content: Text("Insufficient wallet amount"),duration: Duration(seconds: 1),);
+                                                                  Scaffold.of(context).showSnackBar(snackbar);
+                                                                }
+                                                                else if(res == 'swap'){
+                                                                  SnackBar snackbar = new SnackBar(content: Text("Team swapped"),duration: Duration(seconds: 1),);
+                                                                  Scaffold.of(context).showSnackBar(snackbar);
+                                                                }else{
+                                                                  SnackBar snackbar = new SnackBar(content: Text("Error joining team"),duration: Duration(seconds: 1),);
+                                                                  Scaffold.of(context).showSnackBar(snackbar);
+                                                                }
+                                                                Future.delayed(Duration(seconds: 1),(){
+
+                                                                });
+
+                                                              }
+                                                              else{
+                                                                SnackBar snackbar = new SnackBar(content: Text("Error joining team"));
+                                                                Scaffold.of(context).showSnackBar(snackbar);
+                                                              }
                                                             }
                                                           }, child: new Text(_buttonText,style: TextStyle(color:Colors.white,fontSize: 8.0),),
                                                             color: _buttonColor,

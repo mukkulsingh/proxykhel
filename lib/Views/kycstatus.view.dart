@@ -5,6 +5,8 @@ import './kycphoneverification.view.dart';
 import './../Constants/slideTransitions.dart';
 import 'package:http/http.dart' as http;
 import 'dart:math';
+import 'dart:io';
+import 'dart:convert';
 
 class KycStatusView extends StatefulWidget {
   @override
@@ -13,9 +15,13 @@ class KycStatusView extends StatefulWidget {
 
 class _KycStatusViewState extends State<KycStatusView> {
 
+
+
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   
   static bool _verify;
+  static bool _verifyAadhar;
+  static bool _verifyPan;
   static String emailId;
   static bool _isLoading=false;
   
@@ -24,11 +30,19 @@ class _KycStatusViewState extends State<KycStatusView> {
     // TODO: implement initState
     super.initState();
     KycStatus kycStatus = KycModel.instance.getKycStatusData();
-    if(kycStatus.data.emailId == '0'){
+    if(kycStatus.data.idVerification == '0'){
       _verify = true;
     }
     else{
       _verify = false;
+    }
+    if(kycStatus.data.idVerification == '0'){
+      _verifyAadhar = true;
+      _verifyPan=true;
+    }
+    else{
+      _verifyAadhar = false;
+      _verifyPan=true;
     }
     _isLoading = false;
   }
@@ -154,6 +168,29 @@ class _KycStatusViewState extends State<KycStatusView> {
       ),
     );
 
+    final verifyAadharButton = new Container(
+      child: FlatButton(
+        color: Colors.yellow[700],
+        onPressed: (){},
+          child:new Text('Verify!',style: TextStyle(color: Colors.black),),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(32.0),
+        ),
+      ),
+    );
+
+    final verifyPancardButton = new Container(
+      child: FlatButton(
+        color: Colors.yellow[700],
+        onPressed: (){
+        },
+        child:new Text('Verify!',style: TextStyle(color: Colors.black),),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(32.0),
+        ),
+      ),
+    );
+
     final contactVerify = new Container(
       height: 80.0,
       child: new InkWell(
@@ -240,6 +277,54 @@ class _KycStatusViewState extends State<KycStatusView> {
         ),
       ),
     );
+
+    final aadharId = new Container(
+      height: 80.0,
+      child: new Card(
+        child: new Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            new Expanded(
+              flex: 3,
+              child:  Padding(
+                padding: const EdgeInsets.all(12.0),
+                child:  new Text('Aadhar ID',style: new TextStyle(fontSize: 18.0),),
+
+              ),
+            ),
+            new Expanded(
+              flex: 1,
+              child: Padding(padding: EdgeInsets.only(right: 12.0),child: _verifyAadhar? _isLoading?new Center(child: new CircularProgressIndicator(),):verifyAadharButton:new Icon(Icons.verified_user,color: Colors.green,),),
+            )
+          ],
+        ),
+      ),
+    );
+
+    final pancardId = new Container(
+      height: 80.0,
+      child: new Card(
+        child: new Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            new Expanded(
+              flex: 3,
+              child:  Padding(
+                padding: const EdgeInsets.all(12.0),
+                child:  new Text('Pancard ID',style: new TextStyle(fontSize: 18.0),),
+
+              ),
+            ),
+            new Expanded(
+              flex: 1,
+              child: Padding(padding: EdgeInsets.only(right: 12.0),child: _verifyPan? _isLoading?new Center(child: new CircularProgressIndicator(),):verifyPancardButton:new Icon(Icons.verified_user,color: Colors.green,),),
+            )
+          ],
+        ),
+      ),
+    );
     return Scaffold(
       key: _scaffoldKey,
       appBar: new AppBar(
@@ -251,12 +336,8 @@ class _KycStatusViewState extends State<KycStatusView> {
       body: new ListView(
         shrinkWrap: true,
         children: <Widget>[
-          new Stack(
-            children: <Widget>[
-              contactVerify,
-//              _isLoading?new Center(child: new CircularProgressIndicator(),):verifyButton,
-            ],
-          )
+          contactVerify,
+          pancardId
         ],
       )
     );

@@ -38,8 +38,11 @@ class Notifications extends StatelessWidget {
               new ListView(
                 shrinkWrap: true,
                 children: <Widget>[
-                  new Card(
-                    child: new Text('Notification'),
+                  Container(
+                    height: 100,
+                    child: new Card(
+                      child: new Center(child: new Text('0 Contest joined',style: TextStyle(color: Colors.deepOrange),)),
+                    ),
                   )
                 ],
               ),

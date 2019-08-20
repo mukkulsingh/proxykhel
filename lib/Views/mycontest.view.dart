@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import './../Constants/theme.dart' as Theme;
 import './../main.dart';
 import './bottomnavbar.view.dart';
-
+import 'dart:io';
 class MyContest extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -54,15 +54,20 @@ class MyContest extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  new FlatButton(onPressed: (){},
+                  new FlatButton(onPressed: (){
+                    exit(0);
+                  },
                     child: new Text('LIVE',style: TextStyle(color: Colors.white),),
                     color: Colors.deepOrange,
                   ),
-                  new FlatButton(onPressed: (){},
+                  new FlatButton(onPressed: (){
+                    exit(0);                  },
                     highlightColor: Colors.deepOrange,
                     child: new Text('UPCOMING'),
                   ),
-                  new FlatButton(onPressed: (){},
+                  new FlatButton(onPressed: (){
+                    exit(0);
+                  },
                     highlightColor: Colors.deepOrange,
                     child: new Text('FINISHED'),
                   ),
@@ -71,13 +76,13 @@ class MyContest extends StatelessWidget {
               ),
             ),
             new Container(
-              child: new Text('foo'),
+              child: new Center(child: new Text('Comming soon',style: TextStyle(color: Colors.deepOrange),)),
             ),
             new Container(
-              child: new Text('foo'),
+              child: new Center(child: new Text('Comming soon',style: TextStyle(color: Colors.deepOrange),)),
             ),
             new Container(
-              child: new Text('foo'),
+              child: new Center(child: new Text('Comming soon',style: TextStyle(color: Colors.deepOrange),)),
             ),
           ]),
 

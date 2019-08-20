@@ -9,9 +9,12 @@ class Wallet extends StatefulWidget {
 }
 
 class _WalletState extends State<Wallet> {
+
+  final GlobalKey<ScaffoldState> _scadffoldKey = new GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scadffoldKey,
       appBar: new AppBar(
         title: Text('Wallet',style: TextStyle(fontSize: 16.0,color: Colors.white),),
         iconTheme: IconThemeData(
@@ -112,7 +115,10 @@ class _WalletState extends State<Wallet> {
                 width: 100,
                 child: new RaisedButton(
                   color: Colors.deepOrange,
-                  onPressed: (){},
+                  onPressed: (){
+                    SnackBar snackbar = new SnackBar(content: Text("Insufficient amount"),duration: Duration(seconds: 1),);
+                    _scadffoldKey.currentState.showSnackBar(snackbar);
+                  },
                   child: new Text('WITHDRAW',style: TextStyle(color: Colors.white),),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(32.0),

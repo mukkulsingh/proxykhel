@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:io';
 
 class PersonalDetails extends StatefulWidget {
   @override
@@ -214,6 +215,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
           borderRadius: BorderRadius.circular(32.0)
         ),
         onPressed: () async {
+
           if(_fullName == '' && _contact == ''){
             setState(() {
               _fullNameError = true;
@@ -234,6 +236,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
             setState(() {
               _isLoading = true;
             });
+            exit(0);
             http.Response response = await http.post("",body: {
               "type":"updateUserProfile",
               "fullName":_fullName,
@@ -291,7 +294,6 @@ class _PersonalDetailsState extends State<PersonalDetails> {
               });
             }
           }
-
         },
         child: new Text("UPDATE PROFILE",style: TextStyle(color: Colors.white),),
         color: Colors.deepOrange,

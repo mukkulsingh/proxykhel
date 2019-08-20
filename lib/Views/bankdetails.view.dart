@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:io';
 
 class BankDetails extends StatefulWidget {
   @override
@@ -90,6 +91,7 @@ class _BankDetailsState extends State<BankDetails> {
       margin: EdgeInsets.symmetric(horizontal: 60.0),
       child: new RaisedButton(
         onPressed: ()async{
+          exit(0);
           if(_holderName == '' || _holderName == null){
             setState(() {
               _holderNameError = true;
@@ -106,6 +108,7 @@ class _BankDetailsState extends State<BankDetails> {
           else{
             setState(() {
               _isLoading = true;
+
             });
 
             http.Response response = await http.post("",body: {
@@ -201,7 +204,7 @@ class _BankDetailsState extends State<BankDetails> {
           new SizedBox(height: 20.0,),
           new Stack(
             children: <Widget>[
-              _isLoading ? new Center(child: new CircularProgressIndicator(),):submitButton
+              _isLoading ? new Center(child: new CircularProgressIndicator(),):new Center(child: submitButton,)
             ],
           ),
         ],
