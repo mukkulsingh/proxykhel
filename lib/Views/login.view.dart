@@ -6,13 +6,9 @@ import './../Constants/slideTransitions.dart';
 import 'package:connectivity/connectivity.dart';
 import './dashboard.view.dart';
 import './verifyphoneafterlogin.view.dart';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
 import './verifyphone.view.dart';
 import './../Model/verifyphone.model.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -33,40 +29,39 @@ class _LoginScreenState extends State<LoginScreen> {
 
   GoogleSignIn googleSignIn;
 
-  Future<FirebaseUser> _signin() async {
-    setState(() {
-      userPage = Home(onSignin: null, onLogout: _logout, showLoading: true);
-    });
-    FirebaseAuth _auth = FirebaseAuth.instance;
-    try {
-      googleSignIn = GoogleSignIn();
-      GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
-      GoogleSignInAuthentication gauth =
-      await googleSignInAccount.authentication;
-      FirebaseUser user = await _auth.signInWithGoogle(
-        accessToken: gauth.accessToken,
-        idToken: gauth.idToken,
-      );
-
-      setState(() {
-        _username = user.displayName;
-        userPage = User(
-          onLogout: _logout,
-          user: user,
-        );
-      });
-
-      return user;
-    } catch (e) {
-      print(e.toString());
-    }
-    return null;
-  }
+//  Future<FirebaseUser> _signin() async {
+//    setState(() {
+//      userPage = Home(onSignin: null, onLogout: _logout, showLoading: true);
+//    });
+//    FirebaseAuth _auth = FirebaseAuth.instance;
+//    try {
+//      googleSignIn = GoogleSignIn();
+//      GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+//      GoogleSignInAuthentication gauth =
+//      await googleSignInAccount.authentication;
+//      FirebaseUser user = await _auth.signInWithGoogle(
+//        accessToken: gauth.accessToken,
+//        idToken: gauth.idToken,
+//      );
+//
+//      setState(() {
+//        _username = user.displayName;
+//        userPage = User(
+//          onLogout: _logout,
+//          user: user,
+//        );
+//      });
+//
+//      return user;
+//    } catch (e) {
+//      print(e.toString());
+//    }
+//    return null;
+//  }
 
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _isTextObsecured = true;
   }
@@ -300,4 +295,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-

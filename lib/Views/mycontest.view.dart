@@ -1,11 +1,47 @@
 import 'package:flutter/material.dart';
 import './../Constants/theme.dart' as Theme;
-import './../main.dart';
 import './bottomnavbar.view.dart';
-import 'dart:io';
+import './myContestCricketTab.view.dart';
+import './../Model/logout.model.dart';
+import './../Views/login.view.dart';
+import './../Views/wallet.view.dart';
+import './../Constants/slideTransitions.dart';
+import './profile.view.dart';
+
 class MyContest extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
+    void _showLogoutDialog(String title, String content) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          // return object of type Dialog
+          return AlertDialog(
+            title: new Text(title),
+            content: new Text(content),
+            actions: <Widget>[
+              // usually buttons at the bottom of the dialog
+              new FlatButton(
+                child: new Text("Yes"),
+                onPressed: () async {
+                  await LogoutModel.instance.logoutRequest();
+                  Navigator.of(context).pushAndRemoveUntil(SlideRightRoute(widget: LoginScreen()), (Route<dynamic> route)=>false);
+                },
+              ),
+              new FlatButton(
+                child: new Text("no"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: Theme.ProxykhelThemeData,
@@ -17,20 +53,39 @@ class MyContest extends StatelessWidget {
             ),
             actions: <Widget>[
               new IconButton(
-                  icon: Icon(
-                    Icons.account_balance_wallet,
-                    color: Colors.white,
-                  )),
-              new IconButton(
-                  icon: Icon(
-                    Icons.exit_to_app,
-                    color: Colors.white,
+                icon: Icon(
+                  Icons.account_balance_wallet,
+                  color: Colors.white,
+                ),
+                onPressed: (){
+                  Navigator.push(context, SlideLeftRoute(widget: Wallet()));
+                },
+              ),
+              new PopupMenuButton<int>(
+                icon: Icon(
+                  Icons.menu,
+                  color: Colors.white,
+                ),
+                itemBuilder: (context) => [
+                  PopupMenuItem<int>(
+                    value: 1,
+                    child: new Text('My Profile'),
                   ),
-                  onPressed: () {
-//                    Navigator.push(context,
-//                        MaterialPageRoute(builder: (context) => Logins()));
-                  })
-            ],
+                  PopupMenuItem<int>(
+                    value: 2,
+                    child: new Text('Logout'),
+                  ),
+                ],
+                onSelected: (value) async {
+                  if (value == 2) {
+                    _showLogoutDialog(
+                        'Warning', 'You sure you want to logout?');
+                  }
+                  else if(value == 1){
+                    Navigator.push(context,SlideLeftRoute(widget: Profile()));
+                  }
+                },
+              )            ],
               bottom: TabBar(
                 labelColor: Colors.white,
                 labelStyle: TextStyle(
@@ -48,33 +103,9 @@ class MyContest extends StatelessWidget {
               ),
           ),
           body: TabBarView(children: [
-            new Container(
-              margin: EdgeInsets.all(10.0),
-              child: new Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  new FlatButton(onPressed: (){
-                    exit(0);
-                  },
-                    child: new Text('LIVE',style: TextStyle(color: Colors.white),),
-                    color: Colors.deepOrange,
-                  ),
-                  new FlatButton(onPressed: (){
-                    exit(0);                  },
-                    highlightColor: Colors.deepOrange,
-                    child: new Text('UPCOMING'),
-                  ),
-                  new FlatButton(onPressed: (){
-                    exit(0);
-                  },
-                    highlightColor: Colors.deepOrange,
-                    child: new Text('FINISHED'),
-                  ),
-                  
-                ],
-              ),
-            ),
+            new MyContestCricketTab(),
+
+
             new Container(
               child: new Center(child: new Text('Comming soon',style: TextStyle(color: Colors.deepOrange),)),
             ),
