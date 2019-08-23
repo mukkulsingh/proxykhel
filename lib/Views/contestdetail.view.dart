@@ -315,8 +315,9 @@ class _ContestDetailState extends State<ContestDetail> {
                                         crossAxisAlignment: CrossAxisAlignment.stretch,
                                         children: <Widget>[
                                           Container(
-                                            height:60,
+                                            height:40,
                                             child: new Card(
+                                              margin: EdgeInsets.zero,
                                               child: Padding(
                                                 padding: const EdgeInsets.only(top:12.0,left: 12.0),
                                                 child: new Text('${snapshot.data.data[index].teamname}',style: TextStyle(fontSize: 18.0),),
@@ -326,6 +327,7 @@ class _ContestDetailState extends State<ContestDetail> {
                                           new Container(
                                             height: 80.0,
                                             child: new Card(
+                                              margin: EdgeInsets.zero,
                                               child:new Row(
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: <Widget>[
@@ -447,6 +449,7 @@ class _ContestDetailState extends State<ContestDetail> {
                                           new Container(
                                             height: 60.0,
                                             child: new Card(
+                                              margin: EdgeInsets.zero,
                                               child: new Row(
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: <Widget>[
