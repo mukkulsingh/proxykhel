@@ -9,7 +9,7 @@ import './tabBarFootball.view.dart';
 import './tabBarHockey.view.dart';
 import './tabBarKabaddi.view.dart';
 import './profile.view.dart';
-
+import 'package:google_sign_in/google_sign_in.dart';
 void main() => runApp(Dashboard());
 
 
@@ -19,7 +19,7 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-
+  final GoogleSignIn googleSignIn = GoogleSignIn();
   static final navKey = new GlobalKey<NavigatorState>();
 
   @override
@@ -45,6 +45,7 @@ class _DashboardState extends State<Dashboard> {
               new FlatButton(
                 child: new Text("Yes"),
                 onPressed: () async {
+                  await googleSignIn.signOut();
                   await LogoutModel.instance.logoutRequest();
                   Navigator.of(context).pushAndRemoveUntil(SlideRightRoute(widget: LoginScreen()), (Route<dynamic> route)=>false);
                 },

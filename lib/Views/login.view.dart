@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
 import './../Constants/theme.dart' as Theme;
 import './../Model/login.model.dart';
 import './register.view.dart';
@@ -9,6 +10,8 @@ import './verifyphoneafterlogin.view.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import './verifyphone.view.dart';
 import './../Model/verifyphone.model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import './forgotpassword.view.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -27,37 +30,37 @@ class _LoginScreenState extends State<LoginScreen> {
   String BASE_URL ='https://www.proxykhel.com/';
   String endPointLogin ='android/final.php';
 
-  GoogleSignIn googleSignIn;
+  String name;
+  String email;
+  String imageUrl;
 
-//  Future<FirebaseUser> _signin() async {
-//    setState(() {
-//      userPage = Home(onSignin: null, onLogout: _logout, showLoading: true);
-//    });
-//    FirebaseAuth _auth = FirebaseAuth.instance;
-//    try {
-//      googleSignIn = GoogleSignIn();
-//      GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
-//      GoogleSignInAuthentication gauth =
-//      await googleSignInAccount.authentication;
-//      FirebaseUser user = await _auth.signInWithGoogle(
-//        accessToken: gauth.accessToken,
-//        idToken: gauth.idToken,
-//      );
-//
-//      setState(() {
-//        _username = user.displayName;
-//        userPage = User(
-//          onLogout: _logout,
-//          user: user,
-//        );
-//      });
-//
-//      return user;
-//    } catch (e) {
-//      print(e.toString());
-//    }
-//    return null;
-//  }
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  final GoogleSignIn googleSignIn = GoogleSignIn();
+
+
+  Future<String> signInWithGoogle() async {
+    final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+    final GoogleSignInAuthentication googleSignInAuthentication =
+    await googleSignInAccount.authentication;
+
+    final AuthCredential credential = GoogleAuthProvider.getCredential(
+      accessToken: googleSignInAuthentication.accessToken,
+      idToken: googleSignInAuthentication.idToken,
+    );
+
+    final AuthResult Authuser = await _auth.signInWithCredential(credential);
+    final FirebaseUser user = Authuser.user;
+
+    assert(await user.getIdToken() != null);
+
+    final FirebaseUser currentUser = await _auth.currentUser();
+    assert(user.uid == currentUser.uid);
+
+    return 'signInWithGoogle succeeded: $user';
+  }
+
+
 
 
   @override
@@ -123,8 +126,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                         ),
                                         elevation: 4.0,
                                         color: Colors.white,
-                                        onPressed: (){
-                                          print('google login');
+                                        onPressed: () {
+                                          signInWithGoogle().whenComplete(() {
+                                            Navigator.pushAndRemoveUntil(context, SlideLeftRoute(widget: Dashboard()), (Route<dynamic> route)=>false);
+                                          });
                                         },
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -281,7 +286,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           new Container(
                             margin: EdgeInsets.only(top: 20.0),
-                            child: Center(child: new Text('Forgot password?',style: TextStyle(color:Colors.deepOrange,fontSize: 16.0,fontWeight: FontWeight.bold)),),
+                            child: Center(child: InkWell(
+                                onTap: (){Navigator.push(context, SlideLeftRoute(widget: ForgotPassword()));},
+                                child: new Text('Forgot password?',style: TextStyle(color:Colors.deepOrange,fontSize: 16.0,fontWeight: FontWeight.bold))),),
                           ),
 
                         ]

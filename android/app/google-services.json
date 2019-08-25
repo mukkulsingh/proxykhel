@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "189803467674",
+    "firebase_url": "https://proxykhel-a46d3.firebaseio.com",
+    "project_id": "proxykhel-a46d3",
+    "storage_bucket": "proxykhel-a46d3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:189803467674:android:ee7924d2ba92b9c7",
+        "android_client_info": {
+          "package_name": "com.proxykhel.proxykhel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "189803467674-2j7v74mhq0affolf2gool7ttvvkb32cp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.proxykhel.proxykhel",
+            "certificate_hash": "18a50896699fac9971a06fafd21e62d2282fed32"
+          }
+        },
+        {
+          "client_id": "189803467674-i41jjf97l19gq2rl85052c8um1nie5a7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD51yYnqH6BGMlTSVsTJbvhSKlOfxw0fq0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "189803467674-i41jjf97l19gq2rl85052c8um1nie5a7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
