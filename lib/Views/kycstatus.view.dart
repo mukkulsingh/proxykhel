@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'dart:math';
 import 'dart:io';
 import 'dart:convert';
+import 'package:image_picker_modern/image_picker_modern.dart';
 
 class KycStatusView extends StatefulWidget {
   @override
@@ -18,7 +19,7 @@ class _KycStatusViewState extends State<KycStatusView> {
 
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  
+  static var _image;
   static bool _verify;
   static bool _verifyAadhar;
   static bool _verifyPan;
@@ -46,10 +47,19 @@ class _KycStatusViewState extends State<KycStatusView> {
     }
     _isLoading = false;
   }
+
+  Future getImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      _image = image;
+    });
+  }
   
   @override
   Widget build(BuildContext context) {
-  
+
+
 
     KycStatus kycStatus = KycModel.instance.getKycStatusData();
     if(kycStatus.data.emailId == '0'){
@@ -183,6 +193,7 @@ class _KycStatusViewState extends State<KycStatusView> {
       child: FlatButton(
         color: Colors.yellow[700],
         onPressed: (){
+          getImage();
         },
         child:new Text('Verify!',style: TextStyle(color: Colors.black),),
         shape: RoundedRectangleBorder(
@@ -337,7 +348,10 @@ class _KycStatusViewState extends State<KycStatusView> {
         shrinkWrap: true,
         children: <Widget>[
           contactVerify,
-          pancardId
+          pancardId,
+          new Container(
+            child: _image == null ? Text('No image selected.') : Image.file(_image),
+          )
         ],
       )
     );
