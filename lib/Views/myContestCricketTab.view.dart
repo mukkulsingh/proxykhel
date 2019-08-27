@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import './../Model/joinedContestDetail.model.dart';
+import './../Model/JoinedContestListModel.model.dart';
+import './../Constants/slideTransitions.dart';
+import './JoinedContestList.view.dart';
 
 class MyContestCricketTab extends StatefulWidget {
   @override
@@ -15,9 +18,8 @@ class _MyContestCricketTabState extends State<MyContestCricketTab> {
   static bool _isUpcomingButtonSelected;
   static bool _isFinishedButtonSelected;
 
-  String convertDateFromString(DateTime matchDate){
-    final matchDatee=matchDate;
-    Duration difference = matchDatee.difference(DateTime.now());
+  String convertDateFromString(Duration difference){
+
     String d = difference.toString();
 
     String d1 = d.replaceFirst(':', ' h ');
@@ -154,12 +156,17 @@ class _MyContestCricketTabState extends State<MyContestCricketTab> {
                           itemCount: snapshot.data.data.length,
                           itemBuilder: (BuildContext context, int index){
                             Duration difference = (snapshot.data.data[index].matchDateTime).difference(DateTime.now());
-                            if(_currentScreen == 0 && difference > Duration(hours:0,minutes: 0, seconds: 0)){
+                            String _visibility =  snapshot.data.data[index].visibility;
+                            if(_currentScreen == 0 && difference < Duration(hours:0,minutes: 0, seconds: 0) && difference > Duration(hours: -8)){
                                return new Container(
                                   margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                                   height: 120,
                                   child: InkWell(
                                     onTap: () {
+                                      JoinedContestListModel.instance.setMatchId(snapshot.data.data[index].id);
+                                      JoinedContestListModel.instance.setTeam1(snapshot.data.data[index].team1Name);
+                                      JoinedContestListModel.instance.setTeam2(snapshot.data.data[index].team2Name);
+                                      Navigator.push(context, SlideLeftRoute(widget: JoinedContestList()));
                                     },
                                     child: Stack(
                                       children: <Widget>[
@@ -200,7 +207,7 @@ class _MyContestCricketTabState extends State<MyContestCricketTab> {
                                                         new SizedBox(
                                                           height: 20.0,
                                                         ),
-                                                        new Text(timeRemaining,style: TextStyle(fontSize: 12.0,color: Colors.deepOrange,fontWeight: FontWeight.w900),),
+                                                        new Text(convertDateFromString(difference),style: TextStyle(fontSize: 12.0,color: Colors.deepOrange,fontWeight: FontWeight.w900),),
                                                       ],
                                                     ),
                                                     new Column(
@@ -218,12 +225,18 @@ class _MyContestCricketTabState extends State<MyContestCricketTab> {
                                     ),
                                   ),
                                 );
-                            }else if(_currentScreen == 1){
+                            }else
+                            if(_currentScreen == 1 && difference > Duration(hours: 0,minutes: 0,seconds: 0)){
+
                                return new Container(
                                   margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                                   height: 120,
                                   child: InkWell(
                                     onTap: () {
+                                      JoinedContestListModel.instance.setMatchId(snapshot.data.data[index].id);
+                                      JoinedContestListModel.instance.setTeam1(snapshot.data.data[index].team1Name);
+                                      JoinedContestListModel.instance.setTeam2(snapshot.data.data[index].team2Name);
+                                      Navigator.push(context, SlideLeftRoute(widget: JoinedContestList()));
                                     },
                                     child: Stack(
                                       children: <Widget>[
@@ -264,7 +277,7 @@ class _MyContestCricketTabState extends State<MyContestCricketTab> {
                                                         new SizedBox(
                                                           height: 20.0,
                                                         ),
-                                                        new Text(timeRemaining,style: TextStyle(fontSize: 12.0,color: Colors.deepOrange,fontWeight: FontWeight.w900),),
+                                                        new Text(convertDateFromString(difference),style: TextStyle(fontSize: 12.0,color: Colors.deepOrange,fontWeight: FontWeight.w900),),
                                                       ],
                                                     ),
                                                     new Column(
@@ -284,13 +297,21 @@ class _MyContestCricketTabState extends State<MyContestCricketTab> {
                                 );
 
 
-                            }else if(_currentScreen == 2 ){
-
-                               return new Container(
+                            }else
+                            if( _currentScreen==2 ){
+                              if(difference >= Duration(hours: -8))
+                                return new Container();
+                              else
+                              return new  Container(
                                   margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                                   height: 120,
                                   child: InkWell(
                                     onTap: () {
+                                      JoinedContestListModel.instance.setMatchId(snapshot.data.data[index].id);
+                                      JoinedContestListModel.instance.setTeam1(snapshot.data.data[index].team1Name);
+                                      JoinedContestListModel.instance.setTeam2(snapshot.data.data[index].team2Name);
+                                      JoinedContestListModel.instance.setMatchType(snapshot.data.data[index].matchType);
+                                      Navigator.push(context, SlideLeftRoute(widget: JoinedContestList()));
                                     },
                                     child: Stack(
                                       children: <Widget>[
@@ -332,6 +353,9 @@ class _MyContestCricketTabState extends State<MyContestCricketTab> {
                                                           height: 20.0,
                                                         ),
                                                         new Text("Finished",style: TextStyle(fontSize: 12.0,color: Colors.deepOrange,fontWeight: FontWeight.w900),),
+                                                        new Text(snapshot.data.data[index].matchDate.day.toString()+'-'+snapshot.data.data[index].matchDate.month.toString()+'-'+snapshot.data.data[index].matchDate.year.toString(),
+                                                          style: TextStyle(color: Colors.deepOrangeAccent[400],fontSize: 12.0),
+                                                        )
                                                       ],
                                                     ),
                                                     new Column(
