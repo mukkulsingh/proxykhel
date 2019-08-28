@@ -117,9 +117,9 @@ class _JoinedContestListState extends State<JoinedContestList> {
                 ),
 
             ),
-            new Expanded(flex:7,child: ListView(
-              children: <Widget>[
-                new FutureBuilder(
+            new Expanded(
+                flex:7,
+                child: new FutureBuilder(
                     future:JoinedContestListModel.instance.getJoinedContest(),
                     builder: (context, snapshot){
                       switch(snapshot.connectionState){
@@ -132,74 +132,88 @@ class _JoinedContestListState extends State<JoinedContestList> {
                           if(snapshot.hasError){
                             return new Center(child: new Text("Error fetching contests"),);
                           }else if(!snapshot.hasData){
-
+                            return new Center(child: new Text("0 contests joined"),);
                           }else if(snapshot.hasData){
-                            new ListView.builder(
+                            print(snapshot.data.data.length);
+                            return new ListView.builder(
+                                itemCount: snapshot.data.data.length,
                                 itemBuilder: (context,index){
-                                  new Card(
-                                    child: new Column(
-                                      children: <Widget>[
-                                        LinearProgressIndicator(
-                                          value:(int.parse(snapshot.data.data[index].totlaJoin) / int.parse(snapshot.data.data[index].maxTeam)),
-                                          backgroundColor: Colors.grey[300],
-                                        ),
-                                        new Column(
-                                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                                          children: <Widget>[
-                                            new Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                              children: <Widget>[
-                                                Padding(
-                                                  padding: const EdgeInsets.all(8.0),
-                                                  child: new Column(
+                                  return new Container(
+                                    height: 100,
+                                    child: new Card(
+                                      child:new Column(
+                                        children: <Widget>[
+                                          LinearProgressIndicator(
+                                            value:(int.parse(snapshot.data.data[index].totlaJoin) / int.parse(snapshot.data.data[index].maxTeam)),
+                                            backgroundColor: Colors.grey[300],
+                                          ),
+                                          new Column(
+                                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                                            children: <Widget>[
+                                              new Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                children: <Widget>[
+                                                  Padding(
+                                                    padding: const EdgeInsets.all(8.0),
+                                                    child: new Column(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: <Widget>[
+                                                        new CircleAvatar(
+                                                          radius: 10.0,
+                                                          backgroundColor: Colors.deepOrange,
+                                                          child: new Text('M',style: TextStyle(color:Colors.white,fontSize: 10),),
+                                                        ),
+                                                        new InkWell(
+                                                            onTap: (){},
+                                                            child:new Row(
+                                                              children: <Widget>[
+                                                                new Text('Winning'),
+                                                                new Icon(Icons.arrow_drop_down),
+                                                              ],
+                                                            )
+                                                        ),
+                                                        new Text('Rs. '+snapshot.data.data[index].winnersAmt),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  new Column(
                                                     mainAxisAlignment: MainAxisAlignment.center,
                                                     children: <Widget>[
-                                                      new CircleAvatar(
-                                                        radius: 10.0,
-                                                        backgroundColor: Colors.deepOrange,
-                                                        child: new Text('M',style: TextStyle(color:Colors.white,fontSize: 10),),
+                                                      new Text('Winners'),
+                                                      new Text(snapshot.data.data[index].winner,style: TextStyle(fontWeight: FontWeight.bold),),
+                                                      Padding(
+                                                        padding: const EdgeInsets.only(top:18.0),
+                                                        child: new Text(snapshot.data.data[index].totlaJoin+'/'+snapshot.data.data[index].maxTeam+' Joined',style: TextStyle(fontSize: 12.0),),
                                                       ),
-                                                      new InkWell(
-                                                          onTap: (){},
-                                                          child:new Row(
-                                                            children: <Widget>[
-                                                              new Text('Winning'),
-                                                              new Icon(Icons.arrow_drop_down),
-                                                            ],
-                                                          )
-                                                      ),
-                                                      new Text('Rs. '+snapshot.data.data[index].winnersAmt),
+
                                                     ],
                                                   ),
-                                                ),
-                                                new Column(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: <Widget>[
-                                                    new Text('Winners'),
-                                                    new Text(snapshot.data.data[index].winner,style: TextStyle(fontWeight: FontWeight.bold),),
-                                                    Padding(
-                                                      padding: const EdgeInsets.only(top:18.0),
-                                                      child: new Text(snapshot.data.data[index].totlaJoin+'/'+snapshot.data.data[index].maxTeam+' Joined',style: TextStyle(fontSize: 12.0),),
-                                                    ),
+                                                  new Column(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: <Widget>[
+                                                      Container(margin: EdgeInsets.only(top: 10.0), child: new Text('Entry')),
+                                                      Container(
+                                                        margin: EdgeInsets.only(top :20.0,right: 8.0),
+                                                        child: new Text(snapshot.data.data[index].entryfee),
+                                                      ),
+                                                    ],
+                                                  ),
 
-                                                  ],
-                                                ),
-                                                new Column(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: <Widget>[
-                                                    Container(margin: EdgeInsets.only(top: 10.0), child: new Text('Entry')),
-                                                    Container(
-                                                      margin: EdgeInsets.only(top :20.0,right: 8.0),
-                                                      child: new Text(snapshot.data.data[index].entryfee),
-                                                    ),
-                                                  ],
-                                                ),
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                          new Column(
+                                            children: <Widget>[
+                                              new Row(
+                                                children: <Widget>[
 
-                                              ],
-                                            )
-                                          ],
-                                        )
-                                      ],
+                                                ],
+                                              )
+                                            ],
+                                          )
+                                        ],
+                                      )
                                     ),
                                   );
 
@@ -222,9 +236,7 @@ class _JoinedContestListState extends State<JoinedContestList> {
                           }
                       }
 
-                }),
-              ],
-            ))
+                    })),
           ],
         ),
     );

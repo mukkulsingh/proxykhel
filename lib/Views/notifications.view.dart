@@ -62,25 +62,47 @@ class _NotificationsState extends State<Notifications> {
                         return ListView.builder(
                             itemCount: snapshot.data.notif.length,
                             itemBuilder: (context, index){
-                              return new Container(
-                                height: 100.0,
-                                width: double.infinity,
-                                child: new Row(
-                                  children: <Widget>[
-                                    Expanded(
-                                      flex: 2,
-                                      child: Container(
-                                          width: double.infinity,
-                                          color:Colors.red,
-                                          child: new Text(snapshot.data.notif[index].title,style: TextStyle(color: Colors.white),)),
+                              return Column(
+                                children: <Widget>[
+                                  SizedBox(height: 10.0,),
+                                  new Container(
+                                    height: 100.0,
+                                    width: double.infinity,
+                                    child: new Row(
+                                      children: <Widget>[
+                                        Expanded(
+                                          flex: 2,
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                                            child: Container(
+                                              margin: EdgeInsets.only(left: 2.0),
+                                              height: double.infinity,
+                                                width: double.infinity,
+                                                color:Colors.red,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.only(top:18.0),
+                                                  child: new Text(snapshot.data.notif[index].title,style: TextStyle(color: Colors.white),textAlign: TextAlign.center,),
+                                                )),
+                                          ),
+                                        ),
+
+                                        Expanded(
+                                          flex: 6,
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal:28.0),
+                                            child: new Text(snapshot.data.notif[index].description),
+                                          ),
+                                        ),
+
+                                      ],
                                     ),
-                                    Expanded(
-                                      flex: 6,
-                                      child: new Text(snapshot.data.notif[index].description),
-                                    ),
-                                  ],
-                                ),
+
+                                  ),
+                                  Divider(),
+                                  SizedBox(height: 10.0,),
+                                ],
                               );
+
                             });
                       }
                   }

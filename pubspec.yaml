@@ -36,6 +36,7 @@ dependencies:
   firebase_auth: ^0.14.0+2
   image_picker_modern: ^0.4.12+2
   flutter_facebook_login: 1.1.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
