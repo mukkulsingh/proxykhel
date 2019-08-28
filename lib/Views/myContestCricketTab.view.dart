@@ -166,6 +166,7 @@ class _MyContestCricketTabState extends State<MyContestCricketTab> {
                                       JoinedContestListModel.instance.setMatchId(snapshot.data.data[index].id);
                                       JoinedContestListModel.instance.setTeam1(snapshot.data.data[index].team1Name);
                                       JoinedContestListModel.instance.setTeam2(snapshot.data.data[index].team2Name);
+                                      JoinedContestListModel.instance.setMatchType(snapshot.data.data[index].matchType);
                                       Navigator.push(context, SlideLeftRoute(widget: JoinedContestList()));
                                     },
                                     child: Stack(
@@ -236,6 +237,7 @@ class _MyContestCricketTabState extends State<MyContestCricketTab> {
                                       JoinedContestListModel.instance.setMatchId(snapshot.data.data[index].id);
                                       JoinedContestListModel.instance.setTeam1(snapshot.data.data[index].team1Name);
                                       JoinedContestListModel.instance.setTeam2(snapshot.data.data[index].team2Name);
+                                      JoinedContestListModel.instance.setMatchType(snapshot.data.data[index].matchType);
                                       Navigator.push(context, SlideLeftRoute(widget: JoinedContestList()));
                                     },
                                     child: Stack(

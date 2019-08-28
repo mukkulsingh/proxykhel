@@ -85,10 +85,57 @@ class _JoinedContestListState extends State<JoinedContestList> {
         ),
         body: Column(
           children: <Widget>[
-            new Expanded(flex:1,child: Row(children: <Widget>[new Text('${JoinedContestListModel.instance.getTeam1} VS ${JoinedContestListModel.instance.getTeam2}'),new Text('EXPIRED'),new Text('${JoinedContestListModel.instance.getMatchType}')],)),
+            new Expanded(
+                flex:1,
+                child: Container(
+                  height: 65.0,
+                  color: Color(0XFFc4301e),
+                  child: Row(
+
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+
+                      new Text('${JoinedContestListModel.instance.getTeam1}  VS  ${JoinedContestListModel.instance.getTeam2}',style: TextStyle(color: Colors.white),),
+                      new Text('EXPIRED',style: TextStyle(color: Colors.white),),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Center(child: new Text('${JoinedContestListModel.instance.getMatchType??''}',style: TextStyle(color: Colors.white),)),
+                      )
+                    ],
+                  )
+                )
+            ),
+            new Expanded(
+              flex:1,
+              child: new Card(
+                  child:ListTile(
+                    title: Text("Player",style: TextStyle(color: Colors.deepOrange),),
+                    trailing: new Icon(Icons.chevron_right,color: Colors.deepOrange,),
+                    onTap: (){
+                    },
+                  )
+                ),
+
+            ),
             new Expanded(flex:7,child: ListView(
               children: <Widget>[
+                new FutureBuilder(
+                    future:JoinedContestListModel.instance.getJoinedContest(),
+                    builder: (context, snapshot){
+                      switch(snapshot.connectionState){
+                        case ConnectionState.none:
+                        case ConnectionState.active:
+                        case ConnectionState.waiting:
+                          return new Center(child: new CircularProgressIndicator(),);
+                          break;
+                        case ConnectionState.done:
+                          return new ListView.builder(
+                              itemBuilder: (context,index){
 
+                              });
+                      }
+
+                }),
               ],
             ))
           ],
