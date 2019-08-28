@@ -5,7 +5,12 @@ import 'package:connectivity/connectivity.dart';
 import './../Model/register.model.dart';
 import './verifyphone.view.dart';
 import './../Views/login.view.dart';
-
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import './dashboard.view.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -28,6 +33,73 @@ class _RegisterState extends State<Register> {
   static String _emailOrPhone;
   static String _password;
   static String _fullName;
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  final GoogleSignIn googleSignIn = GoogleSignIn();
+
+  bool isLoggedIn = false;
+
+
+  void onLoginStatusChanged(bool isLoggedIn) {
+    setState(() {
+      this.isLoggedIn = isLoggedIn;
+    });
+  }
+
+  Future<bool> initiateFacebookLogin() async {
+    var facebookLogin = FacebookLogin();
+    var facebookLoginResult =
+    await facebookLogin.logInWithReadPermissions(['email']);
+    switch (facebookLoginResult.status) {
+      case FacebookLoginStatus.error:
+        print("Error");
+        onLoginStatusChanged(false);
+        return false;
+        break;
+      case FacebookLoginStatus.cancelledByUser:
+        print("CancelledByUser");
+        onLoginStatusChanged(false);
+        return false;
+        break;
+      case FacebookLoginStatus.loggedIn:
+        print("LoggedIn");
+        var graphResponse = await http.get(
+            'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email&access_token=${facebookLoginResult
+                .accessToken.token}');
+
+        var profile = json.decode(graphResponse.body);
+        print(profile.toString());
+        Model.instance.setFacebookEmail(profile['name'].toString());
+        Model.instance.setFacebookFullName(profile['email'].toString());
+
+        onLoginStatusChanged(true);
+        return true;
+        break;
+    }
+  }
+
+
+  Future<String> signInWithGoogle() async {
+    final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+    final GoogleSignInAuthentication googleSignInAuthentication =
+    await googleSignInAccount.authentication;
+
+    final AuthCredential credential = GoogleAuthProvider.getCredential(
+      accessToken: googleSignInAuthentication.accessToken,
+      idToken: googleSignInAuthentication.idToken,
+    );
+
+    final AuthResult Authuser = await _auth.signInWithCredential(credential);
+    final FirebaseUser user = Authuser.user;
+
+    assert(await user.getIdToken() != null);
+
+    final FirebaseUser currentUser = await _auth.currentUser();
+    assert(user.uid == currentUser.uid);
+
+    return 'signInWithGoogle succeeded: $user';
+  }
 
 
   @override
@@ -81,8 +153,12 @@ class _RegisterState extends State<Register> {
                                 ,                                ),
                               color: Colors.white,
                               elevation: 4.0,
-                              onPressed:(){
+                              onPressed:() async {
                                 print('Facebook login');
+                                if(await initiateFacebookLogin()){
+                                  Model.instance.facebookLogin();
+                                  Navigator.pushAndRemoveUntil(context, SlideLeftRoute(widget:Dashboard()), (Route<dynamic> route)=>false);
+                                }
                               },
 
                               child: Row(
@@ -106,6 +182,7 @@ class _RegisterState extends State<Register> {
                               color: Colors.white,
                               onPressed: (){
                                 print('google login');
+                                signInWithGoogle();
                               },
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceAround,

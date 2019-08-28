@@ -742,7 +742,7 @@ class _CreateTeamState extends State<CreateTeam> {
         body: Column(
           children: <Widget>[
             Expanded(
-              flex: 1,
+              flex: 2,
               child: new Container(
                 height: 230,
                 color: Colors.red[900],
@@ -1069,7 +1069,7 @@ class _CreateTeamState extends State<CreateTeam> {
               ),
             ),
             Expanded(
-              flex: 2,
+              flex: 3,
               child: FutureBuilder(
                   future: CreateTeamModel.instance.getMatchTeam(
                       "https://www.proxykhel.com/android/Createteam.php",

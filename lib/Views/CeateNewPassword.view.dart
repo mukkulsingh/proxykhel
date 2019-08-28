@@ -138,9 +138,9 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(32.0),
                       ),
-                    )
-                    ,
-                  )                ],
+                    ),
+                  )
+                ],
               ),
             ),
           ),

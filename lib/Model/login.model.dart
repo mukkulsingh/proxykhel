@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'package:proxykhel/Model/savedpref.model.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -11,11 +12,22 @@ import './../Model/verifyphone.model.dart';
 class Model{
   static Model _instance;
 
+  static String _facebookFullName;
+  static String _facebookEmailId;
+
   static Model get instance  {
     if(_instance == null){
       _instance = new Model();
     }
     return _instance;
+  }
+
+
+  void setFacebookEmail(String emailId){
+    _facebookEmailId = emailId;
+  }
+  void setFacebookFullName(String fullName){
+    _facebookFullName = fullName;
   }
 
   Future<int> logginIn(String username, String password) async {
@@ -60,6 +72,11 @@ class Model{
     }
   }
 
+  void facebookLogin()async{
+    final pref = await SharedPreferences.getInstance();
+    pref.setString("emailId", _facebookEmailId);
+    pref.setString("fullname", _facebookFullName);
+  }
 
   Future<bool> checkIfLoggedIn() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();

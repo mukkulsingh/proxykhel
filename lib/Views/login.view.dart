@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as prefix0;
 import './../Constants/theme.dart' as Theme;
 import './../Model/login.model.dart';
 import './register.view.dart';
@@ -12,6 +11,9 @@ import './verifyphone.view.dart';
 import './../Model/verifyphone.model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import './forgotpassword.view.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -19,6 +21,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   TextEditingController _username = new TextEditingController();
   TextEditingController _password = new TextEditingController();
 
@@ -37,6 +41,46 @@ class _LoginScreenState extends State<LoginScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   final GoogleSignIn googleSignIn = GoogleSignIn();
+
+  bool isLoggedIn = false;
+
+
+  void onLoginStatusChanged(bool isLoggedIn) {
+    setState(() {
+      this.isLoggedIn = isLoggedIn;
+    });
+  }
+
+  Future<bool> initiateFacebookLogin() async {
+    var facebookLogin = FacebookLogin();
+    var facebookLoginResult =
+    await facebookLogin.logInWithReadPermissions(['email']);
+    switch (facebookLoginResult.status) {
+      case FacebookLoginStatus.error:
+        print("Error");
+        onLoginStatusChanged(false);
+        return false;
+        break;
+      case FacebookLoginStatus.cancelledByUser:
+        print("CancelledByUser");
+        onLoginStatusChanged(false);
+        return false;
+        break;
+      case FacebookLoginStatus.loggedIn:
+        print("LoggedIn");
+        var graphResponse = await http.get(
+            'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email&access_token=${facebookLoginResult
+                .accessToken.token}');
+
+        var profile = json.decode(graphResponse.body);
+        print(profile.toString());
+        Model.instance.setFacebookEmail(profile['name'].toString());
+        Model.instance.setFacebookFullName(profile['email'].toString());
+        onLoginStatusChanged(true);
+        return true;
+        break;
+    }
+  }
 
 
   Future<String> signInWithGoogle() async {
@@ -79,6 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
             color: Colors.white,
           ),
           child:new Scaffold(
+            key: _scaffoldKey,
             backgroundColor: Colors.transparent,
             body: Builder(
               builder:(context)=> Center(
@@ -102,9 +147,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                           ,                                ),
                                         color: Colors.white,
                                         elevation: 4.0,
-                                        onPressed:(){
+                                        onPressed:()async{
 
                                           print('Facebook login');
+                                          if(await initiateFacebookLogin()){
+                                            Model.instance.facebookLogin();
+                                           Navigator.pushAndRemoveUntil(context, SlideLeftRoute(widget: Dashboard()), (Route<dynamic> route)=>false);
+                                          }  else{
+                                            SnackBar snackbar = new SnackBar(content: Text("Error logging in"),duration: Duration(seconds: 1),);
+                                            _scaffoldKey.currentState.showSnackBar(snackbar);
+                                          }
+
                                         },
 
                                         child: Row(

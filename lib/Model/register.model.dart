@@ -3,9 +3,12 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import './../Model/verifyphone.model.dart';
 
+
 class Model{
   static Register register;
 
+  static String _facebookFullName;
+  static String _facebookEmailId;
 
   static Model _instance;
 
@@ -14,6 +17,13 @@ class Model{
       _instance = new Model();
     }
     return _instance;
+  }
+
+  void setFacebookEmail(String emailId){
+    _facebookEmailId = emailId;
+  }
+  void setFacebookFullName(String fullName){
+    _facebookFullName = fullName;
   }
 
   Future<int> registeringNewUser(String fullName, String emailOrPhone, String password, String url) async{
@@ -49,6 +59,12 @@ class Model{
     else{
       return 0;
     }
+  }
+
+  void facebookLogin()async{
+    final pref = await SharedPreferences.getInstance();
+    pref.setString("emailId", _facebookEmailId);
+    pref.setString("fullname", _facebookFullName);
   }
 }
 

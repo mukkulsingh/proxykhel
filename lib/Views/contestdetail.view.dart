@@ -83,6 +83,8 @@ class _ContestDetailState extends State<ContestDetail> {
         },
       );
     }
+    String _buttonText = '';
+
     return Scaffold(
         appBar: new AppBar(
           iconTheme: IconThemeData(
@@ -286,7 +288,6 @@ class _ContestDetailState extends State<ContestDetail> {
                                 itemCount: snapshot.data.data.length,
                                 itemBuilder: (BuildContext context, int index){
                                 bool _isJoined = false;
-                                String _buttonText = 'JOIN';
                                 Color _buttonColor = Colors.deepOrange;
                                 if(snapshot.data.data[index].joined !=null){
                                   if(snapshot.data.data[index].joined == 1){
@@ -390,7 +391,6 @@ class _ContestDetailState extends State<ContestDetail> {
                                                               SnackBar snackbar = new SnackBar(content: Text("Already joined witht this team"),duration: Duration(seconds: 1),);
                                                               Scaffold.of(context).showSnackBar(snackbar);
                                                             }else{
-                                                              print('here');
                                                               String userId = await SavedPref.instance.getUserId();
                                                               http.Response response  = await http.post("https://www.proxykhel.com/android/contest.php",body:{
                                                                 "type":"joinUserTeam",
@@ -406,16 +406,20 @@ class _ContestDetailState extends State<ContestDetail> {
                                                               });
 
                                                               if(response.statusCode == 200){
+
                                                                 final res = json.decode(response.body);
-                                                                if(res == 1){
+                                                                if(res['data'] == 1){
                                                                   SnackBar snackbar = new SnackBar(content: Text("Contest joined"),duration: Duration(seconds: 1),);
                                                                   Scaffold.of(context).showSnackBar(snackbar);
+                                                                  setState(() {
+
+                                                                  });
                                                                 }
-                                                                else if(res == 'not enough money'){
+                                                                else if(res['data'] == 'not enough money'){
                                                                   SnackBar snackbar = new SnackBar(content: Text("Insufficient wallet amount"),duration: Duration(seconds: 1),);
                                                                   Scaffold.of(context).showSnackBar(snackbar);
                                                                 }
-                                                                else if(res == 'swap'){
+                                                                else if(res['data'] == 'swap'){
                                                                   SnackBar snackbar = new SnackBar(content: Text("Team swapped"),duration: Duration(seconds: 1),);
                                                                   Scaffold.of(context).showSnackBar(snackbar);
                                                                 }else{
