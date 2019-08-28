@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import './../Constants//theme.dart' as Theme;
-import './../main.dart';
+import './../Model/Notification.model.dart';
 import './bottomnavbar.view.dart';
 
-class Notifications extends StatelessWidget {
+class Notifications extends StatefulWidget {
+  @override
+  _NotificationsState createState() => _NotificationsState();
+}
+
+class _NotificationsState extends State<Notifications> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -32,21 +37,54 @@ class Notifications extends StatelessWidget {
             ],
 
           ),
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              new ListView(
-                shrinkWrap: true,
-                children: <Widget>[
-                  Container(
-                    height: 100,
-                    child: new Card(
-                      child: new Center(child: new Text('0 Contest joined',style: TextStyle(color: Colors.deepOrange),)),
-                    ),
-                  )
-                ],
-              ),
-            ],
+          body: new RefreshIndicator(
+              onRefresh:(){
+                setState(() {
+
+                });
+              },
+            child: new FutureBuilder(
+                future: NotificationModel.instance.getNotifications(),
+                builder: (context,snapshot){
+                  switch(snapshot.connectionState){
+                    case ConnectionState.none:
+                    case ConnectionState.active:
+                    case ConnectionState.waiting:
+                      return new Center(child: new CircularProgressIndicator(),);
+                      break;
+                    case ConnectionState.done:
+                      if(snapshot.hasError){
+                        return new Center(child: new Text("Error fetching notification"),);
+                      }
+                      else if(!snapshot.hasData){
+                        return new Center(child: new Text("0 Notifications"),);
+                      }else if(snapshot.hasData){
+                        return ListView.builder(
+                            itemCount: snapshot.data.notif.length,
+                            itemBuilder: (context, index){
+                              return new Container(
+                                height: 100.0,
+                                width: double.infinity,
+                                child: new Row(
+                                  children: <Widget>[
+                                    Expanded(
+                                      flex: 2,
+                                      child: Container(
+                                          width: double.infinity,
+                                          color:Colors.red,
+                                          child: new Text(snapshot.data.notif[index].title,style: TextStyle(color: Colors.white),)),
+                                    ),
+                                    Expanded(
+                                      flex: 6,
+                                      child: new Text(snapshot.data.notif[index].description),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            });
+                      }
+                  }
+                }),
           ),
 
           bottomNavigationBar:BottomNavBar()
