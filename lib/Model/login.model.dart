@@ -1,3 +1,4 @@
+import 'package:date_format/date_format.dart';
 import 'package:http/http.dart' as http;
 import 'package:proxykhel/Model/savedpref.model.dart';
 
@@ -69,6 +70,8 @@ class Model{
       else {
         return 0;
       }
+    }else{
+      return 0;
     }
   }
 
@@ -76,6 +79,41 @@ class Model{
     final pref = await SharedPreferences.getInstance();
     pref.setString("emailId", _facebookEmailId);
     pref.setString("fullname", _facebookFullName);
+  }
+  
+  Future<int> googleLogin(String uId, String emailId, String fullName,String picture,String firstName)async{
+
+    if(picture == null){
+      picture = '';
+    }
+    http.Response response = await http.post("https://www.proxykhel.com/android/google_model.php",body: {
+      "type":"googleLogin",
+      "uid":uId,
+      "emailId":emailId,
+      "fullName":fullName,
+      "picture":picture,
+      "username":firstName
+    });
+    if(response.statusCode == 200){
+      final res = json.decode(response.body);
+      print(res);
+      if(res == null){
+        return  0;
+      }
+      if(res['success']==true){
+        final pref = await SharedPreferences.getInstance();
+        UserAccount account = userAccountFromJson(response.body);
+        pref.setString('emailId', account.data.emailId);
+        pref.setString('userId', account.data.id);
+        pref.setString('username', account.data.username);
+        pref.setString('fullName', account.data.fullName);
+        return 1;
+      }else{
+        return 0;
+      }
+    }else{
+      return 0;
+    }
   }
 
   Future<bool> checkIfLoggedIn() async {
@@ -99,7 +137,7 @@ UserAccount userAccountFromJson(String str) => UserAccount.fromJson(json.decode(
 String userAccountToJson(UserAccount data) => json.encode(data.toJson());
 
 class UserAccount {
-  String success;
+  bool success;
   Data data;
 
   UserAccount({

@@ -9,7 +9,6 @@ import './verifyphoneafterlogin.view.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import './verifyphone.view.dart';
 import './../Model/verifyphone.model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import './forgotpassword.view.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:http/http.dart' as http;
@@ -26,6 +25,8 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController _username = new TextEditingController();
   TextEditingController _password = new TextEditingController();
 
+  GoogleSignInAccount _currentUser;
+
   static bool _isTextObsecured;
 
   bool _isLoading = false;
@@ -34,22 +35,17 @@ class _LoginScreenState extends State<LoginScreen> {
   String BASE_URL ='https://www.proxykhel.com/';
   String endPointLogin ='android/final.php';
 
-  String name;
-  String email;
-  String imageUrl;
-
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-
-  final GoogleSignIn googleSignIn = GoogleSignIn();
-
   bool isLoggedIn = false;
 
+  String _contactText;
 
   void onLoginStatusChanged(bool isLoggedIn) {
     setState(() {
       this.isLoggedIn = isLoggedIn;
     });
   }
+
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   Future<bool> initiateFacebookLogin() async {
     var facebookLogin = FacebookLogin();
@@ -83,35 +79,44 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
 
-  Future<String> signInWithGoogle() async {
-    final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
-    final GoogleSignInAuthentication googleSignInAuthentication =
-    await googleSignInAccount.authentication;
-
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
-      accessToken: googleSignInAuthentication.accessToken,
-      idToken: googleSignInAuthentication.idToken,
-    );
-
-    final AuthResult Authuser = await _auth.signInWithCredential(credential);
-    final FirebaseUser user = Authuser.user;
-
-    assert(await user.getIdToken() != null);
-
-    final FirebaseUser currentUser = await _auth.currentUser();
-    assert(user.uid == currentUser.uid);
-
-    return 'signInWithGoogle succeeded: $user';
-  }
-
-
-
-
   @override
   void initState() {
     super.initState();
     _isTextObsecured = true;
+    _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
+      setState(() {
+        _currentUser = account;
+      });
+    });
   }
+
+
+
+  Future<void> _handleSignIn() async {
+    try {
+      await _googleSignIn.signIn();
+      String email = _googleSignIn.currentUser.email;
+      String fullName = _googleSignIn.currentUser.displayName;
+      String uId = _googleSignIn.currentUser.id;
+      String picture = _googleSignIn.currentUser.photoUrl;
+      List<String> s = _googleSignIn.currentUser.displayName.split(new RegExp('\\s+'));
+      String firstName = s[0];
+      int num = await Model.instance.googleLogin(uId, email, fullName, picture, firstName);
+      if(num==1){
+        Navigator.pushAndRemoveUntil(context, SlideLeftRoute(widget: Dashboard()), (Route<dynamic> route)=>false);
+      }else{
+        SnackBar snackBar = new SnackBar(content: Text("Error logging in.Try again"),duration: Duration(seconds: 1),);
+        _scaffoldKey.currentState.showSnackBar(snackBar);
+      }
+
+    } catch (error) {
+      print(error);
+    }
+  }
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -180,9 +185,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                         elevation: 4.0,
                                         color: Colors.white,
                                         onPressed: () {
-                                          signInWithGoogle().whenComplete(() {
-                                            Navigator.pushAndRemoveUntil(context, SlideLeftRoute(widget: Dashboard()), (Route<dynamic> route)=>false);
-                                          });
+//                                          signInWithGoogle().whenComplete(() {
+//                                            Navigator.pushAndRemoveUntil(context, SlideLeftRoute(widget: Dashboard()), (Route<dynamic> route)=>false);
+//                                          });
+                                          _handleSignIn();
                                         },
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceAround,
