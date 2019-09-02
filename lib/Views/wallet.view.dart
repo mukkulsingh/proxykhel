@@ -47,7 +47,7 @@ class _WalletState extends State<Wallet> {
                           break;
                         case ConnectionState.done:
                           if(snapshot.hasError)
-                            return new Text("Something went wrong${snapshot.error.toString()}");
+                            return new Text("${snapshot.error.toString()}");
                           else if(!snapshot.hasData)
                             return new Text('Error fetching balance');
                           else {

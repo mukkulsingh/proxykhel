@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:proxykhel/Model/GetProfileDetailModel.model.dart';
 import 'dart:convert';
 import 'dart:io';
+
+import 'package:proxykhel/Model/UpdateProfileModel.model.dart';
 
 class PersonalDetails extends StatefulWidget {
   @override
@@ -10,7 +13,7 @@ class PersonalDetails extends StatefulWidget {
 
 class _PersonalDetailsState extends State<PersonalDetails> {
 
-  final GlobalKey<ScaffoldState> _scaffolKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   static String _fullName;
   static bool _fullNameError;
@@ -19,6 +22,10 @@ class _PersonalDetailsState extends State<PersonalDetails> {
   static String _state;
   static DateTime _selectedDate;
   static bool _isLoading;
+
+  TextEditingController _fullNameController;
+  TextEditingController _mobileController;
+
 
   @override
   void initState() {
@@ -30,11 +37,12 @@ class _PersonalDetailsState extends State<PersonalDetails> {
     _contactError = false;
     _selectedDate = DateTime.now();
     _isLoading = false;
+    _fullNameController = new TextEditingController();
+    _mobileController = new TextEditingController();
   }
 
   @override
   Widget build(BuildContext context) {
-
 
     Future<DateTime> _selectDate(BuildContext context) async {
       final DateTime picked = await showDatePicker(context: context, initialDate: _selectedDate, firstDate: DateTime(1960,1), lastDate: DateTime(DateTime.now().year,DateTime.now().month+1,DateTime.now().day));
@@ -50,6 +58,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
     final fullName = new Container(
       margin: EdgeInsets.symmetric(horizontal: 24.0),
       child: new TextField(
+        controller: _fullNameController,
         decoration: InputDecoration(
           border: OutlineInputBorder(),
           labelText: "Full Name",
@@ -68,6 +77,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
     final mobileNo = new Container(
       margin: EdgeInsets.symmetric(horizontal: 24.0),
       child: new TextField(
+        controller: _mobileController,
         keyboardType: TextInputType.number,
         decoration: InputDecoration(
             border: OutlineInputBorder(),
@@ -191,6 +201,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
           _state = value;
         });
       },
+      hint: Text("Select your state",style: TextStyle(color: Colors.deepOrange),),
     );
 
 
@@ -236,62 +247,51 @@ class _PersonalDetailsState extends State<PersonalDetails> {
             setState(() {
               _isLoading = true;
             });
-            exit(0);
-            http.Response response = await http.post("",body: {
-              "type":"updateUserProfile",
-              "fullName":_fullName,
-              "contact":_contact,
-              "state":_state,
-              "dob":_selectedDate.toString(),
-            });
-            if(response.statusCode == 200){
-              final res = json.decode(response.body);
-              if(res['success']==true){
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      Future.delayed(Duration(seconds: 2), () {
-                        Navigator.of(context).pop(true);
+
+           int num = await UpdateProfileModel.instance.updateProfile(_fullName, _contact, _state, _selectedDate.toIso8601String());
+            if(num == 1){
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    Future.delayed(Duration(seconds: 2), () {
+                      Navigator.of(context).pop(true);
+                      setState(() {
+
                       });
-                      return AlertDialog(
-                        title: Text('Success',style: TextStyle(color: Colors.green,fontSize: 22.0),),
-                        content: Row(
-                          children: <Widget>[
-                            Text('Profile updated',style: TextStyle(fontSize: 18.0),),
-                            Icon(Icons.check_circle,color:Colors.green,size: 16.0,)
-                          ],
-                        ),
-                      );
                     });
-                setState(() {
-                  _isLoading = false;
-                });
-              }
-              else{
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      Future.delayed(Duration(seconds: 2), () {
-                        Navigator.of(context).pop(true);
+                    return AlertDialog(
+                      title: Text('Success',style: TextStyle(color: Colors.green,fontSize: 22.0),),
+                      content: Row(
+                        children: <Widget>[
+                          Text('Profile updated',style: TextStyle(fontSize: 18.0),),
+                          Icon(Icons.check_circle,color:Colors.green,size: 16.0,)
+                        ],
+                      ),
+                    );
+                  });
+            }else if(num == 2){
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    Future.delayed(Duration(seconds: 2), () {
+                      Navigator.of(context).pop(true);
+                      setState(() {
                       });
-                      return AlertDialog(
-                        title: Text('Error',style: TextStyle(color: Colors.red,fontSize: 22.0),),
-                        content: Row(
-                          children: <Widget>[
-                            Text('Error updating profile.Try again.',style: TextStyle(fontSize: 18.0),),
-                            Icon(Icons.error,color:Colors.red,size: 24.0,)
-                          ],
-                        ),
-                      );
                     });
-              }
-            }
-            else{
-              SnackBar snackbar = new SnackBar(content: Text("Error updating profile.Please try again"));
-              _scaffolKey.currentState.showSnackBar(snackbar);
-              setState(() {
-                _isLoading = false;
-              });
+                    return AlertDialog(
+                      title: Text('Warning',style: TextStyle(color: Colors.green,fontSize: 22.0),),
+                      content: Row(
+                        children: <Widget>[
+                          Text('Details not changed',style: TextStyle(fontSize: 18.0),),
+                          Icon(Icons.check_circle,color:Colors.green,size: 16.0,)
+                        ],
+                      ),
+                    );
+                  });
+            }else {
+             SnackBar snackbar = new SnackBar(content: Text("Error while updating profile.Try again!"),duration: Duration(seconds: 1),);
+             _scaffoldKey.currentState.showSnackBar(snackbar);
+
             }
           }
         },
@@ -301,37 +301,93 @@ class _PersonalDetailsState extends State<PersonalDetails> {
     );
 
     return Scaffold(
-      key: _scaffolKey,
+      key: _scaffoldKey,
       appBar: new AppBar(
         iconTheme: IconThemeData(
           color: Colors.white,
         ),
         title: new Text('Personal Details',style: TextStyle(color: Colors.white)),
       ),
-      body: new ListView(
+      body: FutureBuilder(
+        future: GetProfileDetailModel.instance.getProfileDetail(),
+          builder: (context, snapshot){
+          switch(snapshot.connectionState){
+            case ConnectionState.none:
+            case ConnectionState.active:
+            case ConnectionState.waiting:
+              return new Center(child: new CircularProgressIndicator(),);
+            case ConnectionState.done:
+              if(snapshot.hasError){
+                return new Center(child: new Text('${snapshot.hasError}'),);
+              }else if(!snapshot.hasData){
+                return new Center(child: Column(
+                  children: <Widget>[
+                    new Text("User details not found"),
+                    new FlatButton(onPressed: (){setState(() {
 
-        children: <Widget>[
+                    });}, child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text("Retry"),
+                        new Icon(Icons.refresh)
+                      ],
+                    ))
+                  ],
+                ),);
 
-          new SizedBox(height: 20.0,),
-          fullName,
-          new SizedBox(height: 20.0,),
-          mobileNo,
-          new SizedBox(height: 20.0,),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 24.0),
-            child: selectState
-          ),
-          new SizedBox(height: 20.0,),
-          dob,
-          new SizedBox(height: 20.0,),
-          new Stack(
-          children: <Widget>[
-            _isLoading ? new Center(child:  new CircularProgressIndicator(),) : new Center(child: submit,),
-    ],
-    ),
-        ],
+              }
+              else if(snapshot.hasData){
 
-      ),
+                _fullNameController.text = snapshot.data.data.fullName;
+                _mobileController.text = snapshot.data.data.mobileNo;
+//                _state = snapshot.data.data.state??'';
+                print(snapshot.data.data.dateofbirth);
+//                var d = DateTime.parse(snapshot.data.data.dateofbirth);
+//                _selectedDate = d;
+                return new ListView(
+
+                  children: <Widget>[
+
+                    new SizedBox(height: 20.0,),
+                    fullName,
+                    new SizedBox(height: 20.0,),
+                    mobileNo,
+                    new SizedBox(height: 20.0,),
+                    Container(
+                        margin: EdgeInsets.symmetric(horizontal: 24.0),
+                        child: selectState
+                    ),
+                    new SizedBox(height: 20.0,),
+                    dob,
+                    new SizedBox(height: 20.0,),
+                    new Stack(
+                      children: <Widget>[
+                        _isLoading ? new Center(child:  new CircularProgressIndicator(),) : new Center(child: submit,),
+                      ],
+                    ),
+                  ],
+
+                );
+
+              }
+              else{
+                return new Center(child: Column(
+                  children: <Widget>[
+                    new Text("Something went wrong"),
+                    new FlatButton(onPressed: (){setState(() {
+
+                    });}, child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text("Retry"),
+                        new Icon(Icons.refresh)
+                      ],
+                    ))
+                  ],
+                ),);
+              }
+          }
+      }),
     );
   }
 }

@@ -56,14 +56,12 @@ class WalletDetails {
   String userId;
   String walletAmount;
   DateTime created;
-  DateTime modified;
 
   WalletDetails({
     this.id,
     this.userId,
     this.walletAmount,
     this.created,
-    this.modified,
   });
 
   factory WalletDetails.fromJson(Map<String, dynamic> json) => new WalletDetails(
@@ -71,7 +69,6 @@ class WalletDetails {
     userId: json["user_id"],
     walletAmount: json["wallet_amount"],
     created: DateTime.parse(json["created"]),
-    modified: DateTime.parse(json["modified"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -79,6 +76,5 @@ class WalletDetails {
     "user_id": userId,
     "wallet_amount": walletAmount,
     "created": created.toIso8601String(),
-    "modified": modified.toIso8601String(),
   };
 }
