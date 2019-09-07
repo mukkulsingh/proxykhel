@@ -92,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
 
 
-  Future<void> _handleSignIn() async {
+  Future<int> _handleSignIn() async {
     try {
       await _googleSignIn.signIn();
       String email = _googleSignIn.currentUser.email;
@@ -102,12 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
       List<String> s = _googleSignIn.currentUser.displayName.split(new RegExp('\\s+'));
       String firstName = s[0];
       int num = await Model.instance.googleLogin(uId, email, fullName, picture, firstName);
-      if(num==1){
-        Navigator.pushAndRemoveUntil(context, SlideLeftRoute(widget: Dashboard()), (Route<dynamic> route)=>false);
-      }else{
-        SnackBar snackBar = new SnackBar(content: Text("Error logging in.Try again"),duration: Duration(seconds: 1),);
-        _scaffoldKey.currentState.showSnackBar(snackBar);
-      }
+      return num;
 
     } catch (error) {
       print(error);
@@ -184,11 +179,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                         ),
                                         elevation: 4.0,
                                         color: Colors.white,
-                                        onPressed: () {
+                                        onPressed: () async {
 //                                          signInWithGoogle().whenComplete(() {
 //                                            Navigator.pushAndRemoveUntil(context, SlideLeftRoute(widget: Dashboard()), (Route<dynamic> route)=>false);
 //                                          });
-                                          _handleSignIn();
+                                          int num = await _handleSignIn();
+                                          if(num==1){
+                                            Navigator.pushAndRemoveUntil(context, SlideLeftRoute(widget: Dashboard()), (Route<dynamic> route)=>false);
+                                          }else{
+                                            SnackBar snackBar = new SnackBar(content: Text("Error logging in.Try again"),duration: Duration(seconds: 1),);
+                                            _scaffoldKey.currentState.showSnackBar(snackBar);
+                                          }
                                         },
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceAround,

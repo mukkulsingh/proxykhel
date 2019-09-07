@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:proxykhel/Constants/slideTransitions.dart';
 import 'package:proxykhel/Model/GetProfileDetailModel.model.dart';
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:proxykhel/Model/UpdateProfileModel.model.dart';
+import './EditPersonalDetails.view.dart';
 
 class PersonalDetails extends StatefulWidget {
   @override
@@ -44,179 +42,6 @@ class _PersonalDetailsState extends State<PersonalDetails> {
   @override
   Widget build(BuildContext context) {
 
-    Future<DateTime> _selectDate(BuildContext context) async {
-      final DateTime picked = await showDatePicker(context: context, initialDate: _selectedDate, firstDate: DateTime(1960,1), lastDate: DateTime(DateTime.now().year,DateTime.now().month+1,DateTime.now().day));
-      if(picked != null && picked != _selectedDate){
-        _selectedDate = picked;
-        setState(() {
-
-        });
-      }
-      return _selectedDate;
-    }
-
-    final fullName = new Container(
-      margin: EdgeInsets.symmetric(horizontal: 24.0),
-      child: new TextField(
-        controller: _fullNameController,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(),
-          labelText: "Full Name",
-          errorText: _fullNameError?"Invalid input":'',
-        ),
-        onChanged: (value){
-          _fullName = value;
-          setState(() {
-            _fullNameError=false;
-          });
-        },
-
-      ),
-    );
-
-    final mobileNo = new Container(
-      margin: EdgeInsets.symmetric(horizontal: 24.0),
-      child: new TextField(
-        controller: _mobileController,
-        keyboardType: TextInputType.number,
-        decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            labelText: "Mobile No",
-          errorText: _contactError?"Invalid input":'',
-
-        ),
-        onChanged: (value){
-          _contact = value;
-          setState(() {
-            _contactError = false;
-          });
-        },
-
-      ),
-    );
-
-
-
-    List<DropdownMenuItem<String>> dropDownItems = [
-      DropdownMenuItem<String>(
-        child: Text("Arunachal Pradesh"),
-        value: "AR",
-      ),
-      DropdownMenuItem<String>(
-        child: Text("Bihar"),
-        value: "BR",
-      ),
-      DropdownMenuItem<String>(
-        child: Text("Chhattisgarh"),
-        value: "CT",
-      ),
-      DropdownMenuItem<String>(
-        child: Text("Goa"),
-        value: "GA",
-      ),
-      DropdownMenuItem<String>(
-        child: Text("Gujarat"),
-        value: "GJ",
-      ),
-      DropdownMenuItem<String>(
-        child: Text("Haryana"),
-        value: "HR",
-      ),
-      DropdownMenuItem<String>(
-        child: Text("Himachal Pradesh"),
-        value: "HP",
-      ),
-      DropdownMenuItem<String>(
-        child: Text("Jammu & Kashmir"),
-        value: "JK",
-      ),
-      DropdownMenuItem<String>(
-        child: Text("Jharkhand"),
-        value: "JH",
-      ),
-      DropdownMenuItem<String>(
-        child: Text("Karnataka"),
-        value: "KA",
-      ),
-      DropdownMenuItem<String>(
-        child: Text("Kerala"),
-        value: "KL",
-      ),
-      DropdownMenuItem<String>(
-        child: Text("Madhya Pradesh"),
-        value: "MP",
-      ),
-      DropdownMenuItem<String>(
-        child: Text("Maharashtra"),
-        value: "MH",
-      ),
-      DropdownMenuItem<String>(
-        child: Text("Manipur"),
-        value: "MN",
-      ),
-      DropdownMenuItem<String>(
-        child: Text("Meghalaya"),
-        value: "ML",
-      ),
-      DropdownMenuItem<String>(
-        child: Text("Mizoram"),
-        value: "MZ",
-      ),
-      DropdownMenuItem<String>(
-        child: Text("Punjab"),
-        value: "PB",
-      ),
-      DropdownMenuItem<String>(
-        child: Text("Rajasthan"),
-        value: "RJ",
-      ),
-      DropdownMenuItem<String>(
-        child: Text("Sikkim"),
-        value: "SK",
-      ),
-      DropdownMenuItem<String>(
-        child: Text("Tripura"),
-        value: "TR",
-      ),
-      DropdownMenuItem<String>(
-        child: Text("Uttarakhand"),
-        value: "UK",
-      ),
-      DropdownMenuItem<String>(
-        child: Text("Uttar Pradesh"),
-        value: "UP",
-      ),
-      DropdownMenuItem<String>(
-        child: Text("West Bengal"),
-        value: "WB",
-      ),
-    ];
-
-    final selectState = DropdownButton<String>(
-      value: _state,
-      isExpanded: true,
-      items: dropDownItems,
-      onChanged: (value){
-        setState(() {
-          _state = value;
-        });
-      },
-      hint: Text("Select your state",style: TextStyle(color: Colors.deepOrange),),
-    );
-
-
-    final dob =  Container(
-        child:Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            new Text('Select Date Of Birth',style: TextStyle(color: Colors.deepOrange,fontSize: 18.0),),
-            FlatButton(
-              onPressed: () {_selectDate(context);},
-              child: Text(_selectedDate.day.toString()+'-'+_selectedDate.month.toString()+'-'+_selectedDate.year.toString(),style: TextStyle(fontSize:18.0 ),),
-            ),
-          ],
-        )
-    );
 
     final submit = new Container(
       margin: EdgeInsets.symmetric(horizontal: 60.0),
@@ -225,77 +50,10 @@ class _PersonalDetailsState extends State<PersonalDetails> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(32.0)
         ),
-        onPressed: () async {
-
-          if(_fullName == '' && _contact == ''){
-            setState(() {
-              _fullNameError = true;
-              _contactError = true;
-            });
-          }
-          else if(_fullName == '' || _fullName == null ){
-            setState(() {
-              _fullNameError = true;
-            });
-          }
-          else if(_contact == '' || _contact == null){
-            setState(() {
-              _contactError = true;
-            });
-          }
-          else{
-            setState(() {
-              _isLoading = true;
-            });
-
-           int num = await UpdateProfileModel.instance.updateProfile(_fullName, _contact, _state, _selectedDate.toIso8601String());
-            if(num == 1){
-              showDialog(
-                  context: context,
-                  builder: (context) {
-                    Future.delayed(Duration(seconds: 2), () {
-                      Navigator.of(context).pop(true);
-                      setState(() {
-
-                      });
-                    });
-                    return AlertDialog(
-                      title: Text('Success',style: TextStyle(color: Colors.green,fontSize: 22.0),),
-                      content: Row(
-                        children: <Widget>[
-                          Text('Profile updated',style: TextStyle(fontSize: 18.0),),
-                          Icon(Icons.check_circle,color:Colors.green,size: 16.0,)
-                        ],
-                      ),
-                    );
-                  });
-            }else if(num == 2){
-              showDialog(
-                  context: context,
-                  builder: (context) {
-                    Future.delayed(Duration(seconds: 2), () {
-                      Navigator.of(context).pop(true);
-                      setState(() {
-                      });
-                    });
-                    return AlertDialog(
-                      title: Text('Warning',style: TextStyle(color: Colors.green,fontSize: 22.0),),
-                      content: Row(
-                        children: <Widget>[
-                          Text('Details not changed',style: TextStyle(fontSize: 18.0),),
-                          Icon(Icons.check_circle,color:Colors.green,size: 16.0,)
-                        ],
-                      ),
-                    );
-                  });
-            }else {
-             SnackBar snackbar = new SnackBar(content: Text("Error while updating profile.Try again!"),duration: Duration(seconds: 1),);
-             _scaffoldKey.currentState.showSnackBar(snackbar);
-
-            }
-          }
+        onPressed: () {
+          Navigator.push(context, SlideLeftRoute(widget: EditPersonalDetail()));
         },
-        child: new Text("UPDATE PROFILE",style: TextStyle(color: Colors.white),),
+        child: new Text("Edit Profile",style: TextStyle(color: Colors.white),),
         color: Colors.deepOrange,
       ),
     );
@@ -338,31 +96,66 @@ class _PersonalDetailsState extends State<PersonalDetails> {
               }
               else if(snapshot.hasData){
 
-                _fullNameController.text = snapshot.data.data.fullName;
-                _mobileController.text = snapshot.data.data.mobileNo;
-//                _state = snapshot.data.data.state??'';
-                print(snapshot.data.data.dateofbirth);
-//                var d = DateTime.parse(snapshot.data.data.dateofbirth);
-//                _selectedDate = d;
                 return new ListView(
 
                   children: <Widget>[
 
                     new SizedBox(height: 20.0,),
-                    fullName,
-                    new SizedBox(height: 20.0,),
-                    mobileNo,
-                    new SizedBox(height: 20.0,),
-                    Container(
-                        margin: EdgeInsets.symmetric(horizontal: 24.0),
-                        child: selectState
+                    new Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            new Text("  Full name:",style: TextStyle(color:Colors.deepOrange,fontWeight: FontWeight.bold,fontSize: 24.0),textAlign: TextAlign.left,),
+                            new Text("      ${snapshot.data.data.fullName}",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24.0),),
+                          ],
+                        )
+                      ],
                     ),
                     new SizedBox(height: 20.0,),
-                    dob,
+                    new Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            new Text("  Mobile no:",style: TextStyle(color:Colors.deepOrange,fontWeight: FontWeight.bold,fontSize: 24.0),textAlign: TextAlign.left,),
+                            new Text("      ${snapshot.data.data.mobileNo}",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24.0),),
+                          ],
+                        )
+                      ],
+                    ),
+                    new SizedBox(height: 20.0,),
+                    new Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            new Text("  State: ",style: TextStyle(color:Colors.deepOrange,fontWeight: FontWeight.bold,fontSize: 24.0),textAlign: TextAlign.left,),
+                            new Text("      ${snapshot.data.data.state}",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24.0),),
+                          ],
+                        )
+                      ],
+                    ),
+                    new SizedBox(height: 20.0,),
+                    new Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            new Text("  Date of birth: ",style: TextStyle(color:Colors.deepOrange,fontWeight: FontWeight.bold,fontSize: 24.0),textAlign: TextAlign.left,),
+                            new Text("      ${snapshot.data.data.dateofbirth}",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24.0),),
+                          ],
+                        )
+                      ],
+                    ),
                     new SizedBox(height: 20.0,),
                     new Stack(
                       children: <Widget>[
-                        _isLoading ? new Center(child:  new CircularProgressIndicator(),) : new Center(child: submit,),
+                      new Center(child: submit,),
                       ],
                     ),
                   ],

@@ -10,6 +10,7 @@ import './tabBarHockey.view.dart';
 import './tabBarKabaddi.view.dart';
 import './profile.view.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import './MyProfile.view.dart';
 void main() => runApp(Dashboard());
 
 
@@ -101,7 +102,7 @@ class _DashboardState extends State<Dashboard> {
                             'Warning', 'You sure you want to logout?');
                       }
                       else if(value == 1){
-                        Navigator.push(context,SlideLeftRoute(widget: Profile()));
+                        Navigator.push(context,SlideLeftRoute(widget: MyProfile()));
                       }
                     },
                   ),

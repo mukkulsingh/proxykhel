@@ -5,8 +5,6 @@ import './kycphoneverification.view.dart';
 import './../Constants/slideTransitions.dart';
 import 'package:http/http.dart' as http;
 import 'dart:math';
-import 'dart:io';
-import 'dart:convert';
 import 'package:image_picker_modern/image_picker_modern.dart';
 
 class KycStatusView extends StatefulWidget {
@@ -58,8 +56,6 @@ class _KycStatusViewState extends State<KycStatusView> {
   
   @override
   Widget build(BuildContext context) {
-
-
 
     KycStatus kycStatus = KycModel.instance.getKycStatusData();
     if(kycStatus.data.emailId == '0'){

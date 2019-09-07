@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import './personaldetails.view.dart';
 import './kycstatus.view.dart';
 import './bankdetails.view.dart';
-import './invitefriends.view.dart';
 import './../Constants/slideTransitions.dart';
 import './../Model/kyc.model.dart';
 class Profile extends StatefulWidget {

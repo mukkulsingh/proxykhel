@@ -17,12 +17,21 @@ class _EditBankDetailsState extends State<EditBankDetails> {
   void initState() {
     super.initState();
     _isLoading = false;
+    _inputError = false;
   }
+
+
+
   @override
   Widget build(BuildContext context) {
 
     return MultiProvider(
-      providers: [],
+      providers: [
+        ChangeNotifierProvider(builder: (_)=>AccountNumberProvider(),),
+        ChangeNotifierProvider(builder: (_)=>HolderNameProvider(),),
+        ChangeNotifierProvider(builder: (_)=>IfscProvider(),),
+
+      ],
       child: Scaffold(
         key: _scaffoldKey,
           appBar: new AppBar(
@@ -48,6 +57,9 @@ class _EditBankDetailsState extends State<EditBankDetails> {
                   _isLoading?new Center(child: new CircularProgressIndicator(),):new Center(child: new Container(
                     height: 45.0,
                     child: new RaisedButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(32.0)
+                      ),
                       color: Colors.deepOrange,
                         child: new Text("SUBMIT",style: TextStyle(color:Colors.white),),
                         onPressed: ()async{
@@ -107,7 +119,7 @@ class _EditBankDetailsState extends State<EditBankDetails> {
 class HolderNameProvider extends ChangeNotifier{
   static String _fullName;
 
-  static bool _isError;
+  static bool _isError=false;
 
   void setFullName(String fullName){
     _fullName = fullName;

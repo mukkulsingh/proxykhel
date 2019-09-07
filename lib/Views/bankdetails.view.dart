@@ -51,45 +51,50 @@ class _BankDetailsState extends State<BankDetails> {
               case ConnectionState.waiting:
                 return new Center(child: new CircularProgressIndicator(),);
               case ConnectionState.done:
+                print(snapshot);
                 if(snapshot.hasError){
                   return new Center(child: new Text(snapshot.hasError.toString()),);
                 }
                 else if(snapshot.hasData){
-                  ListView(
+                  return new ListView(
                     children: <Widget>[
                       new SizedBox(
                         height: 20.0,
                       ),
                       new Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            new Text("Holder Name:",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24.0),),
-                            new Text("${snapshot.data.data.bankholder}",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24.0),),
+                            new Text("Holder Name:",style: TextStyle(color:Colors.deepOrange,fontWeight: FontWeight.bold,fontSize: 24.0),),
+                            new Text("      ${snapshot.data.data.bankholder}",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24.0),),
                           ],
                         )
                       ],
                       ),
+                      new SizedBox(height: 20.0,),
                       new Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              new Text("Accoount No:",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24.0),),
-                              new Text("${snapshot.data.data.bankAccount}",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24.0),),
+                              new Text("Account No:",style: TextStyle(color:Colors.deepOrange,fontWeight: FontWeight.bold,fontSize: 24.0),textAlign: TextAlign.left,),
+                              new Text("      ${snapshot.data.data.bankAccount}",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24.0),),
                             ],
                           )
                         ],
                       ),
                       new SizedBox(height: 20.0,),
                       new Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              new Text("IFSC code:",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24.0),),
-                              new Text("${snapshot.data.data.ifsc}",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24.0),),
+                              new Text("IFSC code:",style: TextStyle(color:Colors.deepOrange,fontWeight: FontWeight.bold,fontSize: 24.0),),
+                              new Text("      ${snapshot.data.data.ifsc}",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24.0),),
                             ],
                           )
                         ],
@@ -100,9 +105,12 @@ class _BankDetailsState extends State<BankDetails> {
                   );
 
                 }
+                else{
+                  return new Center(child: new Text("Profile detail not found"),);
+                }
             }
           }),
-    )
+    );
   }
 }
 

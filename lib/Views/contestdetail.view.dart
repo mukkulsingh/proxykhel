@@ -83,7 +83,7 @@ class _ContestDetailState extends State<ContestDetail> {
         },
       );
     }
-    String _buttonText = '';
+    String _buttonText = 'JOIN';
 
     return Scaffold(
         appBar: new AppBar(
@@ -533,7 +533,7 @@ class _ContestDetailState extends State<ContestDetail> {
                         else if(snapshot.hasError){
                           return new Stack(
                             children: <Widget>[
-                              new Center(child: new Text("Error fetching teams"),),
+                              new Center(child: new Text("Create new team"),),
                             ],
                           );
                         }
