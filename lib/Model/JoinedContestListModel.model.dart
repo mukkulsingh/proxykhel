@@ -49,7 +49,6 @@ class JoinedContestListModel {
     if(response.statusCode == 200){
       final res = json.decode(response.body);
       if(res['success']==true){
-        print(res);
         return joinedContestDetailFromJson(response.body);
       }else{
         return null;

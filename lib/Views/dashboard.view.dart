@@ -8,7 +8,6 @@ import './tabBarCricket.view.dart';
 import './tabBarFootball.view.dart';
 import './tabBarHockey.view.dart';
 import './tabBarKabaddi.view.dart';
-import './profile.view.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import './MyProfile.view.dart';
 void main() => runApp(Dashboard());

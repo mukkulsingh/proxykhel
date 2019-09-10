@@ -3,32 +3,44 @@ import './dashboard.view.dart';
 import './mycontest.view.dart';
 import './../Constants/slideTransitions.dart';
 import './../Views/notifications.view.dart';
-class BottomNavBar extends StatelessWidget {
+class BottomNavBar extends StatefulWidget {
   static int prevIndex=0;
 
   @override
+  _BottomNavBarState createState() => _BottomNavBarState();
+}
+
+class _BottomNavBarState extends State<BottomNavBar> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    int _selectedIndex = 0;
     void _onItemTapped(int index) {
-      if (index == 0 && index == prevIndex){
+      if (index == 0 && index == BottomNavBar.prevIndex){
       }
-      else if (index == 0 && index < prevIndex) {
+      else if (index == 0 && index < BottomNavBar.prevIndex) {
         Navigator.pushAndRemoveUntil(context,SlideRightRoute(widget:Dashboard()), (Route<dynamic> route)=>false);
       }
-      else if (index == 1  && index > prevIndex) {
+      else if (index == 1  && index > BottomNavBar.prevIndex) {
         Navigator.pushAndRemoveUntil(context, SlideLeftRoute(widget: MyContest()), (Route<dynamic> route)=>false);
       }
-      else if (index == 1  && index < prevIndex) {
+      else if (index == 1  && index < BottomNavBar.prevIndex) {
         Navigator.pushAndRemoveUntil(context, SlideRightRoute(widget: MyContest()), (Route<dynamic> route)=>false);
       }
 
-      else if (index == 2 && index > prevIndex) {
+      else if (index == 2 && index > BottomNavBar.prevIndex) {
         Navigator.pushAndRemoveUntil(context, SlideLeftRoute(widget: Notifications()), (Route<dynamic> route)=>false);
 
       }
       else if (index == 2) {
       }
-      prevIndex = index;
+      setState(() {
+        BottomNavBar.prevIndex = index;
+      });
     }
 
     return BottomNavigationBar(
@@ -36,21 +48,21 @@ class BottomNavBar extends StatelessWidget {
         BottomNavigationBarItem(
           icon: Icon(
             Icons.games,
-            color:Colors.grey,
           ),
+          activeIcon: Icon(Icons.games,),
           title: Text(
             'Games',
-            style: TextStyle(color: Colors.grey, fontSize: 16.0),
+            style: TextStyle( fontSize: 16.0),
           ),
         ),
         BottomNavigationBarItem(
           icon: Icon(
             Icons.input,
-            color: Colors.grey,
           ),
+          activeIcon: Icon(Icons.input,),
           title: Text(
             'My contest',
-            style: TextStyle(color: Colors.grey, fontSize: 16.0),
+            style: TextStyle( fontSize: 16.0),
           ),
         ),
         BottomNavigationBarItem(
@@ -58,14 +70,17 @@ class BottomNavBar extends StatelessWidget {
             Icons.notifications_active,
             color: Colors.grey,
           ),
+          activeIcon: Icon(Icons.notifications_active,),
+
           title: Text(
             'Notification',
-            style: TextStyle(color: Colors.grey, fontSize: 16.0),
+            style: TextStyle(fontSize: 16.0),
           ),
         ),
       ],
-      selectedItemColor: Colors.black54,
-      currentIndex: _selectedIndex,
+      selectedItemColor: Colors.deepOrange,
+      unselectedItemColor: Colors.grey,
+      currentIndex: BottomNavBar.prevIndex,
       onTap: _onItemTapped,
     );
   }

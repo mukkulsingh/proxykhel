@@ -1,10 +1,9 @@
 import 'dart:convert';
 import './savedpref.model.dart';
 import 'package:http/http.dart' as http;
-import 'package:async/async.dart';
+
 class JoinedContestModel{
 
-  AsyncMemoizer _memoizer = new AsyncMemoizer();
   
   static JoinedContestModel _instance;
   
@@ -16,22 +15,21 @@ class JoinedContestModel{
   }
   
   Future getJoinedContestDetail() async {
-    return _memoizer.runOnce(()async{
-      String userId = await SavedPref.instance.getUserId();
+    String userId = await SavedPref.instance.getUserId();
 
-      http.Response response = await http.post("https://www.proxykhel.com/android/joinedmatches.php",body: {"type":"getJoinedContest","userId":userId});
-      if(response.statusCode == 200){
-        final res = json.decode(response.body);
-        if(res['success']==true){
-          return joinedContestDetailFromJson(response.body);
-        }else{
-          return null;
-        }
+    http.Response response = await http.post("https://www.proxykhel.com/android/joinedmatches.php",body: {"type":"getJoinedContest","userId":userId});
+    if(response.statusCode == 200){
+      final res = json.decode(response.body);
+      if(res['success']==true){
+        return joinedContestDetailFromJson(response.body);
       }else{
         return null;
       }
-    });
+    }else{
+      return null;
+    }
   }
+
 }
 
 

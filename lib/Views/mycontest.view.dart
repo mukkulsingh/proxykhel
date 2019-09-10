@@ -7,8 +7,11 @@ import './../Views/login.view.dart';
 import './../Views/wallet.view.dart';
 import './../Constants/slideTransitions.dart';
 import './profile.view.dart';
-
+import 'package:google_sign_in/google_sign_in.dart';
 class MyContest extends StatelessWidget {
+
+  final GoogleSignIn googleSignIn = GoogleSignIn();
+
   @override
   Widget build(BuildContext context) {
 
@@ -25,6 +28,7 @@ class MyContest extends StatelessWidget {
               new FlatButton(
                 child: new Text("Yes"),
                 onPressed: () async {
+                  await googleSignIn.signOut();
                   await LogoutModel.instance.logoutRequest();
                   Navigator.of(context).pushAndRemoveUntil(SlideRightRoute(widget: LoginScreen()), (Route<dynamic> route)=>false);
                 },

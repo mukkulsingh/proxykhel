@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'profile.view.dart';
+import 'MyProfile.view.dart';
 import './../Views/wallet.view.dart';
 import './bottomnavbar.view.dart';
 import './../Constants/slideTransitions.dart';
@@ -12,13 +12,16 @@ import './../Model/getalluserteam.model.dart';
 import 'package:http/http.dart' as http;
 import './../Model/savedpref.model.dart';
 import 'dart:convert';
-
+import 'package:google_sign_in/google_sign_in.dart';
 class ContestDetail extends StatefulWidget {
   @override
   _ContestDetailState createState() => _ContestDetailState();
 }
 
 class _ContestDetailState extends State<ContestDetail> {
+  final GoogleSignIn googleSignIn = GoogleSignIn();
+
+
   ContestData contestData;
   @override
   void initState() {
@@ -44,6 +47,7 @@ class _ContestDetailState extends State<ContestDetail> {
               new FlatButton(
                 child: new Text("Yes"),
                 onPressed: () async {
+                  await googleSignIn.signOut();
                   await LogoutModel.instance.logoutRequest();
                   Navigator.of(context).pushAndRemoveUntil(SlideRightRoute(widget: LoginScreen()), (Route<dynamic> route)=>false);
                 },
@@ -116,7 +120,7 @@ class _ContestDetailState extends State<ContestDetail> {
                   _showLogoutDialog('Warning','You sure you want to logout?');
                 }
                 else if(value == 1){
-                  Navigator.push(context,SlideLeftRoute(widget: Profile()));
+                  Navigator.push(context,SlideLeftRoute(widget: MyProfile()));
                 }
               } ,
             )
@@ -289,21 +293,18 @@ class _ContestDetailState extends State<ContestDetail> {
                                 itemBuilder: (BuildContext context, int index){
                                 bool _isJoined = false;
                                 Color _buttonColor = Colors.deepOrange;
-                                if(snapshot.data.data[index].joined !=null){
-                                  if(snapshot.data.data[index].joined == 1){
-                                    _isJoined = true;
-                                    _buttonText = "JOINED";
-                                    _buttonColor = Colors.deepOrange[200];
-                                  }
-                                  else{
-                                    _isJoined = false;
-                                    _buttonText = "JOIN";
-                                    _buttonColor = Colors.deepOrange;
-                                  }
-                                }
-                                else{
-                                  _isJoined = false;
-                                }
+
+//                                  if(snapshot.data.data[index].joined == 1){
+//                                    _isJoined = true;
+//                                    _buttonText = "JOINED";
+//                                    _buttonColor = Colors.deepOrange[200];
+//                                  }
+//                                  else{
+//                                    _isJoined = false;
+//                                    _buttonText = "JOIN";
+//                                    _buttonColor = Colors.deepOrange;
+//                                  }
+
                                   return MediaQuery.removePadding(
                                     context: context,
                                     removeTop: true,
@@ -387,7 +388,7 @@ class _ContestDetailState extends State<ContestDetail> {
                                                           height: 30.0,
                                                           width: 60.0,
                                                           child: new FlatButton(onPressed: () async {
-                                                            if(_isJoined){
+                                                            if(snapshot.data.data[index].joined == 1){
                                                               SnackBar snackbar = new SnackBar(content: Text("Already joined witht this team"),duration: Duration(seconds: 1),);
                                                               Scaffold.of(context).showSnackBar(snackbar);
                                                             }else{
@@ -404,7 +405,7 @@ class _ContestDetailState extends State<ContestDetail> {
                                                                 "matchType":ContestDetailModel.instance.getMatchType(),
                                                                 "matchtime":ContestDetailModel.instance.getContestDuration(),
                                                               });
-
+                                                              print(response.statusCode);
                                                               if(response.statusCode == 200){
 
                                                                 final res = json.decode(response.body);
@@ -429,15 +430,14 @@ class _ContestDetailState extends State<ContestDetail> {
                                                                 Future.delayed(Duration(seconds: 1),(){
 
                                                                 });
-
                                                               }
                                                               else{
                                                                 SnackBar snackbar = new SnackBar(content: Text("Error joining team"));
                                                                 Scaffold.of(context).showSnackBar(snackbar);
                                                               }
                                                             }
-                                                          }, child: new Text(_buttonText,style: TextStyle(color:Colors.white,fontSize: 8.0),),
-                                                            color: _buttonColor,
+                                                          }, child: new Text("JOIN",style: TextStyle(color:Colors.white,fontSize: 8.0),),
+                                                            color: Colors.deepOrange,
                                                             shape: RoundedRectangleBorder(
                                                               borderRadius: BorderRadius.circular(32.0),
                                                             ),
@@ -547,7 +547,11 @@ class _ContestDetailState extends State<ContestDetail> {
                         break;
 
                     }
-                  }),
+                    return new Container();
+                  }
+
+
+                  ),
             ),
 
           ],

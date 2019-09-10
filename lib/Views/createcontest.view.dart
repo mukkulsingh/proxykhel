@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'MyProfile.view.dart';
 import 'wallet.view.dart';
 import './bottomnavbar.view.dart';
 import './../Model/logout.model.dart';
@@ -7,12 +8,14 @@ import './login.view.dart';
 import './tabBarMega.view.dart';
 import './tabBarHtoH.view.dart';
 import './tabBarPartial.view.dart';
-import 'profile.view.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class CreateContest extends StatelessWidget {
 
   String matchId;
   CreateContest({@required this.matchId});
+
+  final GoogleSignIn googleSignIn = GoogleSignIn();
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +32,7 @@ class CreateContest extends StatelessWidget {
               new FlatButton(
                 child: new Text("Yes"),
                 onPressed: () async {
+                  await googleSignIn.signOut();
                   await LogoutModel.instance.logoutRequest();
                   Navigator.of(context).pushAndRemoveUntil(SlideRightRoute(widget: LoginScreen()), (Route<dynamic> route)=>false);
                 },
@@ -44,81 +48,8 @@ class CreateContest extends StatelessWidget {
         },
       );
     }
-
-    void _showDialogWinningBreakdown() {
-      // flutter defined function
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          // return object of type Dialog
-          return AlertDialog(
-            title: new Text("WINNINGS BREAKDOWN"),
-            content: new Column(
-              children: <Widget>[
-                new Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    new Text('Rank 1'),
-                    new Text('Rs. 50'),
-                  ],
-                ),
-                SizedBox(
-                  height: 20.0,
-                ),
-                new Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    new Text('Rank 2'),
-                    new Text('Rs. 30'),
-                  ],
-                ),
-                SizedBox(
-                  height: 20.0,
-                ),
-                new Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    new Text('Rank 3'),
-                    new Text('Rs. 25'),
-                  ],
-                ),
-                SizedBox(
-                  height: 20.0,
-                ),
-                new Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    new Text('Rank 4'),
-                    new Text('Rs. 20'),
-                  ],
-                ),
-                SizedBox(
-                  height: 20.0,
-                ),
-                new Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    new Text('Rank 5'),
-                    new Text('Rs. 15'),
-                  ],
-                ),
-
-              ],
-            ),
-            actions: <Widget>[
-              // usually buttons at the bottom of the dialog
-              new FlatButton(
-                child: new Text("Got it !",textAlign: TextAlign.center,),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    }
-    return  DefaultTabController(length: 3,
+    return  DefaultTabController(
+      length: 3,
         child: new Scaffold(
           appBar: new AppBar(
             iconTheme: IconThemeData(
@@ -145,7 +76,7 @@ class CreateContest extends StatelessWidget {
                       _showLogoutDialog('Warning','You sure you want to logout?');
                     }
                     else if(value == 1){
-                      Navigator.push(context,SlideLeftRoute(widget: Profile()));
+                      Navigator.push(context,SlideLeftRoute(widget: MyProfile()));
                     }
                 } ,
               )

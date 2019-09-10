@@ -58,8 +58,21 @@ class _TabBarCricketState extends State<TabBarCricket> {
           }
 
           else if(!snapshot.hasData)  {
-            return new Center(child: Container(margin:EdgeInsets.only(top:
-            100.0),child: new Text('No match')));
+            return new Center(child: Column(
+              children: <Widget>[
+                Container(margin:EdgeInsets.only(top:
+                100.0),child: new Text('No match')),
+                new Container(
+                  child: new Row(
+                    children: <Widget>[
+                      new Text("Retry",style: TextStyle(color: Colors.deepOrange),),
+                      SizedBox(width: 5.0,),
+                      new Icon(Icons.refresh,color: Colors.deepOrange,)
+                    ],
+                  ),
+                )
+              ],
+            ));
           }
           else
             return ListView.builder(
@@ -108,14 +121,14 @@ class _TabBarCricketState extends State<TabBarCricket> {
                           elevation: _elevation,
                           child: new Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
-                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: <Widget>[
                               new Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
                                     new Column(
                                       children: <Widget>[
-                                        new Image(image: NetworkImage('https://www.proxykhel.com/public/teamLogo/'+snapshot.data.matchData[index].team1Image),height: 80,width: 80,),
+                                        new Image(image: NetworkImage('https://www.proxykhel.com/public/teamLogo/'+snapshot.data.matchData[index].team1Image),height: 50,width: 50,),
                                         new Text(snapshot.data.matchData[index].team1Name,style: TextStyle(fontWeight: FontWeight.bold),),
                                       ],
                                     ),
@@ -145,7 +158,7 @@ class _TabBarCricketState extends State<TabBarCricket> {
                                     ),
                                     new Column(
                                       children: <Widget>[
-                                        new Image(image: NetworkImage('https://www.proxykhel.com/public/teamLogo/'+snapshot.data.matchData[index].team2Image),height: 80,width: 80,),
+                                        new Image(image: NetworkImage('https://www.proxykhel.com/public/teamLogo/'+snapshot.data.matchData[index].team2Image),height: 50,width: 50,),
                                         new Text(snapshot.data.matchData[index].team2Name,style: TextStyle(fontWeight: FontWeight.bold),),
                                       ],
                                     ),
