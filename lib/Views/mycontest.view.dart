@@ -6,8 +6,9 @@ import './../Model/logout.model.dart';
 import './../Views/login.view.dart';
 import './../Views/wallet.view.dart';
 import './../Constants/slideTransitions.dart';
-import './profile.view.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
+import 'MyProfile.view.dart';
 class MyContest extends StatelessWidget {
 
   final GoogleSignIn googleSignIn = GoogleSignIn();
@@ -86,7 +87,7 @@ class MyContest extends StatelessWidget {
                         'Warning', 'You sure you want to logout?');
                   }
                   else if(value == 1){
-                    Navigator.push(context,SlideLeftRoute(widget: Profile()));
+                    Navigator.push(context,SlideLeftRoute(widget: MyProfile()));
                   }
                 },
               )            ],
