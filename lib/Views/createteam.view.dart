@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'profile.view.dart';
+import 'MyProfile.view.dart';
 import './../Constants/slideTransitions.dart';
 import './../Model/logout.model.dart';
 import './../Views/login.view.dart';
@@ -33,6 +33,8 @@ class _CreateTeamState extends State<CreateTeam> {
   static bool _isXpplayer = false;
   static bool _isSupefive = false;
   static bool _isChoosenplayer = false;
+
+  final _scrollController = new ScrollController();
 
   List<Widget> _loadCategoriesBatsman(List playerType) {
     List<Widget> categoryCells = [];
@@ -599,7 +601,9 @@ class _CreateTeamState extends State<CreateTeam> {
           chosenPlayer.removeAt(i);
         }
       }
-      setState(() {});
+      setState(() {
+
+      });
     } else if (colorCode == 1) {
       SnackBar snackBar =
           new SnackBar(content: Text('Player already selected'),duration: const Duration(seconds: 1),);
@@ -734,7 +738,7 @@ class _CreateTeamState extends State<CreateTeam> {
                     _showLogoutDialog(
                         'Warning', 'You sure you want to logout?');
                   } else if (value == 1) {
-                    Navigator.push(context, SlideLeftRoute(widget: Profile()));
+                    Navigator.push(context, SlideLeftRoute(widget: MyProfile()));
                   }
                 },
               ),
@@ -755,30 +759,45 @@ class _CreateTeamState extends State<CreateTeam> {
                         children: <Widget>[
                           Column(
                             children: <Widget>[
-                              InkWell(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.green,
+                              Stack(
+                                children: <Widget>[
+
+                                  InkWell(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Colors.green,
+                                      ),
+                                      padding: _isBatsman
+                                          ? const EdgeInsets.all(3.0)
+                                          : const EdgeInsets.all(0.0),
+                                      child: new CircleAvatar(
+                                        child: Image(
+                                            image: NetworkImage(
+                                                "https://www.proxykhel.com/assets/image/icons/Batsman.png")),
+                                        backgroundColor: Colors.white,
+                                        radius: 24.0,
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      resetAll();
+                                      setState(() {
+                                        _isBatsman = true;
+                                        _playerType = 1;
+                                      });
+                                    },
                                   ),
-                                  padding: _isBatsman
-                                      ? const EdgeInsets.all(3.0)
-                                      : const EdgeInsets.all(0.0),
-                                  child: new CircleAvatar(
-                                    child: Image(
-                                        image: NetworkImage(
-                                            "https://www.proxykhel.com/assets/image/icons/Batsman.png")),
-                                    backgroundColor: Colors.white,
-                                    radius: 24.0,
-                                  ),
-                                ),
-                                onTap: () {
-                                  resetAll();
-                                  setState(() {
-                                    _isBatsman = true;
-                                    _playerType = 1;
-                                  });
-                                },
+                                  new Container(
+                                    margin: EdgeInsets.only(left: 35.0),
+                                    height:16.0,
+                                    width:16.0,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.green,
+                                    ),
+                                    child: new Text("${getPlayerCount("Batsman")}",textAlign: TextAlign.center,),
+                                  )
+                                ],
                               ),
                               Container(
                                   margin: EdgeInsets.only(top: 4.0),
@@ -792,30 +811,46 @@ class _CreateTeamState extends State<CreateTeam> {
                           ),
                           Column(
                             children: <Widget>[
-                              InkWell(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.green,
+                              Stack(
+                                children: <Widget>[
+                                  InkWell(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Colors.green,
+                                      ),
+                                      padding: _isBowler
+                                          ? const EdgeInsets.all(3.0)
+                                          : const EdgeInsets.all(0.0),
+                                      child: new CircleAvatar(
+                                        child: Image(
+                                            image: NetworkImage(
+                                                "https://www.proxykhel.com/assets/image/icons/Bowler.png")),
+                                        backgroundColor: Colors.white,
+                                        radius: 24.0,
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      resetAll();
+                                      setState(() {
+                                        _isBowler = true;
+                                        _playerType = 2;
+                                      });
+                                    },
                                   ),
-                                  padding: _isBowler
-                                      ? const EdgeInsets.all(3.0)
-                                      : const EdgeInsets.all(0.0),
-                                  child: new CircleAvatar(
-                                    child: Image(
-                                        image: NetworkImage(
-                                            "https://www.proxykhel.com/assets/image/icons/Bowler.png")),
-                                    backgroundColor: Colors.white,
-                                    radius: 24.0,
+                                  new Container(
+                                    margin: EdgeInsets.only(left: 35.0),
+                                    height:16.0,
+                                    width:16.0,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.green,
+                                    ),
+                                    child: new Text("${getPlayerCount("Bowler")}",textAlign: TextAlign.center,),
                                   ),
-                                ),
-                                onTap: () {
-                                  resetAll();
-                                  setState(() {
-                                    _isBowler = true;
-                                    _playerType = 2;
-                                  });
-                                },
+
+
+                                ],
                               ),
                               Container(
                                   margin: EdgeInsets.only(top: 4.0),
@@ -829,35 +864,50 @@ class _CreateTeamState extends State<CreateTeam> {
                           ),
                           Column(
                             children: <Widget>[
-                              InkWell(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.green,
+                              Stack(
+                                children: <Widget>[
+                                  InkWell(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Colors.green,
+                                      ),
+                                      padding: _isWicketee
+                                          ? const EdgeInsets.all(3.0)
+                                          : const EdgeInsets.all(0.0),
+                                      child: new CircleAvatar(
+                                        child: Image(
+                                            image: NetworkImage(
+                                                "https://www.proxykhel.com/assets/image/icons/Wicket-Keeper.png")),
+                                        backgroundColor: Colors.white,
+                                        radius: 24.0,
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      resetAll();
+                                      setState(() {
+                                        _isWicketee = true;
+                                        _playerType = 3;
+                                      });
+                                    },
                                   ),
-                                  padding: _isWicketee
-                                      ? const EdgeInsets.all(3.0)
-                                      : const EdgeInsets.all(0.0),
-                                  child: new CircleAvatar(
-                                    child: Image(
-                                        image: NetworkImage(
-                                            "https://www.proxykhel.com/assets/image/icons/Wicket-Keeper.png")),
-                                    backgroundColor: Colors.white,
-                                    radius: 24.0,
-                                  ),
-                                ),
-                                onTap: () {
-                                  resetAll();
-                                  setState(() {
-                                    _isWicketee = true;
-                                    _playerType = 3;
-                                  });
-                                },
+                                  new Container(
+                                    margin: EdgeInsets.only(left: 35.0),
+                                    height:16.0,
+                                    width:16.0,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.green,
+                                    ),
+                                    child: new Text("${getPlayerCount("Wicket Keeper")}",textAlign: TextAlign.center,),
+                                  )
+
+                                ],
                               ),
                               Container(
                                   margin: EdgeInsets.only(top: 4.0),
                                   child: new Text(
-                                    'Wicket Kepper',
+                                    'Wicket Keeper',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white),
@@ -866,30 +916,45 @@ class _CreateTeamState extends State<CreateTeam> {
                           ),
                           Column(
                             children: <Widget>[
-                              InkWell(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.green,
+                              Stack(
+                                children: <Widget>[
+                                  InkWell(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Colors.green,
+                                      ),
+                                      padding: _isAllrounder
+                                          ? const EdgeInsets.all(3.0)
+                                          : const EdgeInsets.all(0.0),
+                                      child: new CircleAvatar(
+                                        child: Image(
+                                            image: NetworkImage(
+                                                "https://www.proxykhel.com/assets/image/icons/All-Rounder.png")),
+                                        backgroundColor: Colors.white,
+                                        radius: 24.0,
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      resetAll();
+                                      setState(() {
+                                        _isAllrounder = true;
+                                        _playerType = 4;
+                                      });
+                                    },
                                   ),
-                                  padding: _isAllrounder
-                                      ? const EdgeInsets.all(3.0)
-                                      : const EdgeInsets.all(0.0),
-                                  child: new CircleAvatar(
-                                    child: Image(
-                                        image: NetworkImage(
-                                            "https://www.proxykhel.com/assets/image/icons/All-Rounder.png")),
-                                    backgroundColor: Colors.white,
-                                    radius: 24.0,
-                                  ),
-                                ),
-                                onTap: () {
-                                  resetAll();
-                                  setState(() {
-                                    _isAllrounder = true;
-                                    _playerType = 4;
-                                  });
-                                },
+                                  new Container(
+                                    margin: EdgeInsets.only(left: 35.0),
+                                    height:16.0,
+                                    width:16.0,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.green,
+                                    ),
+                                    child: new Text("${getPlayerCount("All Rounder")}",textAlign: TextAlign.center,),
+                                  )
+
+                                ],
                               ),
                               Container(
                                   margin: EdgeInsets.only(top: 4.0),
@@ -913,30 +978,45 @@ class _CreateTeamState extends State<CreateTeam> {
                             children: <Widget>[
                               Column(
                                 children: <Widget>[
-                                  InkWell(
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.green,
+                                  Stack(
+                                    children: <Widget>[
+                                      InkWell(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Colors.green,
+                                          ),
+                                          padding: _isStarplayer
+                                              ? const EdgeInsets.all(3.0)
+                                              : const EdgeInsets.all(0.0),
+                                          child: new CircleAvatar(
+                                            child: Image(
+                                                image: NetworkImage(
+                                                    "https://www.proxykhel.com/assets/image/icons/Man-of-the-Match.png")),
+                                            backgroundColor: Colors.white,
+                                            radius: 24.0,
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          resetAll();
+                                          setState(() {
+                                            _isStarplayer = true;
+                                            _playerType = 5;
+                                          });
+                                        },
                                       ),
-                                      padding: _isStarplayer
-                                          ? const EdgeInsets.all(3.0)
-                                          : const EdgeInsets.all(0.0),
-                                      child: new CircleAvatar(
-                                        child: Image(
-                                            image: NetworkImage(
-                                                "https://www.proxykhel.com/assets/image/icons/Man-of-the-Match.png")),
-                                        backgroundColor: Colors.white,
-                                        radius: 24.0,
-                                      ),
-                                    ),
-                                    onTap: () {
-                                      resetAll();
-                                      setState(() {
-                                        _isStarplayer = true;
-                                        _playerType = 5;
-                                      });
-                                    },
+                                      new Container(
+                                        margin: EdgeInsets.only(left: 35.0),
+                                        height:16.0,
+                                        width:16.0,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.green,
+                                        ),
+                                        child: new Text("${getPlayerCount("Star Player")}",textAlign: TextAlign.center,),
+                                      )
+
+                                    ],
                                   ),
                                   Container(
                                       margin: EdgeInsets.only(top: 4.0),
@@ -946,34 +1026,50 @@ class _CreateTeamState extends State<CreateTeam> {
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white),
                                       )),
+
                                 ],
                               ),
                               Column(
                                 children: <Widget>[
-                                  InkWell(
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.green,
+                                  Stack(
+                                    children: <Widget>[
+                                      InkWell(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Colors.green,
+                                          ),
+                                          padding: _isXpplayer
+                                              ? const EdgeInsets.all(3.0)
+                                              : const EdgeInsets.all(0.0),
+                                          child: new CircleAvatar(
+                                            child: Image(
+                                                image: NetworkImage(
+                                                    "https://www.proxykhel.com/assets/image/icons/Super-Striker.png")),
+                                            backgroundColor: Colors.white,
+                                            radius: 24.0,
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          resetAll();
+                                          setState(() {
+                                            _isXpplayer = true;
+                                            _playerType = 6;
+                                          });
+                                        },
                                       ),
-                                      padding: _isXpplayer
-                                          ? const EdgeInsets.all(3.0)
-                                          : const EdgeInsets.all(0.0),
-                                      child: new CircleAvatar(
-                                        child: Image(
-                                            image: NetworkImage(
-                                                "https://www.proxykhel.com/assets/image/icons/Super-Striker.png")),
-                                        backgroundColor: Colors.white,
-                                        radius: 24.0,
-                                      ),
-                                    ),
-                                    onTap: () {
-                                      resetAll();
-                                      setState(() {
-                                        _isXpplayer = true;
-                                        _playerType = 6;
-                                      });
-                                    },
+                                      new Container(
+                                        margin: EdgeInsets.only(left: 35.0),
+                                        height:16.0,
+                                        width:16.0,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.green,
+                                        ),
+                                        child: new Text("${getPlayerCount("X Player")}",textAlign: TextAlign.center,),
+                                      )
+
+                                    ],
                                   ),
                                   Container(
                                       margin: EdgeInsets.only(top: 4.0),
@@ -987,67 +1083,106 @@ class _CreateTeamState extends State<CreateTeam> {
                               ),
                               Column(
                                 children: <Widget>[
-                                  InkWell(
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.green,
+                                  Stack(
+                                    children: <Widget>[
+                                      InkWell(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Colors.green,
+                                          ),
+                                          padding: _isSupefive
+                                              ? const EdgeInsets.all(3.0)
+                                              : const EdgeInsets.all(0.0),
+                                          child: new CircleAvatar(
+                                            child: Image(
+                                                image: NetworkImage(
+                                                    "https://www.proxykhel.com/assets/image/icons/fwp.png")),
+                                            backgroundColor: Colors.white,
+                                            radius: 24.0,
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          resetAll();
+                                          setState(() {
+                                            _isSupefive = true;
+                                            _playerType = 7;
+                                          });
+                                        },
                                       ),
-                                      padding: _isSupefive
-                                          ? const EdgeInsets.all(3.0)
-                                          : const EdgeInsets.all(0.0),
-                                      child: new CircleAvatar(
-                                        child: Image(
-                                            image: NetworkImage(
-                                                "https://www.proxykhel.com/assets/image/icons/fwp.png")),
-                                        backgroundColor: Colors.white,
-                                        radius: 24.0,
-                                      ),
-                                    ),
-                                    onTap: () {
-                                      resetAll();
-                                      setState(() {
-                                        _isSupefive = true;
-                                        _playerType = 7;
-                                      });
-                                    },
+                                      new Container(
+                                        margin: EdgeInsets.only(left: 35.0),
+                                        height:16.0,
+                                        width:16.0,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.green,
+                                        ),
+                                        child: new Text("${getPlayerCount("Super Five")}",textAlign: TextAlign.center,),
+                                      )
+
+                                    ],
                                   ),
                                   Container(
                                       margin: EdgeInsets.only(top: 4.0),
                                       child: new Text(
-                                        'Super five',
+                                        'Super Five',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white),
                                       )),
+
                                 ],
                               ),
                               Column(
                                 children: <Widget>[
-                                  InkWell(
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.green,
+                                  Stack(
+                                    children: <Widget>[
+                                      InkWell(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Colors.green,
+                                          ),
+                                          padding: _isChoosenplayer
+                                              ? const EdgeInsets.all(3.0)
+                                              : const EdgeInsets.all(0.0),
+                                          child: new CircleAvatar(
+                                            child: Image(
+                                                image: NetworkImage(
+                                                    "https://www.proxykhel.com/assets/image/icons/Choosen-Players.png")),
+                                            backgroundColor: Colors.white,
+                                            radius: 24.0,
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          resetAll();
+                                          setState(() {
+                                            _isChoosenplayer = true;
+                                            _playerType = 8;
+                                          });
+                                        },
                                       ),
-                                      padding: _isChoosenplayer
-                                          ? const EdgeInsets.all(3.0)
-                                          : const EdgeInsets.all(0.0),
-                                      child: new CircleAvatar(
-                                        child: Image(
-                                            image: NetworkImage(
-                                                "https://www.proxykhel.com/assets/image/icons/Choosen-Players.png")),
-                                        backgroundColor: Colors.white,
-                                        radius: 24.0,
-                                      ),
-                                    ),
-                                    onTap: () {
-                                      resetAll();
-                                      setState(() {
-                                        _isChoosenplayer = true;
-                                        _playerType = 8;
-                                      });
-                                    },
+                                      new Container(
+                                        margin: EdgeInsets.only(left: 35.0),
+                                        height:16.0,
+                                        width:16.0,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.green,
+                                        ),
+                                        child: new Text("${
+                                            getPlayerCount("Bowler")
+                                            +getPlayerCount("Wicket Keeper")
+                                            +getPlayerCount("Batsman")
+                                            +getPlayerCount("All Rounder")
+                                            +getPlayerCount("Star Player")
+                                            +getPlayerCount("X Player")
+                                            +getPlayerCount("Super Five")
+                                        }",textAlign: TextAlign.center,),
+                                      )
+
+                                    ],
                                   ),
                                   Container(
                                       margin: EdgeInsets.only(top: 4.0),
@@ -1256,6 +1391,7 @@ class _CreateTeamState extends State<CreateTeam> {
                           }
                         }
                     }
+                    return new Container();
                   }),
             ),
           ],
