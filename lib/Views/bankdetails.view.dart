@@ -51,7 +51,6 @@ class _BankDetailsState extends State<BankDetails> {
               case ConnectionState.waiting:
                 return new Center(child: new CircularProgressIndicator(),);
               case ConnectionState.done:
-                print(snapshot);
                 if(snapshot.hasError){
                   return new Center(child: new Text(snapshot.hasError.toString()),);
                 }
@@ -109,7 +108,9 @@ class _BankDetailsState extends State<BankDetails> {
                   return new Center(child: new Text("Profile detail not found"),);
                 }
             }
-          }),
+            return new Container();
+          }
+          ),
     );
   }
 }

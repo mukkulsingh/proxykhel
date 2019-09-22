@@ -53,23 +53,19 @@ class _RegisterState extends State<Register> {
     await facebookLogin.logInWithReadPermissions(['email']);
     switch (facebookLoginResult.status) {
       case FacebookLoginStatus.error:
-        print("Error");
         onLoginStatusChanged(false);
         return false;
         break;
       case FacebookLoginStatus.cancelledByUser:
-        print("CancelledByUser");
         onLoginStatusChanged(false);
         return false;
         break;
       case FacebookLoginStatus.loggedIn:
-        print("LoggedIn");
         var graphResponse = await http.get(
             'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email&access_token=${facebookLoginResult
                 .accessToken.token}');
 
         var profile = json.decode(graphResponse.body);
-        print(profile.toString());
         Model.instance.setFacebookEmail(profile['name'].toString());
         Model.instance.setFacebookFullName(profile['email'].toString());
 
@@ -112,7 +108,6 @@ class _RegisterState extends State<Register> {
     emailOrPhoneController = new TextEditingController();
     passwordController = new TextEditingController();
     fullNameController = new TextEditingController();
-    print(_isLoading);
   }
 
 
@@ -154,7 +149,6 @@ class _RegisterState extends State<Register> {
                               color: Colors.white,
                               elevation: 4.0,
                               onPressed:() async {
-                                print('Facebook login');
                                 if(await initiateFacebookLogin()){
                                   Model.instance.facebookLogin();
                                   Navigator.pushAndRemoveUntil(context, SlideLeftRoute(widget:Dashboard()), (Route<dynamic> route)=>false);
@@ -181,7 +175,6 @@ class _RegisterState extends State<Register> {
                               elevation: 4.0,
                               color: Colors.white,
                               onPressed: (){
-                                print('google login');
                                 signInWithGoogle();
                               },
                               child: Row(

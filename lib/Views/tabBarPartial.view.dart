@@ -96,7 +96,6 @@ class _TabBarPartialState extends State<TabBarPartial> {
     // TODO: implement initState
     super.initState();
     matchId = widget.matchId;
-    print(matchId);
   }
   @override
   Widget build(BuildContext context) {

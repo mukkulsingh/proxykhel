@@ -31,7 +31,6 @@ class Model{
     http.Response response = await http.post(url,body:{'type':"register",'fullName':fullName, 'emailId':emailOrPhone.toString(),'password':password.toString()});
     if(response.statusCode == 200){
       final res = json.decode(response.body);
-      print(res);
 
       if(res['data'] == 'invalidPhone'){
         return 1;

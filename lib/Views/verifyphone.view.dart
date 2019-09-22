@@ -90,7 +90,6 @@ class _VerifyPhoneState extends State<VerifyPhone> {
                             height: 45.0,
                             child: new RaisedButton(
                               onPressed: () async {
-                                print(_OTP);
                                 if(_OTP == 0 || _OTP == null){
                                   setState(() {
                                     _isOtpError=true;

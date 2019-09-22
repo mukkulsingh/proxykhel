@@ -62,13 +62,15 @@ class _TabBarCricketState extends State<TabBarCricket> {
               children: <Widget>[
                 Container(margin:EdgeInsets.only(top:
                 100.0),child: new Text('No match')),
-                new Container(
-                  child: new Row(
-                    children: <Widget>[
-                      new Text("Retry",style: TextStyle(color: Colors.deepOrange),),
-                      SizedBox(width: 5.0,),
-                      new Icon(Icons.refresh,color: Colors.deepOrange,)
-                    ],
+                Center(
+                  child: new Container(
+                    child: new Row(
+                      children: <Widget>[
+                        new Text("Retry",style: TextStyle(color: Colors.deepOrange),),
+                        SizedBox(width: 5.0,),
+                        new Icon(Icons.refresh,color: Colors.deepOrange,)
+                      ],
+                    ),
                   ),
                 )
               ],

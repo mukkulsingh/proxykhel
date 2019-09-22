@@ -16,7 +16,6 @@ class _AddMoneyState extends State<AddMoney> {
     // setting a listener on payment response
     PaytmPayments.responseStream.listen((Map<dynamic, dynamic> responseData){
 
-      print(responseData);
 
       /*
       * {RESPMSG : [MSG]} // this is the type of map object received, except for one case.
@@ -70,7 +69,6 @@ class _AddMoneyState extends State<AddMoney> {
 
     } on Exception {
 
-      print("Some error occurred");
     }
 
     // If the widget was removed from the tree while the asynchronous platform

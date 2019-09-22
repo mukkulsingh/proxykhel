@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'CreateTeamTemp.view.dart';
 import 'MyProfile.view.dart';
 import './../Views/wallet.view.dart';
 import './bottomnavbar.view.dart';
@@ -217,7 +218,7 @@ class _ContestDetailState extends State<ContestDetail> {
                                     width: 85,
                                     margin: EdgeInsets.all(8.0),
                                     child: new FlatButton(onPressed: (){
-                                      Navigator.push(context, SlideLeftRoute(widget:CreateTeam()));
+                                      Navigator.push(context, SlideLeftRoute(widget:CreateTeamTemp()));
                                     },
                                       color: Colors.deepOrange,
                                       shape: RoundedRectangleBorder(
@@ -405,7 +406,6 @@ class _ContestDetailState extends State<ContestDetail> {
                                                                 "matchType":ContestDetailModel.instance.getMatchType(),
                                                                 "matchtime":ContestDetailModel.instance.getContestDuration(),
                                                               });
-                                                              print(response.statusCode);
                                                               if(response.statusCode == 200){
 
                                                                 final res = json.decode(response.body);

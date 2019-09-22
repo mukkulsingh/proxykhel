@@ -1,0 +1,309 @@
+import 'package:http/http.dart' as http;
+import 'package:async/async.dart';
+import 'dart:convert';
+
+class CreateTeamModel{
+
+ static CreateTeamModel _instance;
+ final AsyncMemoizer _memoizer = AsyncMemoizer();
+
+ static CreateTeamModel get instance{
+   if(_instance == null){
+     _instance = new CreateTeamModel();
+   }
+   return _instance;
+ }
+ static bool _isBatsman=true;
+ static bool _isBowler=false;
+ static bool _isWicketee=false;
+ static bool _isAllRounder=false;
+ static bool _isStarPlayer=false;
+ static bool _isXPlayer=false;
+ static bool _isSuperFive=false;
+ static bool _isChoosenPlayer=false;
+
+ static int _playerType=1;
+
+ static String batsmanGroup = "Batsman";
+ static String bowlerGroup = "Bowler";
+ static String wkGroup = "Wicket Keeper";
+ static String arGroup = "All Rounder";
+ static String starPlayerGroup = "Star Player";
+ static String xPlayerGroup = "X Player";
+ static String superFiveGroup = "Super Five";
+
+ List allPlayers=[];
+ List batsMan=[];
+ List bowler=[];
+ List allRounder=[];
+ List wicketKeeper=[];
+ List starPlayer=[];
+ List xPlayer=[];
+ List superFive=[];
+ List chosenPlayer=[];
+
+ void resetAll() {
+   _isBatsman = false;
+   _isBowler = false;
+   _isWicketee = false;
+   _isAllRounder = false;
+   _isStarPlayer = false;
+   _isXPlayer = false;
+   _isSuperFive = false;
+   _isChoosenPlayer = false;
+ }
+
+ void setBatsman(bool isBatsman){_isBatsman = isBatsman; }
+ void setBowler(bool isBowler){_isBowler = isBowler;}
+ void setWicketee(bool isWicketee){_isWicketee = isWicketee;}
+ void setAllRounder(bool isAllRounder){_isAllRounder = isAllRounder;}
+ void setStarPlayer(bool starPlayer){_isStarPlayer = starPlayer;}
+ void setXPlayer(bool xPlayer){_isXPlayer = xPlayer;}
+ void setSuperFive(bool superFive){_isSuperFive = superFive;}
+ void setChoosenPlayer(bool choosenPlayer){_isChoosenPlayer = choosenPlayer;}
+ void setPlayerType(int playerType){_playerType = playerType;}
+
+ get getBowler=>_isBowler;
+ get getBatsman=>_isBatsman;
+ get getPlayerType=>_playerType;
+ get getBatsmanList=>batsMan;
+ get getBowlerList =>bowler;
+ get getAllPlayer=>allPlayers;
+
+ int getPlayerColor(int playerIndex, String groupName) {
+   for (int i = 0; i < chosenPlayer.length; i++) {
+     if (int.parse(chosenPlayer[i]['playerIndex']) == playerIndex &&
+         chosenPlayer[i]['groupName'] == groupName)
+       return 2;
+     else if (int.parse(chosenPlayer[i]['playerIndex']) == playerIndex)
+       return 1;
+   }
+   return 0;
+ }
+
+ int getPlayerCount(String groupName) {
+   int count = 0;
+   for (int i = 0; i < chosenPlayer.length; i++)
+     if (chosenPlayer[i]['groupName'] == groupName) count++;
+   return count;
+ }
+
+ double getTotalCreditOfTeam() {
+   double credit = 0;
+   for (int i = 0; i < chosenPlayer.length; i++)
+     credit += double.parse(
+         allPlayers[int.parse(chosenPlayer[i]['playerIndex'])].credit);
+   return credit;
+ }
+
+ int selectPlayer(List playerList, int playerIndex, String groupName,
+     int allowedSelection) {
+   int colorCode = getPlayerColor(playerIndex, groupName);
+
+   if (colorCode == 2) {
+     for (int i = 0; i < chosenPlayer.length; i++) {
+       if (playerIndex == int.parse(chosenPlayer[i]['playerIndex'])) {
+         chosenPlayer.removeAt(i);
+       }
+     }
+
+     return 0;
+//     setState(() {
+//
+//     });
+   } else if (colorCode == 1) {
+     return 3;
+//     SnackBar snackBar =
+//     new SnackBar(content: Text('Player already selected'),duration: const Duration(seconds: 1),);
+//     _scaffoldKey.currentState.showSnackBar(snackBar);
+   } else {
+     if (allowedSelection == getPlayerCount(groupName)) {
+       // show("that this many batsman already selected");
+       return 2;
+//       SnackBar snackBar = new SnackBar(
+//           content: Text('you can pick only $allowedSelection $groupName'),duration: const Duration(seconds: 1));
+//       _scaffoldKey.currentState.showSnackBar(snackBar);
+     } else if (getTotalCreditOfTeam() +
+         double.parse(allPlayers[playerIndex].credit) >
+         100) {
+       //show('credit limit exeed');
+       return 4;
+//       SnackBar snackBar = new SnackBar(content: Text('low credit'),duration: const Duration(seconds: 1));
+//       _scaffoldKey.currentState.showSnackBar(snackBar);
+     } else {
+       //show('select that player and add it into chosenPlayer');
+       Map playerMap = new Map();
+       playerMap['playerId'] = allPlayers[playerIndex].id;
+       playerMap['playerIndex'] = playerIndex.toString();
+       playerMap['groupName'] = groupName;
+       chosenPlayer.add(playerMap);
+       return 1;
+//       setState(() {});
+     }
+   }
+ }
+
+ Future getMatchTeam(String matchId, String team1name, String team2name) async {
+
+     http.Response response = await http.post("https://www.proxykhel.com/android/Createteam.php",body: {
+       "type":"getTeam",
+       "matchId":matchId,
+       "team1name":team1name,
+       "team2name":team2name,
+     });
+     if(response.statusCode == 200){
+       final res = json.decode(response.body);
+       if(res['success']==true){
+          CreateTeamDetails createTeamDetails = createTeamDetailsFromJson(response.body);
+
+          allPlayers = createTeamDetails.data.supperSticker;
+
+         for (int i = 0;i < createTeamDetails.data.batsman.length;i++) {
+           for (int j = 0; j < allPlayers.length; j++) {
+             if (createTeamDetails.data.batsman[i].id == allPlayers[j].id) {
+               batsMan.add(j);
+             }
+           }
+         }
+
+          for (int i = 0;i < createTeamDetails.data.bowler.length;i++) {
+            for (int j = 0; j < allPlayers.length; j++) {
+              if (createTeamDetails.data.bowler[i].id == allPlayers[j].id) {
+                bowler.add(j);
+              }
+            }
+          }
+//          return true;
+
+
+         return createTeamDetailsFromJson(response.body);
+       }
+       else{
+         return null;
+       }
+     }else{
+       return null;
+     }
+
+ }
+
+
+}
+
+CreateTeamDetails createTeamDetailsFromJson(String str) => CreateTeamDetails.fromJson(json.decode(str));
+
+String createTeamDetailsToJson(CreateTeamDetails data) => json.encode(data.toJson());
+
+class CreateTeamDetails {
+  bool success;
+  Data data;
+
+  CreateTeamDetails({
+    this.success,
+    this.data,
+  });
+
+  factory CreateTeamDetails.fromJson(Map<String, dynamic> json) => new CreateTeamDetails(
+    success: json["success"],
+    data: Data.fromJson(json["data"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "success": success,
+    "data": data.toJson(),
+  };
+}
+
+class Data {
+  List<AllRounder> bowler;
+  List<AllRounder> supperSticker;
+  List<AllRounder> allRounder;
+  List<AllRounder> batsman;
+  List<AllRounder> wicketKeeper;
+
+  Data({
+    this.bowler,
+    this.supperSticker,
+    this.allRounder,
+    this.batsman,
+    this.wicketKeeper,
+  });
+
+  factory Data.fromJson(Map<String, dynamic> json) => new Data(
+    bowler: new List<AllRounder>.from(json["Bowler"].map((x) => AllRounder.fromJson(x))),
+    supperSticker: new List<AllRounder>.from(json["supperSticker"].map((x) => AllRounder.fromJson(x))),
+    allRounder: new List<AllRounder>.from(json["AllRounder"].map((x) => AllRounder.fromJson(x))),
+    batsman: new List<AllRounder>.from(json["Batsman"].map((x) => AllRounder.fromJson(x))),
+    wicketKeeper: new List<AllRounder>.from(json["WicketKeeper"].map((x) => AllRounder.fromJson(x))),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "Bowler": new List<dynamic>.from(bowler.map((x) => x.toJson())),
+    "supperSticker": new List<dynamic>.from(supperSticker.map((x) => x.toJson())),
+    "AllRounder": new List<dynamic>.from(allRounder.map((x) => x.toJson())),
+    "Batsman": new List<dynamic>.from(batsman.map((x) => x.toJson())),
+    "WicketKeeper": new List<dynamic>.from(wicketKeeper.map((x) => x.toJson())),
+  };
+}
+
+class AllRounder {
+  String id;
+  String playerName;
+  String country;
+  String imageUrl;
+  String credit;
+  String teamname;
+  bool isSelected;
+
+  AllRounder({
+    this.id,
+    this.playerName,
+    this.country,
+    this.imageUrl,
+    this.credit,
+    this.teamname,
+    this.isSelected,
+  });
+
+  factory AllRounder.fromJson(Map<String, dynamic> json) => new AllRounder(
+    id: json["id"],
+    playerName: json["playerName"],
+    country: json["country"],
+    imageUrl: json["imageURL"] == null ? null : json["imageURL"],
+    credit: json["credit"],
+    teamname: json["teamname"],
+    isSelected: false,
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "playerName": playerName,
+    "country": country,
+    "imageURL": imageUrl == null ? null : imageUrl,
+    "credit": credit,
+    "teamname": teamname,
+    "isSelected":isSelected,
+  };
+}
+
+enum Country { CHEPAUK_SUPER_GILLIES, DINDIGUL_DRAGONS }
+
+final countryValues = new EnumValues({
+  "Chepauk Super Gillies": Country.CHEPAUK_SUPER_GILLIES,
+  "Dindigul Dragons": Country.DINDIGUL_DRAGONS
+});
+
+class EnumValues<T> {
+  Map<String, T> map;
+  Map<T, String> reverseMap;
+
+  EnumValues(this.map);
+
+  Map<T, String> get reverse {
+    if (reverseMap == null) {
+      reverseMap = map.map((k, v) => new MapEntry(v, k));
+    }
+    return reverseMap;
+  }
+}
+

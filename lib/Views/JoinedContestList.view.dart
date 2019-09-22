@@ -137,7 +137,6 @@ class _JoinedContestListState extends State<JoinedContestList> {
                           }else if(!snapshot.hasData){
                             return new Center(child: new Text("0 contests joined"),);
                           }else if(snapshot.hasData){
-                            print(snapshot.data.data.length);
                             return new ListView.builder(
                                 itemCount: snapshot.data.data.length,
                                 itemBuilder: (context,index){
@@ -237,7 +236,7 @@ class _JoinedContestListState extends State<JoinedContestList> {
                             ),);
                           }
                       }
-
+                      return new Container();
                     })),
           ],
         ),

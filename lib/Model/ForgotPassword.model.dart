@@ -58,7 +58,6 @@ class ForgotPasswordModel{
     });
     if (response.statusCode == 200) {
       final res = json.decode(response.body);
-      print(res);
       if (res['success'] == true) {
         return true;
       } else {

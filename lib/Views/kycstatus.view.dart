@@ -5,7 +5,7 @@ import './kycphoneverification.view.dart';
 import './../Constants/slideTransitions.dart';
 import 'package:http/http.dart' as http;
 import 'dart:math';
-import 'package:image_picker_modern/image_picker_modern.dart';
+import 'package:image_picker/image_picker.dart';
 
 class KycStatusView extends StatefulWidget {
   @override
