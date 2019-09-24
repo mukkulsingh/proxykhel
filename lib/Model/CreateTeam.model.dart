@@ -2,10 +2,14 @@ import 'package:http/http.dart' as http;
 import 'package:async/async.dart';
 import 'dart:convert';
 
+import 'package:proxykhel/Model/savedpref.model.dart';
+
+import 'contest.model.dart';
+import 'contestdetail.model.dart';
+
 class CreateTeamModel{
 
  static CreateTeamModel _instance;
- final AsyncMemoizer _memoizer = AsyncMemoizer();
 
  static CreateTeamModel get instance{
    if(_instance == null){
@@ -20,7 +24,7 @@ class CreateTeamModel{
  static bool _isStarPlayer=false;
  static bool _isXPlayer=false;
  static bool _isSuperFive=false;
- static bool _isChoosenPlayer=false;
+ static bool _isChosenPlayer=false;
 
  static int _playerType=1;
 
@@ -33,7 +37,7 @@ class CreateTeamModel{
  static String superFiveGroup = "Super Five";
 
  List allPlayers=[];
- List batsMan=[];
+ List batsman=[];
  List bowler=[];
  List allRounder=[];
  List wicketKeeper=[];
@@ -50,7 +54,7 @@ class CreateTeamModel{
    _isStarPlayer = false;
    _isXPlayer = false;
    _isSuperFive = false;
-   _isChoosenPlayer = false;
+   _isChosenPlayer = false;
  }
 
  void setBatsman(bool isBatsman){_isBatsman = isBatsman; }
@@ -60,15 +64,28 @@ class CreateTeamModel{
  void setStarPlayer(bool starPlayer){_isStarPlayer = starPlayer;}
  void setXPlayer(bool xPlayer){_isXPlayer = xPlayer;}
  void setSuperFive(bool superFive){_isSuperFive = superFive;}
- void setChoosenPlayer(bool choosenPlayer){_isChoosenPlayer = choosenPlayer;}
+ void setChosenPlayer(bool choosenPlayer){_isChosenPlayer = choosenPlayer;}
  void setPlayerType(int playerType){_playerType = playerType;}
 
  get getBowler=>_isBowler;
  get getBatsman=>_isBatsman;
+ get getWicketee=>_isWicketee;
+ get getAllRounder=>_isAllRounder;
+ get getStarPlayer=>_isStarPlayer;
+ get getXPlayer=>_isXPlayer;
+ get getSuperFive=>_isSuperFive;
+ get getChosenPlayer=>_isChosenPlayer;
+
  get getPlayerType=>_playerType;
- get getBatsmanList=>batsMan;
+ get getAllPlayerList=>allPlayers;
+ get getAllRounderList=>allRounder;
+ get getBatsmanList=>batsman;
  get getBowlerList =>bowler;
- get getAllPlayer=>allPlayers;
+ get getWicketKeeperList=>wicketKeeper;
+ get getStarPlayerList=>starPlayer;
+ get getXPlayerList=>xPlayer;
+ get getSuperFiveList=>superFive;
+ get getChosenPlayerList=>chosenPlayer;
 
  int getPlayerColor(int playerIndex, String groupName) {
    for (int i = 0; i < chosenPlayer.length; i++) {
@@ -155,28 +172,83 @@ class CreateTeamModel{
        final res = json.decode(response.body);
        if(res['success']==true){
           CreateTeamDetails createTeamDetails = createTeamDetailsFromJson(response.body);
+          allPlayers=[];
+          batsman=[];
+          bowler=[];
+          allRounder=[];
+          wicketKeeper=[];
+          starPlayer=[];
+          xPlayer=[];
+          superFive=[];
+          chosenPlayer=[];
 
           allPlayers = createTeamDetails.data.supperSticker;
 
-         for (int i = 0;i < createTeamDetails.data.batsman.length;i++) {
-           for (int j = 0; j < allPlayers.length; j++) {
-             if (createTeamDetails.data.batsman[i].id == allPlayers[j].id) {
-               batsMan.add(j);
-             }
-           }
-         }
+          for (int i = 0; i < createTeamDetails.data.batsman.length; i++) {
+            for (int j = 0; j < allPlayers.length; j++) {
+              if (createTeamDetails.data.batsman[i].id == allPlayers[j].id) {
+                batsman.add(j);
+              }
+            }
+          }
 
-          for (int i = 0;i < createTeamDetails.data.bowler.length;i++) {
+          for (int i = 0; i < createTeamDetails.data.bowler.length; i++) {
             for (int j = 0; j < allPlayers.length; j++) {
               if (createTeamDetails.data.bowler[i].id == allPlayers[j].id) {
                 bowler.add(j);
               }
             }
           }
-//          return true;
+          for (int i = 0; i < createTeamDetails.data.wicketKeeper.length; i++) {
+            for (int j = 0; j < allPlayers.length; j++) {
+              if (createTeamDetails.data.wicketKeeper[i].id == allPlayers[j].id) {
+                wicketKeeper.add(j);
+              }
+            }
+          }
+          for (int i = 0; i < createTeamDetails.data.allRounder.length; i++) {
+            for (int j = 0; j < allPlayers.length; j++) {
+              if (createTeamDetails.data.allRounder[i].id == allPlayers[j].id) {
+                allRounder.add(j);
+              }
+            }
+          }
+          for (int i = 0; i < createTeamDetails.data.supperSticker.length; i++) {
+            for (int j = 0; j < allPlayers.length; j++) {
+              if (createTeamDetails.data.supperSticker[i].id == allPlayers[j].id) {
+                starPlayer.add(j);
+              }
+            }
+          }
 
+          for (int i = 0; i < createTeamDetails.data.supperSticker.length; i++) {
+            for (int j = 0; j < allPlayers.length; j++) {
+              if (createTeamDetails.data.supperSticker[i].id == allPlayers[j].id) {
+                xPlayer.add(j);
+              }
+            }
+          }
+          for (int i = 0; i < createTeamDetails.data.supperSticker.length; i++) {
+            for (int j = 0; j < allPlayers.length; j++) {
+              if (createTeamDetails.data.supperSticker[i].id == allPlayers[j].id) {
+                superFive.add(j);
+              }
+            }
+          }
 
-         return createTeamDetailsFromJson(response.body);
+//          int counter = 0;
+//          for (int i = 0; i < allPlayers.length; i++) {
+//            if (wicketKeeper.length > counter)
+//              if (wicketKeeper[counter] == i) {
+//                counter++;
+//            } else {
+//              superFive.add(i);
+//            }
+//            else
+//              superFive.add(i);
+//          }
+
+          return createTeamDetailsFromJson(response.body);
        }
        else{
          return null;
@@ -186,6 +258,83 @@ class CreateTeamModel{
      }
 
  }
+
+ Future<dynamic> saveTeam(
+     String matchId,
+     String contestId,
+     String creadit,
+     String country1,
+     String country2,
+     ) async {
+
+
+
+    int batsmanId,bowlerId,WKId, allrounderId,starplayerId,xplayerId;
+
+    List superFive=[];
+
+   String userId = await SavedPref.instance.getUserId();
+   for(int i=0;i<CreateTeamModel.instance.getChosenPlayerList.length;i++){
+     if(chosenPlayer[i]['groupName'] == 'Batsman'){
+        batsmanId = int.parse(chosenPlayer[i]['playerId']);
+     }
+     else if(chosenPlayer[i]['groupName'] == 'Bowler'){
+        bowlerId = int.parse(chosenPlayer[i]['playerId']);
+
+     }
+     else if(chosenPlayer[i]['groupName'] == 'Wicket Keeper'){
+        WKId = int.parse(chosenPlayer[i]['playerId']);
+
+     }
+     else if(chosenPlayer[i]['groupName'] == 'All Rounder'){
+        allrounderId = int.parse(chosenPlayer[i]['playerId']);
+
+     }
+     else if(chosenPlayer[i]['groupName'] == 'Star Player'){
+        starplayerId = int.parse(chosenPlayer[i]['playerId']);
+
+     }
+     else if(chosenPlayer[i]['groupName'] == 'X Player'){
+        xplayerId = (int.parse(chosenPlayer[i]['playerId']));
+
+     }
+     else if(chosenPlayer[i]['groupName'] == 'Super Five'){
+       superFive.add(int.parse(chosenPlayer[i]['playerId']));
+
+     }
+   }
+
+
+   http.Response response = await http.post("https://www.proxykhel.com/android/Createteam.php",
+       body: {
+         "type":"saveTeam",
+         "matchId":matchId.toString(),
+         "contestId":contestId.toString(),
+         "userId":userId.toString(),
+         "batsman":batsmanId.toString(),
+         "bowler":bowlerId.toString(),
+         "allrounder":allrounderId.toString(),
+         "wicketkeeper":WKId.toString(),
+         "manofthematch":starplayerId.toString(),
+         "superstriker":xplayerId.toString(),
+         "credit":creadit.toString(),
+         "player_session":superFive.toString()
+       }
+   );
+   if(response.statusCode == 200){
+     final res = json.decode(response.body);
+     if(res['success']=='true' && res['msg']=='ok'){
+       return true;
+     }
+     else{
+       return false;
+     }
+   }
+   else{
+     return false;
+   }
+ }
+
 
 
 }

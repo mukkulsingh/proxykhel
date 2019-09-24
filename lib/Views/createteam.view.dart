@@ -137,7 +137,8 @@
 //                    radius: 22.0,
 //                    backgroundColor: Colors.transparent,
 //                    backgroundImage: NetworkImage(
-//                        "https://www.proxykhel.com/public/player/${allPlayers[bowler[i]].imageUrl}"),
+//                        "https://www.proxykhel.com/public/player/${
+//                            allPlayers[bowler[i]].imageUrl}"),
 //                  ),
 //                ),
 //                Expanded(
