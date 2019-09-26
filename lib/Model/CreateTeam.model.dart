@@ -1,11 +1,8 @@
 import 'package:http/http.dart' as http;
-import 'package:async/async.dart';
 import 'dart:convert';
 
 import 'package:proxykhel/Model/savedpref.model.dart';
 
-import 'contest.model.dart';
-import 'contestdetail.model.dart';
 
 class CreateTeamModel{
 
@@ -27,14 +24,6 @@ class CreateTeamModel{
  static bool _isChosenPlayer=false;
 
  static int _playerType=1;
-
- static String batsmanGroup = "Batsman";
- static String bowlerGroup = "Bowler";
- static String wkGroup = "Wicket Keeper";
- static String arGroup = "All Rounder";
- static String starPlayerGroup = "Star Player";
- static String xPlayerGroup = "X Player";
- static String superFiveGroup = "Super Five";
 
  List allPlayers=[];
  List batsman=[];
@@ -98,6 +87,14 @@ class CreateTeamModel{
    return 0;
  }
 
+ int getTeamPlayerCount(String teamName){
+   int count=0;
+   for(int i=0;i<chosenPlayer.length;i++)
+     if(chosenPlayer[i]['teamName'] == teamName)count++;
+     return count;
+ }
+
+
  int getPlayerCount(String groupName) {
    int count = 0;
    for (int i = 0; i < chosenPlayer.length; i++)
@@ -114,7 +111,7 @@ class CreateTeamModel{
  }
 
  int selectPlayer(List playerList, int playerIndex, String groupName,
-     int allowedSelection) {
+     String teamName,int allowedSelection,int allowedTeamPlayer) {
    int colorCode = getPlayerColor(playerIndex, groupName);
 
    if (colorCode == 2) {
@@ -123,36 +120,32 @@ class CreateTeamModel{
          chosenPlayer.removeAt(i);
        }
      }
-
+     //     deselect player
      return 0;
-//     setState(() {
-//
-//     });
    } else if (colorCode == 1) {
+//     Player already selected
      return 3;
-//     SnackBar snackBar =
-//     new SnackBar(content: Text('Player already selected'),duration: const Duration(seconds: 1),);
-//     _scaffoldKey.currentState.showSnackBar(snackBar);
    } else {
      if (allowedSelection == getPlayerCount(groupName)) {
        // show("that this many batsman already selected");
        return 2;
-//       SnackBar snackBar = new SnackBar(
-//           content: Text('you can pick only $allowedSelection $groupName'),duration: const Duration(seconds: 1));
-//       _scaffoldKey.currentState.showSnackBar(snackBar);
-     } else if (getTotalCreditOfTeam() +
+     }
+     else if(allowedTeamPlayer == getTeamPlayerCount(teamName)){
+       //show allowed selection for one team exhausted
+       return 5;
+     }
+     else if (getTotalCreditOfTeam() +
          double.parse(allPlayers[playerIndex].credit) >
          100) {
        //show('credit limit exeed');
        return 4;
-//       SnackBar snackBar = new SnackBar(content: Text('low credit'),duration: const Duration(seconds: 1));
-//       _scaffoldKey.currentState.showSnackBar(snackBar);
      } else {
        //show('select that player and add it into chosenPlayer');
        Map playerMap = new Map();
        playerMap['playerId'] = allPlayers[playerIndex].id;
        playerMap['playerIndex'] = playerIndex.toString();
        playerMap['groupName'] = groupName;
+       playerMap['teamName'] = teamName;
        chosenPlayer.add(playerMap);
        return 1;
 //       setState(() {});
@@ -236,18 +229,6 @@ class CreateTeamModel{
             }
           }
 
-//          int counter = 0;
-//          for (int i = 0; i < allPlayers.length; i++) {
-//            if (wicketKeeper.length > counter)
-//              if (wicketKeeper[counter] == i) {
-//                counter++;
-//            } else {
-//              superFive.add(i);
-//            }
-//            else
-//              superFive.add(i);
-//          }
-
           return createTeamDetailsFromJson(response.body);
        }
        else{
@@ -303,8 +284,6 @@ class CreateTeamModel{
 
      }
    }
-
-
    http.Response response = await http.post("https://www.proxykhel.com/android/Createteam.php",
        body: {
          "type":"saveTeam",

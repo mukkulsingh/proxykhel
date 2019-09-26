@@ -577,12 +577,6 @@ class _CreateTeamtempState extends State<CreateTeamtemp> {
                   break;
                 case 7:
                   currentPlayerList = createTeamDetails.data.supperSticker;
-//                  for (int i = 0;i < createTeamDetails.data.batsman.length;i++) {
-//                    currentPlayerList.add(createTeamDetails.data.batsman[i]);
-//                  }
-//                  for (int i = 0;i < createTeamDetails.data.allRounder.length;i++) {
-//                    currentPlayerList.add(createTeamDetails.data.allRounder[i]);
-//                  }
                   playerListWithIndices = CreateTeamModel.instance.getSuperFiveList;
                   groupName = "Super Five";
                   playerCount=5;
@@ -621,9 +615,21 @@ class _CreateTeamtempState extends State<CreateTeamtemp> {
                               )),
                           Expanded(flex: 1, child: Divider()),
                           Expanded(
+
                               flex: 2,
-                              child: new Text(
-                                  'Cr.${CreateTeamModel.instance.allPlayers[int.parse(CreateTeamModel.instance.getChosenPlayerList[index]['playerIndex'])].credit}'))
+                              child: new Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: <Widget>[
+                                  new Text(
+                                    '${CreateTeamModel.instance.allPlayers[int.parse(CreateTeamModel.instance.getChosenPlayerList[index]['playerIndex'])].teamname}',
+                                  ),
+                                  new Text(
+                                    'Cr:${CreateTeamModel.instance.allPlayers[int.parse(CreateTeamModel.instance.getChosenPlayerList[index]['playerIndex'])].credit}',
+                                  )
+                                ],
+                              )
+
+                          )
                         ],
                       ),
                     );
@@ -637,19 +643,22 @@ class _CreateTeamtempState extends State<CreateTeamtemp> {
                 itemCount: currentPlayerList.length,
                 itemBuilder: (context,index){
                   Color color = Colors.white;
+                  Color textColor = Colors.black;
                   int num = CreateTeamModel.instance.getPlayerColor(playerListWithIndices[index], groupName);
                   if (num == 0) {
                     color = Colors.white;
+                    textColor = Colors.black;
                   } else if (num == 1) {
                     color = Colors.deepOrangeAccent[100];
+                    textColor = Colors.black;
                   } else {
                     color = Colors.deepOrange;
+                    textColor = Colors.white;
                   }
                   return InkWell(
-
                     onTap: (){
                       if(playingEleven){}else {
-                      int num = CreateTeamModel.instance.selectPlayer(playerListWithIndices, playerListWithIndices[index], groupName, playerCount);
+                      int num = CreateTeamModel.instance.selectPlayer(playerListWithIndices, playerListWithIndices[index], groupName, currentPlayerList[index].teamname,playerCount,7);
                         switch(num){
                           case 0:
                             setState(() {});
@@ -669,6 +678,9 @@ class _CreateTeamtempState extends State<CreateTeamtemp> {
                             SnackBar snackBar = new SnackBar(content: Text('Low creadit'),duration: const Duration(seconds: 1));
                             Scaffold.of(context).showSnackBar(snackBar);
                             break;
+                          case 5:
+                            SnackBar snackBar = new SnackBar(content: Text('You can pick only 7 players from one team'),duration: const Duration(seconds: 1));
+                            Scaffold.of(context).showSnackBar(snackBar);
                         }
                       }
                     },
@@ -696,17 +708,25 @@ class _CreateTeamtempState extends State<CreateTeamtemp> {
                                   textAlign: TextAlign.center,
                                   textScaleFactor: 0.8,
                                   style: TextStyle(
-                                      color: currentPlayerList[index].isSelected
-                                          ? Colors.white
-                                          : Colors.black),
+                                      color: textColor
+                                  ),
                                 ),
                               )),
                           Expanded(flex: 1, child: Divider()),
                           Expanded(
                               flex: 2,
-                              child: new Text(
-                                'Cr.${currentPlayerList[index].credit}',
-                              ))
+                              child: new Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: <Widget>[
+                                  new Text(
+                                    '${currentPlayerList[index].teamname}',
+                                  ),
+                                  new Text(
+                                    'Cr:${currentPlayerList[index].credit}',
+                                  )
+                                ],
+                              )
+                          )
                         ],
                       ),
                     ),
@@ -732,16 +752,16 @@ class _CreateTeamtempState extends State<CreateTeamtemp> {
                     new Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        new Text(""),
-                        new Text("")
+                        new Text("${ContestDetailModel.instance.getTeam1Name()}"),
+                        new Text("${CreateTeamModel.instance.getTeamPlayerCount(ContestDetailModel.instance.getTeam1Name())}")
                       ],
                     ),
                     new SizedBox(width: 5.0,),
                     new Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        new Text(""),
-                        new Text("")
+                        new Text("${ContestDetailModel.instance.getTeam2Name()}"),
+                        new Text("${CreateTeamModel.instance.getTeamPlayerCount(ContestDetailModel.instance.getTeam2Name())}")
                       ],
                     )
                   ],
@@ -775,7 +795,7 @@ class _CreateTeamtempState extends State<CreateTeamtemp> {
                       child: new Container(
                         margin: EdgeInsets.symmetric(horizontal: 5.0),
                         child: new RaisedButton(onPressed: () async {
-                          if(await  CreateTeamModel.instance.saveTeam(ContestDetailModel.instance.getMatchId(), ContestDetailModel.instance.getContestId(), (100 - CreateTeamModel.instance.getTotalCreditOfTeam()).toString(),ContestModel.instance.getTeamOneName(),ContestModel.instance.getTeamTwoName()))
+                          if(await  CreateTeamModel.instance.saveTeam(ContestDetailModel.instance.getMatchId(), ContestDetailModel.instance.getContestId(), (CreateTeamModel.instance.getTotalCreditOfTeam()).toString(),ContestModel.instance.getTeamOneName(),ContestModel.instance.getTeamTwoName()))
                           {
                             Navigator.of(context).pop();
                           }else{
