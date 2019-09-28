@@ -154,7 +154,8 @@ class CreateTeamModel{
  }
 
  Future getMatchTeam(String matchId, String team1name, String team2name) async {
-
+    print(team1name);
+    print(team2name);
      http.Response response = await http.post("https://www.proxykhel.com/android/Createteam.php",body: {
        "type":"getTeam",
        "matchId":matchId,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:proxykhel/Model/ViewTeam.model.dart';
 import 'CreateTeamTemp.view.dart';
 import 'MyProfile.view.dart';
 import './../Views/wallet.view.dart';
@@ -14,6 +15,8 @@ import 'package:http/http.dart' as http;
 import './../Model/savedpref.model.dart';
 import 'dart:convert';
 import 'package:google_sign_in/google_sign_in.dart';
+
+import 'ViewTeam.view.dart';
 class ContestDetail extends StatefulWidget {
   @override
   _ContestDetailState createState() => _ContestDetailState();
@@ -470,23 +473,29 @@ class _ContestDetailState extends State<ContestDetail> {
                                                     ),
                                                   ),
 
-//                                            Container(
-//                                              child: Row(
-//                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                                                children: <Widget>[
-//                                                  new Column(
-//                                                    mainAxisAlignment: MainAxisAlignment.center,
-//                                                    children: <Widget>[
-//                                                      new Icon(Icons.edit),
-//                                                      SizedBox(
-//                                                        height: 3.0,
-//                                                      ),
-//                                                      new Text('EDIT',style: TextStyle(fontSize: 12.0),)
-//                                                    ],
-//                                                  ),
-//                                                  SizedBox(
-//                                                    width: 10.0,
-//                                                  ),
+                                            Container(
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                children: <Widget>[
+                                                  InkWell(
+                                                    onTap:(){
+                                                      ViewTeamModel.instance.setTeamId(snapshot.data.data[index].id);
+                                                      Navigator.push(context,SlideLeftRoute(widget: ViewTeam()));
+                                                    },
+                                                    child: new Column(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: <Widget>[
+                                                        new Icon(Icons.remove_red_eye,color: Colors.black,),
+                                                        SizedBox(
+                                                          height: 3.0,
+                                                        ),
+                                                        new Text('VIEW',style: TextStyle(fontSize: 12.0),)
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 10.0,
+                                                  ),
 //                                                  new Column(
 //                                                    mainAxisAlignment: MainAxisAlignment.center,
 //                                                    children: <Widget>[
@@ -513,9 +522,9 @@ class _ContestDetailState extends State<ContestDetail> {
 //                                                  SizedBox(
 //                                                    width: 10.0,
 //                                                  ),
-//                                                ],
-//                                              ),
-//                                            ),
+                                                ],
+                                              ),
+                                            ),
                                                 ],
                                               ),
                                             ),
