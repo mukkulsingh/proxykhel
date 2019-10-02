@@ -50,7 +50,7 @@ class _RegisterState extends State<Register> {
   Future<bool> initiateFacebookLogin() async {
     var facebookLogin = FacebookLogin();
     var facebookLoginResult =
-    await facebookLogin.logInWithReadPermissions(['email']);
+    await facebookLogin.logIn(['email']);
     switch (facebookLoginResult.status) {
       case FacebookLoginStatus.error:
         onLoginStatusChanged(false);

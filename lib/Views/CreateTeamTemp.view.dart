@@ -64,7 +64,7 @@ class _CreateTeamtempState extends State<CreateTeamtemp> {
       return new Center(child: new CircularProgressIndicator(),);
     }else
 
-
+    Future.delayed(Duration(milliseconds: 300),(){setState(() {});});
 
     return Column(
       children: <Widget>[
@@ -795,13 +795,24 @@ class _CreateTeamtempState extends State<CreateTeamtemp> {
                       child: new Container(
                         margin: EdgeInsets.symmetric(horizontal: 5.0),
                         child: new RaisedButton(onPressed: () async {
-                          if(await  CreateTeamModel.instance.saveTeam(ContestDetailModel.instance.getMatchId(), ContestDetailModel.instance.getContestId(), (CreateTeamModel.instance.getTotalCreditOfTeam()).toString(),ContestModel.instance.getTeamOneName(),ContestModel.instance.getTeamTwoName()))
-                          {
-                            Navigator.of(context).pop();
-                          }else{
-                            SnackBar snackbar = new SnackBar(content: Text('Something went wrong.Try again'),duration: const Duration(seconds: 1),);
-                            Scaffold.of(context).showSnackBar(snackbar);
+                          if(CreateTeamModel.instance.getActionType == 1 || CreateTeamModel.instance.getActionType == 2){
+                            if(await  CreateTeamModel.instance.saveTeam(ContestDetailModel.instance.getMatchId(), ContestDetailModel.instance.getContestId(), (CreateTeamModel.instance.getTotalCreditOfTeam()).toString(),ContestModel.instance.getTeamOneName(),ContestModel.instance.getTeamTwoName()))
+                            {
+                              Navigator.of(context).pop();
+                            }else{
+                              SnackBar snackbar = new SnackBar(content: Text('Something went wrong.Try again'),duration: const Duration(seconds: 1),);
+                              Scaffold.of(context).showSnackBar(snackbar);
+                            }
+                          }else if(CreateTeamModel.instance.getActionType == 3){
+                            if(await  CreateTeamModel.instance.updateTeam(ContestDetailModel.instance.getMatchId(), ContestDetailModel.instance.getContestId(), (CreateTeamModel.instance.getTotalCreditOfTeam()).toString(),ContestModel.instance.getTeamOneName(),ContestModel.instance.getTeamTwoName()))
+                            {
+                              Navigator.of(context).pop();
+                            }else{
+                              SnackBar snackbar = new SnackBar(content: Text('Something went wrong.Try again'),duration: const Duration(seconds: 1),);
+                              Scaffold.of(context).showSnackBar(snackbar);
+                            }
                           }
+
                           },
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(32.0)

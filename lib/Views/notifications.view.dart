@@ -1,6 +1,6 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:proxykhel/Model/logout.model.dart';
 import 'package:proxykhel/Views/wallet.view.dart';
 import './../Constants//theme.dart' as Theme;
 import './../Model/Notification.model.dart';
@@ -8,6 +8,7 @@ import './bottomnavbar.view.dart';
 import './../Constants/slideTransitions.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'MyProfile.view.dart';
+import 'login.view.dart';
 
 class Notifications extends StatefulWidget {
   @override
@@ -54,40 +55,21 @@ class _NotificationsState extends State<Notifications>
             title: new Text(title),
             content: new Text(content),
             actions: <Widget>[
-              new IconButton(
-                icon: Icon(
-                  Icons.account_balance_wallet,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  Navigator.push(context, SlideLeftRoute(widget: Wallet()));
+              // usually buttons at the bottom of the dialog
+              new FlatButton(
+                child: new Text("Yes"),
+                onPressed: () async {
+                  await googleSignIn.signOut();
+                  await LogoutModel.instance.logoutRequest();
+                  Navigator.of(context).pushAndRemoveUntil(SlideRightRoute(widget: LoginScreen()), (Route<dynamic> route)=>false);
                 },
               ),
-              new PopupMenuButton<int>(
-                icon: Icon(
-                  Icons.menu,
-                  color: Colors.white,
-                ),
-                itemBuilder: (context) => [
-                  PopupMenuItem<int>(
-                    value: 1,
-                    child: new Text('My Profile'),
-                  ),
-                  PopupMenuItem<int>(
-                    value: 2,
-                    child: new Text('Logout'),
-                  ),
-                ],
-                onSelected: (value) async {
-                  if (value == 2) {
-                    _showLogoutDialog(
-                        'Warning', 'You sure you want to logout?');
-                  } else if (value == 1) {
-                    Navigator.push(
-                        context, SlideLeftRoute(widget: MyProfile()));
-                  }
+              new FlatButton(
+                child: new Text("no"),
+                onPressed: () {
+                  Navigator.of(context).pop();
                 },
-              )
+              ),
             ],
           );
         },

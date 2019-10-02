@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:proxykhel/Model/CreateTeam.model.dart';
 import 'package:proxykhel/Model/ViewTeam.model.dart';
 import 'CreateTeamTemp.view.dart';
 import 'MyProfile.view.dart';
 import './../Views/wallet.view.dart';
 import './bottomnavbar.view.dart';
 import './../Constants/slideTransitions.dart';
-import './createteam.view.dart';
 import './../Model/logout.model.dart';
 import './../Model/contestdetail.model.dart';
 import './../Views/login.view.dart';
@@ -158,9 +158,8 @@ class _ContestDetailState extends State<ContestDetail> {
               ),
             ),
             Expanded(
-              flex:2,
+              flex:3,
               child: new Container(
-                height: 110,
                 child: Card(
                   child: new Column(
                     children: <Widget>[
@@ -221,6 +220,7 @@ class _ContestDetailState extends State<ContestDetail> {
                                     width: 85,
                                     margin: EdgeInsets.all(8.0),
                                     child: new FlatButton(onPressed: (){
+                                      CreateTeamModel.instance.setActionType(1);
                                       Navigator.push(context, SlideLeftRoute(widget:CreateTeamTemp()));
                                     },
                                       color: Colors.deepOrange,
@@ -248,7 +248,7 @@ class _ContestDetailState extends State<ContestDetail> {
             Expanded(
               flex:1,
               child: new Container(
-                margin: EdgeInsets.only(top: 8.0),
+                margin: EdgeInsets.only(top: 5.0),
                 child: new Column(
                   children: <Widget>[
                     new Text('OR JOIN WITH SAVED TEAM',textAlign: TextAlign.start,style: TextStyle(color: Colors.deepOrange),),
@@ -258,7 +258,7 @@ class _ContestDetailState extends State<ContestDetail> {
               ),
             ),
             Expanded(
-              flex: 5,
+              flex: 7,
               child: new FutureBuilder(
                   future: GetAllUserTeamModel.instance.getAllUserTeam(),
                   builder: (context,snapshot){
@@ -345,7 +345,7 @@ class _ContestDetailState extends State<ContestDetail> {
                                                         new Column(
                                                           mainAxisAlignment: MainAxisAlignment.center,
                                                           children: <Widget>[
-                                                            Container(padding:EdgeInsets.only(left:18.0),child: new Text('Star Player',style: TextStyle(color: Colors.grey,fontSize:16.0),)),
+                                                            Container(padding:EdgeInsets.only(left:18.0),child: new Text('X Player',style: TextStyle(color: Colors.grey,fontSize:16.0),)),
                                                             Padding(
                                                               padding: const EdgeInsets.only(left:18.0),
                                                               child: new Text('${snapshot.data.data[index].starplayer}',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16.0),),
@@ -399,7 +399,7 @@ class _ContestDetailState extends State<ContestDetail> {
                                                               String userId = await SavedPref.instance.getUserId();
                                                               http.Response response  = await http.post("https://www.proxykhel.com/android/contest.php",body:{
                                                                 "type":"joinUserTeam",
-                                                              "matchId":ContestDetailModel.instance.getMatchId(),
+                                                                "matchId":ContestDetailModel.instance.getMatchId(),
                                                                 "contestId":ContestDetailModel.instance.getContestId(),
                                                                 "userId":userId,
                                                                 "squadId":snapshot.data.data[index].id,
@@ -464,7 +464,7 @@ class _ContestDetailState extends State<ContestDetail> {
                                                     child: Column(
                                                       mainAxisAlignment: MainAxisAlignment.center,
                                                       children: <Widget>[
-                                                        new Text('X Player',style: TextStyle(color: Colors.grey,fontSize:16.0),),
+                                                        new Text('Star Player',style: TextStyle(color: Colors.grey,fontSize:16.0),),
                                                         Padding(
                                                           padding: const EdgeInsets.only(left:18.0),
                                                           child: new Text('${snapshot.data.data[index].xplayer}',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16.0),),
@@ -477,6 +477,43 @@ class _ContestDetailState extends State<ContestDetail> {
                                               child: Row(
                                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                                 children: <Widget>[
+
+                                                  InkWell(
+                                                    onTap:(){
+                                                      CreateTeamModel.instance.setActionType(3);
+                                                      CreateTeamModel.instance.setTeamId(snapshot.data.data[index].id);
+                                                      Navigator.push(context, SlideLeftRoute(widget:CreateTeamTemp()));
+                                                    },
+                                                    child: new Column(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: <Widget>[
+                                                        new Icon(Icons.edit,color: Colors.black,),
+                                                        SizedBox(
+                                                          height: 3.0,
+                                                        ),
+                                                        new Text('EDIT',style: TextStyle(fontSize: 12.0),)
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: 10.0,),
+                                                  InkWell(
+                                                    onTap:(){
+                                                      CreateTeamModel.instance.setActionType(2);
+                                                      CreateTeamModel.instance.setTeamId(snapshot.data.data[index].id);
+                                                      Navigator.push(context, SlideLeftRoute(widget:CreateTeamTemp()));
+                                                    },
+                                                    child: new Column(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: <Widget>[
+                                                        new Icon(Icons.content_copy,color: Colors.black,),
+                                                        SizedBox(
+                                                          height: 3.0,
+                                                        ),
+                                                        new Text('CLONE',style: TextStyle(fontSize: 12.0),)
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: 10.0,),
                                                   InkWell(
                                                     onTap:(){
                                                       ViewTeamModel.instance.setTeamId(snapshot.data.data[index].id);
@@ -494,7 +531,7 @@ class _ContestDetailState extends State<ContestDetail> {
                                                     ),
                                                   ),
                                                   SizedBox(
-                                                    width: 10.0,
+                                                    width: 20.0,
                                                   ),
 //                                                  new Column(
 //                                                    mainAxisAlignment: MainAxisAlignment.center,
