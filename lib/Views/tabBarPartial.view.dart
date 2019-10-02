@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './../Model/contest.model.dart';
+import 'package:proxykhel/Model/GetContestTypePartial.model.dart';
 import './../Constants/slideTransitions.dart';
 import './../Views/contestdetail.view.dart';
 import './../Model/contestdetail.model.dart';
@@ -16,7 +16,7 @@ class _TabBarPartialState extends State<TabBarPartial> {
 
   static String _contestFees='';
 
-  void _showDialogWinningBreakdown() {
+  void _showDialogWinningBreakdown(int indices) {
     // flutter defined function
     showDialog(
       context: context,
@@ -107,8 +107,8 @@ class _TabBarPartialState extends State<TabBarPartial> {
 
         });
       },
-      child: FutureBuilder<ContestList>(
-        future: ContestModel.instance.getContestList(matchId),
+      child: FutureBuilder(
+        future: GetContestTypePartialModel.instance.getContestPartial(matchId),
         builder: (context, snapshot){
           if(snapshot.connectionState != ConnectionState.done){
             return new Center(child: new CircularProgressIndicator(),);
@@ -127,59 +127,75 @@ class _TabBarPartialState extends State<TabBarPartial> {
                     _contestFees ='₹ ${snapshot.data.data[index].entryfee}';
                   }
                   double t = (int.parse(snapshot.data.data[index].totlaJoin) / int.parse(snapshot.data.data[index].maxTeam));
-                  if(snapshot.data.data[index].contestType == ContestType.PARTIAL){
-                    return Container(
-                      margin: EdgeInsets.symmetric(vertical: 5.0,horizontal: 5.0),
-                      height: 120,
-                      child: InkWell(
-                        child: new Card(
-                          child: new Column(
-                            children: <Widget>[
-                              LinearProgressIndicator(
-                                value:t,
-                                backgroundColor: Colors.grey[300],
-                              ),
-                              new Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: <Widget>[
-                                  new Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                    children: <Widget>[
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: new Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: <Widget>[
-                                            new CircleAvatar(
-                                              radius: 10.0,
-                                              backgroundColor: Colors.deepOrange,
-                                              child: new Text('M',style: TextStyle(color:Colors.white,fontSize: 10),),
-                                            ),
-                                            new InkWell(
-                                                onTap: _showDialogWinningBreakdown,
-                                                child:new Row(
-                                                  children: <Widget>[
-                                                    new Text('Winning'),
-                                                    new Icon(Icons.arrow_drop_down,color: Colors.black,),
-                                                  ],
-                                                )
-                                            ),
-                                            new Text('Rs. '+snapshot.data.data[index].winnersAmt),
-                                          ],
-                                        ),
-                                      ),
-                                      new Column(
+                  return Container(
+                    margin: EdgeInsets.symmetric(vertical: 5.0,horizontal: 5.0),
+                    height: 120,
+                    child: InkWell(
+                      child: new Card(
+                        child: new Column(
+                          children: <Widget>[
+                            LinearProgressIndicator(
+                              value:t,
+                              backgroundColor: Colors.grey[300],
+                            ),
+                            new Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: <Widget>[
+                                new Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: new Column(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: <Widget>[
-                                          new Text('Winners'),
-                                          new Text(snapshot.data.data[index].winner,style: TextStyle(fontWeight: FontWeight.bold),),
-                                          Padding(
-                                            padding: const EdgeInsets.only(top:18.0),
-                                            child: new Text(snapshot.data.data[index].totlaJoin+'/'+snapshot.data.data[index].maxTeam+' Joined',style: TextStyle(fontSize: 12.0),),
+                                          new CircleAvatar(
+                                            radius: 10.0,
+                                            backgroundColor: Colors.deepOrange,
+                                            child: new Text('M',style: TextStyle(color:Colors.white,fontSize: 10),),
                                           ),
-
+                                          new InkWell(
+                                              onTap: (){
+                                                _showDialogWinningBreakdown(index);
+//                                                  showDialog(
+//                                                    context: context,
+//                                                    builder: (BuildContext context){
+//                                                      return new AlertDialog(
+//                                                        title: new Text("WINNING BREAKDOWN"),
+//                                                        content: new ListView.builder(
+//                                                            itemCount: snapshot.data.data[index].rangeDistrubution,
+//                                                            itemBuilder: (context,index){
+//                                                              return new ListTile(
+//                                                                title: new Text("${snapshot.data.data[index].rangeDistrubution[index].rank}"),
+//                                                              );
+//                                                            }),
+//                                                      );
+//                                                    }
+//                                                  );
+                                              },
+                                              child:new Row(
+                                                children: <Widget>[
+                                                  new Text('Winning'),
+                                                  new Icon(Icons.arrow_drop_down,color: Colors.black,),
+                                                ],
+                                              )
+                                          ),
+                                          new Text('Rs. '+snapshot.data.data[index].winnersAmt),
                                         ],
                                       ),
+                                    ),
+                                    new Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        new Text('Winners'),
+                                        new Text(snapshot.data.data[index].winner,style: TextStyle(fontWeight: FontWeight.bold),),
+                                        Padding(
+                                          padding: const EdgeInsets.only(top:18.0),
+                                          child: new Text(snapshot.data.data[index].totlaJoin+'/'+snapshot.data.data[index].maxTeam+' Joined',style: TextStyle(fontSize: 12.0),),
+                                        ),
+
+                                      ],
+                                    ),
 //                                  Column(
 //                                    mainAxisAlignment: MainAxisAlignment.center,
 //                                    children: <Widget>[
@@ -189,56 +205,51 @@ class _TabBarPartialState extends State<TabBarPartial> {
 //                                      ),
 //                                    ],
 //                                  ),
-                                      new Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: <Widget>[
-                                          Container(margin: EdgeInsets.only(top: 10.0), child: new Text('Entry')),
-                                          Container(
-                                            margin: EdgeInsets.only(top :20.0,right: 8.0),
-                                            child: new FlatButton(onPressed: (){
-                                              final contestData = ContestData(
-                                                  id: snapshot.data.data[index].id,
-                                                  matchId: snapshot.data.data[index].matchId,
-                                                  winingAmtVary: snapshot.data.data[index].winnersAmt,
-                                                  contestCancel: snapshot.data.data[index].contestCancel,
-                                                  maxTeam: snapshot.data.data[index].maxTeam,
-                                                  winnersAmt: snapshot.data.data[index].winnersAmt,
-                                                  proxyPercentage: snapshot.data.data[index].proxyPercentage,
-                                                  totlaJoin: snapshot.data.data[index].totlaJoin,
-                                                  singleEntry: snapshot.data.data[index].singleEntry,
-                                                  multiEntry: snapshot.data.data[index].multiEntry,
-                                                  entryfee: snapshot.data.data[index].entryfee,
-                                                  opponent: snapshot.data.data[index].opponent
-                                              );
-                                              ContestDetailModel.instance.setContestId(snapshot.data.data[index].id);
+                                    new Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Container(margin: EdgeInsets.only(top: 10.0), child: new Text('Entry')),
+                                        Container(
+                                          margin: EdgeInsets.only(top :20.0,right: 8.0),
+                                          child: new FlatButton(onPressed: (){
+                                            final contestData = ContestData(
+                                                id: snapshot.data.data[index].id,
+                                                matchId: snapshot.data.data[index].matchId,
+                                                winingAmtVary: snapshot.data.data[index].winnersAmt,
+                                                contestCancel: snapshot.data.data[index].contestCancel,
+                                                maxTeam: snapshot.data.data[index].maxTeam,
+                                                winnersAmt: snapshot.data.data[index].winnersAmt,
+                                                proxyPercentage: snapshot.data.data[index].proxyPercentage,
+                                                totlaJoin: snapshot.data.data[index].totlaJoin,
+                                                singleEntry: snapshot.data.data[index].singleEntry,
+                                                multiEntry: snapshot.data.data[index].multiEntry,
+                                                entryfee: snapshot.data.data[index].entryfee,
+                                                opponent: snapshot.data.data[index].opponent
+                                            );
+                                            ContestDetailModel.instance.setContestId(snapshot.data.data[index].id);
 
-                                              ContestDetailModel.instance.setContestDetail(contestData);
-                                              Navigator.push(context, SlideLeftRoute(widget:ContestDetail()));
-                                            },
-                                              color: Colors.deepOrange,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(32.0)
-                                              ),
-                                              child: Text(_contestFees,style: TextStyle(color: Colors.white),),
+                                            ContestDetailModel.instance.setContestDetail(contestData);
+                                            Navigator.push(context, SlideLeftRoute(widget:ContestDetail()));
+                                          },
+                                            color: Colors.deepOrange,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(32.0)
                                             ),
+                                            child: Text(_contestFees,style: TextStyle(color: Colors.white),),
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
+                                    ),
 
-                                    ],
-                                  )
-                                ],
-                              )
-                            ],
-                          ),
+                                  ],
+                                )
+                              ],
+                            )
+                          ],
                         ),
                       ),
-                    );
-
-                  }
-                  else{
-                    return Container();
-                  }
+                    ),
+                  );
                 }
             );
           }
