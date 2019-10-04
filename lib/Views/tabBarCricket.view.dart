@@ -37,17 +37,18 @@ class _TabBarCricketState extends State<TabBarCricket> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _isNotVisible=false;
     _elevation = 4;
   }
+
   @override
   Widget build(BuildContext context) {
 
     return RefreshIndicator(
       onRefresh: ()async{
         setState(() {
+
         });
       },
       child: FutureBuilder<MatchData>(
@@ -59,18 +60,24 @@ class _TabBarCricketState extends State<TabBarCricket> {
 
           else if(!snapshot.hasData)  {
             return new Center(child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Container(margin:EdgeInsets.only(top:
-                100.0),child: new Text('No match')),
-                Center(
-                  child: new Container(
-                    child: new Row(
-                      children: <Widget>[
-                        new Text("Retry",style: TextStyle(color: Colors.deepOrange),),
-                        SizedBox(width: 5.0,),
-                        new Icon(Icons.refresh,color: Colors.deepOrange,)
-                      ],
-                    ),
+                Container(child: new Text('Please check your internet connection!')),
+                SizedBox(height: 10.0,),
+                InkWell(
+                  onTap: (){
+                    setState(() {
+
+                    });
+                  },
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      new Text("Retry",style: TextStyle(color: Colors.deepOrange),),
+                      SizedBox(width: 5.0,),
+                      new Icon(Icons.refresh,color: Colors.deepOrange,)
+                    ],
                   ),
                 )
               ],

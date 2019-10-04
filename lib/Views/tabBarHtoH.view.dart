@@ -113,8 +113,28 @@ class _TabBarHtoHState extends State<TabBarHtoH> {
             return new Center(child: new CircularProgressIndicator(),);
           }
           else if(!snapshot.hasData){
-            return new Center(child: Container(margin:EdgeInsets.only(top:
-            100.0),child: new Text('No Contests found')));
+            return new Center(child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                new Text('No Contests found'),
+                new SizedBox(height: 10.0,),
+                InkWell(
+                  onTap: (){
+                    setState(() {
+                    });
+                  },
+                  child: new Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      new Text("Retry",style: TextStyle(color: Colors.deepOrange,fontSize: 18.0),),
+                      new SizedBox(width: 5.0,),
+                      new Icon(Icons.refresh,color: Colors.deepOrange,),
+                    ],
+                  ),
+                )
+              ],
+            ));
           }else{
             return ListView.builder(
                 itemCount: snapshot.data.data.length,

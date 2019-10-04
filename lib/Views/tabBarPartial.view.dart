@@ -16,6 +16,12 @@ class _TabBarPartialState extends State<TabBarPartial> {
 
   static String _contestFees='';
 
+  static String _contestCancel = '';
+  static String _multipleEntry = '';
+  static String _singleEntry = '';
+  static String _opponent = '';
+  static String _amountVaries = '';
+
   void _showDialogWinningBreakdown(int indices) {
     // flutter defined function
     showDialog(
@@ -114,8 +120,28 @@ class _TabBarPartialState extends State<TabBarPartial> {
             return new Center(child: new CircularProgressIndicator(),);
           }
           else if(!snapshot.hasData){
-            return new Center(child: Container(margin:EdgeInsets.only(top:
-            100.0),child: new Text('No Contests found')));
+            return new Center(child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                new Text('No Contests found'),
+                new SizedBox(height: 10.0,),
+                InkWell(
+                  onTap: (){
+                    setState(() {
+                    });
+                  },
+                  child: new Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      new Text("Retry",style: TextStyle(color: Colors.deepOrange,fontSize: 18.0),),
+                      new SizedBox(width: 5.0,),
+                      new Icon(Icons.refresh,color: Colors.deepOrange,),
+                    ],
+                  ),
+                )
+              ],
+            ));
           }else{
             return ListView.builder(
                 itemCount: snapshot.data.data.length,
@@ -126,6 +152,16 @@ class _TabBarPartialState extends State<TabBarPartial> {
                   else{
                     _contestFees ='₹ ${snapshot.data.data[index].entryfee}';
                   }
+                  if(snapshot.data.data[index].multiEntry == "2"){_multipleEntry = "M";}else{_multipleEntry = null;}
+
+                  if(snapshot.data.data[index].contestCancel == "4"){_contestCancel = "U";}else{_contestCancel = null;}
+
+                  if(snapshot.data.data[index].singleEntry == "1"){ _singleEntry = "S";}else{_singleEntry = null;}
+
+                  if(snapshot.data.data[index].opponent == "5"){_opponent = "P";}else{_opponent = null;}
+
+                  if(snapshot.data.data[index].winingAmtVary == "3"){_amountVaries = "C";}else{_amountVaries = null;}
+
                   double t = (int.parse(snapshot.data.data[index].totlaJoin) / int.parse(snapshot.data.data[index].maxTeam));
                   return Container(
                     margin: EdgeInsets.symmetric(vertical: 5.0,horizontal: 5.0),
@@ -149,10 +185,75 @@ class _TabBarPartialState extends State<TabBarPartial> {
                                       child: new Column(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: <Widget>[
-                                          new CircleAvatar(
-                                            radius: 10.0,
-                                            backgroundColor: Colors.deepOrange,
-                                            child: new Text('M',style: TextStyle(color:Colors.white,fontSize: 10),),
+                                          new Row(
+                                            mainAxisSize:MainAxisSize.max,
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: <Widget>[
+                                              Builder(builder: (context){
+                                                if(_singleEntry != null){
+                                                  return new Container(
+                                                    child: new CircleAvatar(
+                                                      backgroundColor: Colors.deepOrange,
+                                                      child: new Text(_singleEntry,style: TextStyle(color: Colors.white,fontSize: 12.0)),
+                                                      radius: 8.0,
+                                                    ),
+                                                  );
+                                                }else
+                                                  return new Container();
+                                              }),
+                                              SizedBox(width: 2.0,),
+                                              Builder(builder: (context){
+                                                if(_multipleEntry != null){
+                                                  return new Container(
+                                                    child: new CircleAvatar(
+                                                      backgroundColor: Colors.deepOrange,
+                                                      child: new Text(_multipleEntry,style: TextStyle(color: Colors.white,fontSize: 12.0),),
+                                                      radius: 8.0,
+                                                    ),
+                                                  );
+                                                }else
+                                                  return new Container();
+                                              }),
+                                              SizedBox(width: 2.0,),
+                                              Builder(builder: (context){
+                                                if(_opponent != null){
+                                                  return new Container(
+                                                    child: new CircleAvatar(
+                                                      backgroundColor: Colors.deepOrange,
+                                                      child: new Text(_opponent,style: TextStyle(color: Colors.white,fontSize: 12.0)),
+                                                      radius: 8.0,
+                                                    ),
+                                                  );
+                                                }else
+                                                  return new Container();
+                                              }),
+                                              SizedBox(width: 2.0,),
+                                              Builder(builder: (context){
+                                                if(_contestCancel != null){
+                                                  return new Container(
+                                                    child: new CircleAvatar(
+                                                      backgroundColor: Colors.deepOrange,
+                                                      child: new Text(_contestCancel,style: TextStyle(color: Colors.white,fontSize: 12.0)),
+                                                      radius: 8.0,
+                                                    ),
+                                                  );
+                                                }else
+                                                  return new Container();
+                                              }),
+                                              SizedBox(width: 2.0,),
+                                              Builder(builder: (context){
+                                                if(_amountVaries != null){
+                                                  return new Container(
+                                                    child: new CircleAvatar(
+                                                      backgroundColor: Colors.deepOrange,
+                                                      child: new Text(_amountVaries,style: TextStyle(color: Colors.white,fontSize: 12.0)),
+                                                      radius: 8.0,
+                                                    ),
+                                                  );
+                                                }else
+                                                  return new Container();
+                                              }),
+                                            ],
                                           ),
                                           new InkWell(
                                               onTap: (){

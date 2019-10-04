@@ -12,7 +12,7 @@ class GetContestTypeHtoHModel{
   }
 
   Future<GetContestTypeHtoH> getContestPartial(String matchId) async {
-    http.Response response = await http.post("https://www.proxykhel.com/android/contest.php",body: {"matchId":matchId,"type":"getContestsMega"});
+    http.Response response = await http.post("https://www.proxykhel.com/android/GetContestsHtoH.php",body: {"matchId":matchId,"type":"getContestsHtoH"});
     if(response.statusCode == 200){
       final res = json.decode(response.body);
       if(res['success'] == true){
