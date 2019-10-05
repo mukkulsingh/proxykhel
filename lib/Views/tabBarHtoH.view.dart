@@ -174,11 +174,99 @@ class _TabBarHtoHState extends State<TabBarHtoH> {
                                             child: new Text('M',style: TextStyle(color:Colors.white,fontSize: 10),),
                                           ),
                                           new InkWell(
-                                              onTap: _showDialogWinningBreakdown,
+//                                              onTap: _showDialogWinningBreakdown,
+                                              onTap: (){
+                                                List tileList =[];
+                                                int itemCount=0,singleDistribution=0, rangeDistribution=0;
+                                                if(snapshot.data.data[index].singleDistrubution != false){
+                                                  singleDistribution = snapshot.data.data[index].singleDistrubution.length;
+//                                              singleDistribution = 1;
+                                                  tileList.add({"name":"Single Distribution"});
+                                                }
+                                                if(snapshot.data.data[index].rangeDistrubution != false){
+                                                  rangeDistribution = snapshot.data.data[index].rangeDistrubution.length;
+//                                                rangeDistribution =1;
+                                                  tileList.add({"name":"Range Distribution"});
+                                                }
+                                                itemCount = singleDistribution + rangeDistribution;
+
+                                                showDialog(context: context,
+                                                    builder: (context)=>AlertDialog(
+                                                        title: new Text("Winning Breakdown"),
+                                                        content: ListView(
+                                                          shrinkWrap: true,
+                                                          children: <Widget>[
+                                                            new ListView.builder(
+                                                                shrinkWrap: true,
+                                                                physics: const NeverScrollableScrollPhysics(),
+                                                                itemCount: singleDistribution,
+                                                                itemBuilder: (context, index2){
+                                                                  return new Container(
+                                                                    margin: EdgeInsets.only(top:10.0),
+                                                                    child: new Row(
+                                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                      children: <Widget>[
+                                                                        new Text(
+                                                                            "Rank ${snapshot.data.data[index].singleDistrubution[index2]['rank']}"
+                                                                        ),
+                                                                        Text(
+                                                                            "₹ ${snapshot.data.data[index].singleDistrubution[index2]['winamt']}"
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  );
+//                                                         return ListTile(title: new Text(
+//                                                           "Rank ${snapshot.data.data[index].singleDistrubution[index2]['rank']}"
+//                                                         ),
+//                                                           subtitle: Text(
+//                                                               "₹ ${snapshot.data.data[index].singleDistrubution[index2]['winamt']}"
+//                                                           ),
+//                                                         );
+                                                                }),
+                                                            new ListView.builder(
+                                                                shrinkWrap: true,
+                                                                physics: const NeverScrollableScrollPhysics(),
+                                                                itemCount: rangeDistribution,
+                                                                itemBuilder: (context, index3){
+                                                                  double winper = ((double.tryParse(snapshot.data.data[index].rangeDistrubution[index3]['winamt'])) / ((double.parse(snapshot.data.data[index].rangeDistrubution[index3]['lastrange']) + 1 ) - double.parse(snapshot.data.data[index].rangeDistrubution[index3]['firstrange'])));
+                                                                  return new Container(
+                                                                    margin: EdgeInsets.only(top:10.0),
+                                                                    child: new Row(
+                                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                      children: <Widget>[
+                                                                        new Text(
+                                                                            "Rank ${snapshot.data.data[index].rangeDistrubution[index3]['firstrange']} - ${snapshot.data.data[index].rangeDistrubution[index3]['lastrange'] }"
+                                                                        ),
+                                                                        Text("₹ ${winper.toString()}"
+//                                                                   "₹ ${snapshot.data.data[index].rangeDistrubution[index3]['winper']}"
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  );
+
+                                                                })
+
+                                                          ],
+                                                        ),
+                                                        actions: <Widget>[
+                                                          new OutlineButton(
+                                                            color:Colors.deepOrange,
+                                                            borderSide: BorderSide(
+                                                                color: Colors.deepOrange
+                                                            ),
+                                                            child: new Text("Got It!"),
+                                                            onPressed: () {
+                                                              Navigator.of(context).pop();
+                                                            },
+                                                          ),
+                                                        ]
+                                                    )
+                                                );
+                                              },
                                               child:new Row(
                                                 children: <Widget>[
                                                   new Text('Winning'),
-                                                  new Icon(Icons.arrow_drop_down),
+                                                  new Icon(Icons.arrow_drop_down,color: Colors.black,),
                                                 ],
                                               )
                                           ),

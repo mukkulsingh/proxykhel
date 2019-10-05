@@ -63,7 +63,7 @@ class Datum {
   String winnersAmt;
   String maxTeam;
   String totlaJoin;
-  ContestType contestType;
+  String contestType;
   String status;
   DateTime insertDatetime;
   String ipAddress;
@@ -77,8 +77,8 @@ class Datum {
   String opponent;
   String contestCancel;
   String distrubution;
-  List<SingleDistrubution> singleDistrubution;
-  bool rangeDistrubution;
+  dynamic singleDistrubution;
+  dynamic rangeDistrubution;
   String entryfee;
   String cancelOn;
 
@@ -120,7 +120,7 @@ class Datum {
     winnersAmt: json["winnersAmt"],
     maxTeam: json["maxTeam"],
     totlaJoin: json["totlaJoin"],
-    contestType: contestTypeValues.map[json["contestType"]],
+    contestType: json["contestType"],
     status: json["status"],
     insertDatetime: DateTime.parse(json["insertDatetime"]),
     ipAddress: json["ipAddress"],
@@ -134,7 +134,7 @@ class Datum {
     opponent: json["opponent"],
     contestCancel: json["contest_cancel"],
     distrubution: json["distrubution"],
-    singleDistrubution: List<SingleDistrubution>.from(json["single_distrubution"].map((x) => SingleDistrubution.fromJson(x))),
+    singleDistrubution: json["single_distrubution"],
     rangeDistrubution: json["range_distrubution"],
     entryfee: json["entryfee"],
     cancelOn: json["cancel_on"],
@@ -149,7 +149,7 @@ class Datum {
     "winnersAmt": winnersAmt,
     "maxTeam": maxTeam,
     "totlaJoin": totlaJoin,
-    "contestType": contestTypeValues.reverse[contestType],
+    "contestType": contestType,
     "status": status,
     "insertDatetime": insertDatetime.toIso8601String(),
     "ipAddress": ipAddress,
@@ -163,31 +163,53 @@ class Datum {
     "opponent": opponent,
     "contest_cancel": contestCancel,
     "distrubution": distrubution,
-    "single_distrubution": List<dynamic>.from(singleDistrubution.map((x) => x.toJson())),
+    "single_distrubution": singleDistrubution,
     "range_distrubution": rangeDistrubution,
     "entryfee": entryfee,
     "cancel_on": cancelOn,
   };
 }
 
-enum ContestType { WIN_LOST }
+class RangeDistrubutionElement {
+  String firstrange;
+  String lastrange;
+  String winamt;
+  String winper;
 
-final contestTypeValues = EnumValues({
-  "winLost": ContestType.WIN_LOST
-});
+  RangeDistrubutionElement({
+    this.firstrange,
+    this.lastrange,
+    this.winamt,
+    this.winper,
+  });
 
-class SingleDistrubution {
+  factory RangeDistrubutionElement.fromJson(Map<String, dynamic> json) => RangeDistrubutionElement(
+    firstrange: json["firstrange"],
+    lastrange: json["lastrange"],
+    winamt: json["winamt"],
+    winper: json["winper"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "firstrange": firstrange,
+    "lastrange": lastrange,
+    "winamt": winamt,
+    "winper": winper,
+  };
+}
+
+class SingleDistrubutionElement {
   String rank;
   String winamt;
   String winper;
 
-  SingleDistrubution({
+  SingleDistrubutionElement({
     this.rank,
     this.winamt,
     this.winper,
   });
 
-  factory SingleDistrubution.fromJson(Map<String, dynamic> json) => SingleDistrubution(
+  factory SingleDistrubutionElement.fromJson(Map<String, dynamic> json) => SingleDistrubutionElement(
     rank: json["rank"],
     winamt: json["winamt"],
     winper: json["winper"],
@@ -199,19 +221,3 @@ class SingleDistrubution {
     "winper": winper,
   };
 }
-
-class EnumValues<T> {
-  Map<String, T> map;
-  Map<T, String> reverseMap;
-
-  EnumValues(this.map);
-
-  Map<T, String> get reverse {
-    if (reverseMap == null) {
-      reverseMap = map.map((k, v) => new MapEntry(v, k));
-    }
-    return reverseMap;
-  }
-}
-
-
