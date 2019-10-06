@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:proxykhel/Views/Transactions.view.dart';
 import './../Constants/slideTransitions.dart';
 import './../Views/addmoney.view.dart';
 import './../Model/wallet.model.dart';
+import 'Withdraw.view.dart';
 
 class Wallet extends StatefulWidget {
   @override
@@ -47,7 +49,7 @@ class _WalletState extends State<Wallet> {
                           break;
                         case ConnectionState.done:
                           if(snapshot.hasError)
-                            return new Text("${snapshot.error.toString()}");
+                            return new Text("No internet");
                           else if(!snapshot.hasData)
                             return new Text('Error fetching balance');
                           else {
@@ -69,6 +71,7 @@ class _WalletState extends State<Wallet> {
                             );
                           }
                       }
+                      return new Container();
                     },
                   ),
                   new RaisedButton(
@@ -116,13 +119,24 @@ class _WalletState extends State<Wallet> {
                 child: new RaisedButton(
                   color: Colors.deepOrange,
                   onPressed: (){
-                    SnackBar snackbar = new SnackBar(content: Text("Insufficient amount"),duration: Duration(seconds: 1),);
-                    _scadffoldKey.currentState.showSnackBar(snackbar);
+                    Navigator.push(context, SlideLeftRoute(widget: Withdraw()));
                   },
                   child: new Text('WITHDRAW',style: TextStyle(color: Colors.white),),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(32.0),
                   ),
+                ),
+              ),
+            ),
+            Divider(),
+            Container(
+              child: OutlineButton(
+                child: Text("Show transactions",style: TextStyle(color: Colors.deepOrange),),
+                onPressed: (){
+                  Navigator.push(context, SlideLeftRoute(widget: Transactions()));
+                },
+                borderSide: BorderSide(
+                  color: Colors.deepOrange,
                 ),
               ),
             )

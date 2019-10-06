@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:proxykhel/Model/GetContestDetail.model.dart';
 import 'package:proxykhel/Model/GetContestTypeMega.model.dart';
 import './../Constants/slideTransitions.dart';
 import './../Views/contestdetail.view.dart';
@@ -396,6 +397,7 @@ class _TabBarMegaState extends State<TabBarMega> {
                                             ContestDetailModel.instance.setContestId(snapshot.data.data[index].id);
 
                                             ContestDetailModel.instance.setContestDetail(contestData);
+                                            GetContestDetailModel.instance.setContestId(snapshot.data.data[index].id);
                                             Navigator.push(context, SlideLeftRoute(widget:ContestDetail()));
                                           },
                                             color: Colors.deepOrange,

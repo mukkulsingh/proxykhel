@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:proxykhel/Model/GetContestDetail.model.dart';
 import 'package:proxykhel/Model/GetContestTypePartial.model.dart';
 import './../Constants/slideTransitions.dart';
 import './../Views/contestdetail.view.dart';
@@ -401,6 +402,8 @@ class _TabBarPartialState extends State<TabBarPartial> {
                                             ContestDetailModel.instance.setContestId(snapshot.data.data[index].id);
 
                                             ContestDetailModel.instance.setContestDetail(contestData);
+                                            GetContestDetailModel.instance.setContestId(snapshot.data.data[index].id);
+
                                             Navigator.push(context, SlideLeftRoute(widget:ContestDetail()));
                                           },
                                             color: Colors.deepOrange,

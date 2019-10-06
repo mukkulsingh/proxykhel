@@ -19,6 +19,8 @@ class GetAllUserTeamModel{
     String userId = await SavedPref.instance.getUserId();
     String matchId = ContestDetailModel.instance.getMatchId();
     String contestId = ContestDetailModel.instance.getContestId();
+    print(matchId);
+    print(contestId);
 
     http.Response response = await http.post("https://www.proxykhel.com/android/contest.php",body:{
       "type":"getUserTeam",
@@ -29,13 +31,18 @@ class GetAllUserTeamModel{
 
     if(response.statusCode == 200){
       final res = json.decode(response.body);
-      if(res['success']=='true'){
+      if(res != false){
+        if(res['success']=='true'){
         return getAllUserTeamDetailFromJson(response.body);
       }
       else{
         return null;
       }
-    }
+      }else{
+        return null;
+      }
+      }
+
     else{
       return null;
     }

@@ -22,18 +22,16 @@ class WalletModel{
 
 
   Future getWalletBalance() async {
-    return this._memoizer.runOnce(()async {
-      String userId = await SavedPref.instance.getUserId();
-      http.Response response = await http.post("https://www.proxykhel.com/android/wallet.php",body: {
-        "type":"getWalletBalance",
-        "userId":userId
-      });
-      if(response.statusCode == 200){
-        return  walletDetailsFromJson(response.body);
-      }else{
-        return null;
-      }
+    String userId = await SavedPref.instance.getUserId();
+    http.Response response = await http.post("https://www.proxykhel.com/android/wallet.php",body: {
+      "type":"getWalletBalance",
+      "userId":userId
     });
+    if(response.statusCode == 200){
+      return  walletDetailsFromJson(response.body);
+    }else{
+      return null;
+    }
   }
 
   void setBalance(String balance){

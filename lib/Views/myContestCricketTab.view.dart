@@ -377,6 +377,7 @@ class _MyContestCricketTabState extends State<MyContestCricketTab> {
                                 );
 
                               }
+                            return new Container();
                           });
                     }
                     else{
@@ -398,7 +399,7 @@ class _MyContestCricketTabState extends State<MyContestCricketTab> {
                       );
                     }
                 }
-
+                return new Container();
             }),
         )
       ],
