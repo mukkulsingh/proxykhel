@@ -395,7 +395,6 @@ class _TabBarMegaState extends State<TabBarMega> {
                                                 opponent: snapshot.data.data[index].opponent
                                             );
                                             ContestDetailModel.instance.setContestId(snapshot.data.data[index].id);
-
                                             ContestDetailModel.instance.setContestDetail(contestData);
                                             GetContestDetailModel.instance.setContestId(snapshot.data.data[index].id);
                                             Navigator.push(context, SlideLeftRoute(widget:ContestDetail()));

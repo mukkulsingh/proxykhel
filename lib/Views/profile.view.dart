@@ -4,6 +4,8 @@ import './kycstatus.view.dart';
 import './bankdetails.view.dart';
 import './../Constants/slideTransitions.dart';
 import './../Model/kyc.model.dart';
+
+
 class Profile extends StatefulWidget {
   @override
   _ProfileState createState() => _ProfileState();
@@ -127,7 +129,9 @@ class _ProfileState extends State<Profile> {
                         }
                       }
                   }
-                }),
+                  return Container();
+                }
+                ),
             new Icon(Icons.chevron_right),
 
           ],

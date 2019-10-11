@@ -19,8 +19,6 @@ class GetAllUserTeamModel{
     String userId = await SavedPref.instance.getUserId();
     String matchId = ContestDetailModel.instance.getMatchId();
     String contestId = ContestDetailModel.instance.getContestId();
-    print(matchId);
-    print(contestId);
 
     http.Response response = await http.post("https://www.proxykhel.com/android/contest.php",body:{
       "type":"getUserTeam",
@@ -63,14 +61,14 @@ class GetAllUserTeamDetail {
     this.data,
   });
 
-  factory GetAllUserTeamDetail.fromJson(Map<String, dynamic> json) => new GetAllUserTeamDetail(
+  factory GetAllUserTeamDetail.fromJson(Map<String, dynamic> json) => GetAllUserTeamDetail(
     success: json["success"],
-    data: new List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+    data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
     "success": success,
-    "data": new List<dynamic>.from(data.map((x) => x.toJson())),
+    "data": List<dynamic>.from(data.map((x) => x.toJson())),
   };
 }
 
@@ -105,7 +103,7 @@ class Datum {
   int batcount;
   String starplayer;
   String xplayer;
-  int joined;
+  bool joined;
 
   Datum({
     this.id,
@@ -141,7 +139,7 @@ class Datum {
     this.joined,
   });
 
-  factory Datum.fromJson(Map<String, dynamic> json) => new Datum(
+  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
     id: json["id"],
     userId: json["userId"],
     sportId: json["sportId"],
@@ -209,4 +207,3 @@ class Datum {
     "joined": joined,
   };
 }
-

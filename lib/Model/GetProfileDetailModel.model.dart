@@ -15,6 +15,7 @@ class GetProfileDetailModel{
   }
 
   Future<GetProfileDetailPojo> getProfileDetail() async {
+
    String userId = await SavedPref.instance.getUserId();
 
    http.Response response = await http.post("https://www.proxykhel.com/android/getProfileDetail.php",body: {

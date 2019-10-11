@@ -185,7 +185,6 @@ class _ContestdetailState extends State<Contestdetail> {
 
   Future getUserTeam() async {
     _allUserTeamDetail = await GetAllUserTeamModel.instance.getAllUserTeam();
-    print(_allUserTeamDetail);
     if (_allUserTeamDetail != null) {
       if (_allUserTeamDetail != false) {
         _teamFound = true;
@@ -211,7 +210,7 @@ class _ContestdetailState extends State<Contestdetail> {
 
   @override
   Widget build(BuildContext context) {
-    String _buttonText = 'JOIN';
+
 
     if (_isPageLoading == true) {
       return new Center(
@@ -693,7 +692,6 @@ class _ContestdetailState extends State<Contestdetail> {
                     child: _teamFound?ListView.builder(
                         itemCount: _allUserTeamDetail.data.length,
                         itemBuilder: (context,index){
-                          print(_allUserTeamDetail.data[index].joined);
                       return new Column(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -806,7 +804,7 @@ class _ContestdetailState extends State<Contestdetail> {
                                                   SnackBar snackbar = new SnackBar(content: Text("Team swapped"),duration: Duration(seconds: 1),);
                                                   Scaffold.of(context).showSnackBar(snackbar);
                                                 }else{
-                                                  SnackBar snackbar = new SnackBar(content: Text("Error joining team"),duration: Duration(seconds: 1),);
+                                                  SnackBar snackbar = new SnackBar(content: Text("Already joined"),duration: Duration(seconds: 1),);
                                                   Scaffold.of(context).showSnackBar(snackbar);
                                                 }
                                                 Future.delayed(Duration(seconds: 1),(){
@@ -814,12 +812,12 @@ class _ContestdetailState extends State<Contestdetail> {
                                                 });
                                               }
                                               else{
-                                                SnackBar snackbar = new SnackBar(content: Text("Error joining team"));
+                                                SnackBar snackbar = new SnackBar(content: Text("Already joined"));
                                                 Scaffold.of(context).showSnackBar(snackbar);
                                               }
                                             }
-                                          }, child: _joined?new Text("Joined",style: TextStyle(color:Colors.white,fontSize: 8.0),):new Text("Join",style: TextStyle(color:Colors.white,fontSize: 8.0),),
-                                            color: _joined?Colors.deepOrangeAccent[100]:Colors.deepOrange,
+                                          }, child: _allUserTeamDetail.data[index].joined?new Text("Joined",style: TextStyle(color:Colors.white,fontSize: 8.0),):new Text("Join",style: TextStyle(color:Colors.white,fontSize: 8.0),),
+                                            color: _allUserTeamDetail.data[index].joined?Colors.deepOrangeAccent[100]:Colors.deepOrange,
                                             shape: RoundedRectangleBorder(
                                               borderRadius: BorderRadius.circular(32.0),
                                             ),
