@@ -5,6 +5,10 @@ import 'dart:convert';
 import 'savedpref.model.dart';
 class UploadIdProofModel{
   static UploadIdProofModel _instance;
+  static int _type;
+
+  void setType(int type){_type = type;}
+  get getType=>_type;
   
   static UploadIdProofModel get instance{
     if(_instance == null){
@@ -17,11 +21,14 @@ class UploadIdProofModel{
     File imageFile = image;
     List<int> imageBytes = imageFile.readAsBytesSync();
     String base64Image = base64Encode(imageBytes);
+    String fileName = imageFile.path.split("/").last;
     String userId = await SavedPref.instance.getUserId();
     http.Response response = await http.post("https://www.proxykhel.com/android/UploadIdProof.php",body: {
       "type":"uploadIdProof",
       "userId":userId,
-      "imageString":base64Image
+      "imageString":base64Image,
+      "name":fileName,
+      "type":_type.toString()
     });
     if(response.statusCode == 200){
       final res = json.decode(response.body);

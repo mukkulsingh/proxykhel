@@ -97,7 +97,7 @@ class _VerifyPhoneAfterLoginState extends State<VerifyPhoneAfterLogin> {
                           int otp = min + (Random().nextInt(max-min));
                           VerifyPhoneModel.instance.setOTP(otp);
                           VerifyPhoneModel.instance.setContact(int.parse(_contact));
-                          var msg = "Dear USER, your OTP is ${VerifyPhoneModel.instance.getOTP()} to activate your account on Proxy Khel.";
+                          var msg = "Dear User, your OTP is ${VerifyPhoneModel.instance.getOTP()} to activate your account on Proxy Khel.";
 
 
                           http.Response response = await http.get("https://api.msg91.com/api/sendhttp.php?mobiles=$_contact&authkey=281414AsacFSKmekD5d0773a5&route=4&sender=PRKHEL&message=$msg&country=91");

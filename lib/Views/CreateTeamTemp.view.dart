@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:proxykhel/Model/CreateTeam.model.dart';
 import 'package:proxykhel/Model/contest.model.dart';
+import 'package:proxykhel/Views/contestdetail.view.dart';
 import '../Model/contestdetail.model.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class CreateTeamTemp extends StatelessWidget {
   @override
@@ -26,6 +28,7 @@ class CreateTeamtemp extends StatefulWidget {
 class _CreateTeamtempState extends State<CreateTeamtemp> {
 
   CreateTeamDetails createTeamDetails;
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
 
   static bool _isPageLoading;
 
@@ -44,16 +47,40 @@ class _CreateTeamtempState extends State<CreateTeamtemp> {
 
 
   }
+  Future onSelectNotification(String payload) async {
+    if (payload != null) {
+      debugPrint('notification payload: ' + payload);
+    }
+    await Navigator.push(
+      context,
+      new MaterialPageRoute(builder: (context) => new ContestDetail()),
+    );
+  }
 
+  Future _showNotificaitonWithDefault() async {
+    var androidPlatformChannelSpecifics = new AndroidNotificationDetails("notification_channel_id", "Channel Name", "channelDescription",
+      importance: Importance.Max,
+      priority: Priority.High
+    );
+    var iosPlatformChannelSpecifics = new IOSNotificationDetails();
+     var platformChannelSpecific = new NotificationDetails(androidPlatformChannelSpecifics, iosPlatformChannelSpecifics);
+     await flutterLocalNotificationsPlugin.show(0, "Contest joined", "You have successfully joined the contest", platformChannelSpecific);
+  }
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _isPageLoading = true;
     CreateTeamModel.instance.resetAll();
     CreateTeamModel.instance.setPlayerType(1);
     CreateTeamModel.instance.setBatsman(true);
     getMatchDetails();
+    var initializationSettingsAndroid =
+    new AndroidInitializationSettings('@mipmap/ic_launcher');
+    var initializationSettingsIOS = new IOSInitializationSettings();
+    var initializationSettings = new InitializationSettings(
+        initializationSettingsAndroid, initializationSettingsIOS);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: onSelectNotification);
   }
 
   @override
@@ -799,6 +826,7 @@ class _CreateTeamtempState extends State<CreateTeamtemp> {
                             if(await  CreateTeamModel.instance.saveTeam(ContestDetailModel.instance.getMatchId(), ContestDetailModel.instance.getContestId(), (CreateTeamModel.instance.getTotalCreditOfTeam()).toString(),ContestModel.instance.getTeamOneName(),ContestModel.instance.getTeamTwoName()))
                             {
                               Navigator.of(context).pop();
+                              _showNotificaitonWithDefault();
                             }else{
                               SnackBar snackbar = new SnackBar(content: Text('Something went wrong.Try again'),duration: const Duration(seconds: 1),);
                               Scaffold.of(context).showSnackBar(snackbar);

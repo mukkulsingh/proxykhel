@@ -1,9 +1,16 @@
+import 'dart:math';
+import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:proxykhel/Constants/slideTransitions.dart';
 import 'package:proxykhel/Model/GetProfileDetailModel.model.dart';
 import 'package:proxykhel/Model/UploadIdProof.model.dart';
+import 'package:proxykhel/Model/VerifyPhoneKyc.model.dart';
 import 'package:proxykhel/Model/kyc.model.dart';
+import 'package:proxykhel/Model/verifyphone.model.dart';
+
+import 'VerifyPhoneKyc.view.dart';
 
 
 class KycView extends StatelessWidget {
@@ -23,7 +30,8 @@ class KycBody extends StatefulWidget {
 class _KycBodyState extends State<KycBody> {
 
   var _image;
-  static int _idType;
+  static bool _docTypeError;
+  static bool _isEmailId;
 
 
   static KycStatus _kycStatus;
@@ -60,7 +68,6 @@ class _KycBodyState extends State<KycBody> {
 
   @override
   void initState() {
-    _idType = null;
     _holderController = new TextEditingController();
     _ifscContorller = new TextEditingController();
     _accountController = new TextEditingController();
@@ -87,6 +94,9 @@ class _KycBodyState extends State<KycBody> {
     _isPageLoading = true;
     _dataFound = false;
 
+    _docTypeError = true;
+
+    _isEmailId = false;
   }
   @override
   Widget build(BuildContext context) {
@@ -140,8 +150,27 @@ class _KycBodyState extends State<KycBody> {
                           title: Text('Basic information'),
                           children: <Widget>[
                             new ListTile(
-                              onTap:(){
+                              onTap:()async{
+                                if(_userDetail.data.emailId.contains("@")){
 
+                                }else{
+                                  int min = 1000;
+                                  int max = 9999;
+                                  int otp = min + (Random().nextInt(max-min));
+                                  VerifyPhoneKycModel.instance.setOTP(otp);
+                                  VerifyPhoneKycModel.instance.setContact(int.parse(_userDetail.data.emailId));
+                                  var msg = "Dear User, your OTP is ${VerifyPhoneKycModel.instance.getOTP()} to activate your account on Proxy Khel.";
+
+
+                                  http.Response response = await http.get("https://api.msg91.com/api/sendhttp.php?mobiles=${_userDetail.data.emailId}&authkey=281414AsacFSKmekD5d0773a5&route=4&sender=PRKHEL&message=$msg&country=91");
+                                  if(response.statusCode == 200){
+                                    SnackBar snackbar = new SnackBar(content: Text('OTP sent'),duration: Duration(seconds: 1),);
+                                    Scaffold.of(context).showSnackBar(snackbar);
+                                  }
+                                  Future.delayed(const Duration(milliseconds: 1200));
+
+                                  Navigator.push(context, SlideLeftRoute(widget: VerifyPhoneKyc()));
+                                }
                               },
                               trailing: _emailStatus? Icon(Icons.check_circle,color: Colors.green,):Icon(Icons.error,color: Colors.red,),
                               title: Text("User Id"),
@@ -174,7 +203,7 @@ class _KycBodyState extends State<KycBody> {
                             ),
                           ],
                         ),
-                      ):new Container(
+                      ):                          new Container(
                         child: new ExpansionTile(
                           leading: new Icon(Icons.check_circle,color: Colors.green,),
                           title: Text("Identity Proof"),
@@ -182,30 +211,47 @@ class _KycBodyState extends State<KycBody> {
                             new Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: <Widget>[
-                                new DropdownButton(
-                                    value: _idType,
-                                    items: [
-                                      DropdownMenuItem(
-                                        value: 1,
-                                        child: new Text("Aadhar Card"),
-                                      ),
-                                      DropdownMenuItem(
-                                        value: 2,
-                                        child: new Text("Pan Card"),
-                                      )
-                                    ],
-                                    hint: Text("Select Id Type"),
-                                    onChanged: (value){
-                                      setState(() {
-                                        _idType = value;
-                                      });
-                                    }),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    new DropdownButton(
+                                        value: UploadIdProofModel.instance.getType,
+                                        items: [
+                                          DropdownMenuItem(
+                                            value: 1,
+                                            child: new Text("Aadhar Card"),
+                                          ),
+                                          DropdownMenuItem(
+                                            value: 2,
+                                            child: new Text("Pan Card"),
+                                          )
+                                        ],
+                                        hint: Text("Select Id Type"),
+                                        onChanged: (value){
+                                          setState(() {
+                                            UploadIdProofModel.instance.setType(value);
+                                          });
+                                        }),
+                                    _docTypeError?new Container(child:new Text("Required",style: TextStyle(color: Colors.red,fontSize: 10.0),)):new Container(),
+                                  ],
+                                ),
                                 new Container(
                                   height: 25.0,
                                   margin: EdgeInsets.only(top: 10.0),
                                   child: new RaisedButton(
                                     onPressed: (){
-                                      getImage();
+                                      if(UploadIdProofModel.instance.getType == null){
+                                        setState(() {
+                                          _docTypeError = true;
+                                        });
+                                      }
+                                      else{
+                                        setState(() {
+                                          _docTypeError = true;
+                                        });
+                                        getImage();
+                                      }
                                     },
                                     child: new Text("upload",style: TextStyle(color: Colors.white),),
                                     color: Colors.deepOrange,
