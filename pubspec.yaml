@@ -38,6 +38,7 @@ dependencies:
   flutter_facebook_login: ^3.0.0
   provider: ^3.1.0
   flutter_local_notifications: ^0.8.4
+  share: ^0.6.2+4
 
 dev_dependencies:
   flutter_test:

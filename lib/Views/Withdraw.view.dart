@@ -191,7 +191,25 @@ class _WithdrawState extends State<Withdraw> {
                                     onPressed: ()async{
                                       Navigator.of(context).pop();
                                       WithdrawModel.instance.setWithdrawAmount(_amountController.text);
+                                      showDialog(
+                                          context: context,
+                                          builder: (context){
+                                            return SimpleDialog(
+                                              children: <Widget>[
+                                                new Row(
+                                                  children: <Widget>[
+                                                    new SizedBox(width:10.0),
+                                                    new CircularProgressIndicator(),
+                                                    new SizedBox(width:10.0),
+                                                    new Text("Please wait..."),
+                                                  ],
+                                                )
+                                              ],
+                                            );
+                                          }
+                                      );
                                       if(await WithdrawModel.instance.withdraw()){
+                                        Navigator.of(context).pop();
                                         showDialog(
                                             context: context,
                                             builder: (context){

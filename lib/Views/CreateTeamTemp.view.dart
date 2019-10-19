@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:proxykhel/Constants/slideTransitions.dart';
 import 'package:proxykhel/Model/CreateTeam.model.dart';
 import 'package:proxykhel/Model/contest.model.dart';
 import 'package:proxykhel/Views/contestdetail.view.dart';
@@ -64,7 +65,7 @@ class _CreateTeamtempState extends State<CreateTeamtemp> {
     );
     var iosPlatformChannelSpecifics = new IOSNotificationDetails();
      var platformChannelSpecific = new NotificationDetails(androidPlatformChannelSpecifics, iosPlatformChannelSpecifics);
-     await flutterLocalNotificationsPlugin.show(0, "Contest joined", "You have successfully joined the contest", platformChannelSpecific);
+     await flutterLocalNotificationsPlugin.show(0, "New team created", "You have successfully created a new team", platformChannelSpecific);
   }
   @override
   void initState() {
@@ -826,6 +827,8 @@ class _CreateTeamtempState extends State<CreateTeamtemp> {
                             if(await  CreateTeamModel.instance.saveTeam(ContestDetailModel.instance.getMatchId(), ContestDetailModel.instance.getContestId(), (CreateTeamModel.instance.getTotalCreditOfTeam()).toString(),ContestModel.instance.getTeamOneName(),ContestModel.instance.getTeamTwoName()))
                             {
                               Navigator.of(context).pop();
+                              Navigator.of(context).pop();
+                              Navigator.of(context).push(SlideRightRoute(widget: ContestDetail()));
                               _showNotificaitonWithDefault();
                             }else{
                               SnackBar snackbar = new SnackBar(content: Text('Something went wrong.Try again'),duration: const Duration(seconds: 1),);

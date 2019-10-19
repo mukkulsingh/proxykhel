@@ -30,6 +30,7 @@ class GetProfileDetailModel{
        return null;
      }
    }
+
    else{
      return null;
    }

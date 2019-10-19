@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:proxykhel/Views/ReferAndEarn.view.dart';
 import 'MyProfile.view.dart';
 import 'wallet.view.dart';
 import './bottomnavbar.view.dart';
@@ -66,6 +67,11 @@ class CreateContest extends StatelessWidget {
                   itemBuilder: (context)=>[PopupMenuItem<int>(
                     value:1,
                   child: new Text('My Profile'),),
+
+                    PopupMenuItem<int>(
+                      value: 3,
+                      child: new Text('Refer And Earn'),
+                    ),
                   PopupMenuItem<int>(
                     value: 2,
                     child: new Text('Logout'),
@@ -77,6 +83,9 @@ class CreateContest extends StatelessWidget {
                     }
                     else if(value == 1){
                       Navigator.push(context,SlideLeftRoute(widget: MyProfile()));
+                    }
+                    else if(value == 3){
+                      Navigator.push(context,SlideLeftRoute(widget: ReferAndEarn()));
                     }
                 } ,
               )

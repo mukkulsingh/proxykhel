@@ -4,11 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:proxykhel/Constants/slideTransitions.dart';
+import 'package:proxykhel/Model/GetAadharAndPanStatus.model.dart';
 import 'package:proxykhel/Model/GetProfileDetailModel.model.dart';
+import 'package:proxykhel/Model/SendVerificationMail.model.dart';
 import 'package:proxykhel/Model/UploadIdProof.model.dart';
 import 'package:proxykhel/Model/VerifyPhoneKyc.model.dart';
+import 'package:proxykhel/Model/insertBankDetails.model.dart';
 import 'package:proxykhel/Model/kyc.model.dart';
-import 'package:proxykhel/Model/verifyphone.model.dart';
+import 'package:proxykhel/Model/uploadPassbook.model.dart';
 
 import 'VerifyPhoneKyc.view.dart';
 
@@ -30,12 +33,19 @@ class KycBody extends StatefulWidget {
 class _KycBodyState extends State<KycBody> {
 
   var _image;
+  var _PanImage;
+  var _passbookImage;
+
   static bool _docTypeError;
   static bool _isEmailId;
-
+  static bool _aadharSubmited;
+  static bool _panSubmited;
+  static bool _passbookUploaded;
+  static bool _passbookStatus;
 
   static KycStatus _kycStatus;
   static GetProfileDetailPojo _userDetail;
+  static GetAadharAndPanStatus _getAadharAndPanStatus;
 
   static bool _emailStatus;
   static bool _idProofStatus;
@@ -48,9 +58,12 @@ class _KycBodyState extends State<KycBody> {
   TextEditingController _ifscContorller;
   TextEditingController _accountController;
 
+  final _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   Future getProfileDetail()async{
     _userDetail = await GetProfileDetailModel.instance.getProfileDetail();
-    if(_userDetail != null){
+    _getAadharAndPanStatus = await GetAadharAndPanStatusModel.instance.getAadharAndPanStatus();
+    if(_userDetail != null && _getAadharAndPanStatus != null){
       setState(() {
         _isPageLoading = false;
         _dataFound = true;
@@ -63,8 +76,26 @@ class _KycBodyState extends State<KycBody> {
     setState(() {
       _image = image;
       UploadIdProofModel.instance.uploadIdProof(image);
+      initState();
     });
   }
+
+
+  Future getPanImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      _PanImage = image;
+      UploadIdProofModel.instance.uploadPan(image);
+      initState();
+    });
+  }
+  Future getPassbookImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      _passbookImage = image;
+    });
+  }
+
 
   @override
   void initState() {
@@ -72,6 +103,9 @@ class _KycBodyState extends State<KycBody> {
     _ifscContorller = new TextEditingController();
     _accountController = new TextEditingController();
     _kycStatus = KycModel.instance.getKycStatusData();
+
+    _aadharSubmited = false;
+    _panSubmited = false;
 
     getProfileDetail();
 
@@ -97,15 +131,33 @@ class _KycBodyState extends State<KycBody> {
     _docTypeError = true;
 
     _isEmailId = false;
+
   }
   @override
   Widget build(BuildContext context) {
+    String _imageName = '';
+
+    if(_passbookImage !=  null){
+      _imageName = _passbookImage.path.split("/").last;
+    }
 
     if(_isPageLoading == true){
       return new Center(child:  new CircularProgressIndicator(),);
     }
 
     else if(_isPageLoading == false && _dataFound == true){
+      if(_idProofStatus == false){
+        if(_getAadharAndPanStatus.data.aadharImage == null || _getAadharAndPanStatus.data.aadharImage == '')
+          _aadharSubmited = false;
+        else{
+          _aadharSubmited = true;
+        }
+        if(_getAadharAndPanStatus.data.panImage == null || _getAadharAndPanStatus.data.panImage == '' ){
+          _panSubmited = false;
+        }else{
+          _panSubmited  =true;
+        }
+      }
       return Container(
         color: Colors.white,
         child: new ListView(
@@ -143,51 +195,75 @@ class _KycBodyState extends State<KycBody> {
                           ],
                         ),
                       ),
+
+
+
                       Padding(
                         padding: EdgeInsets.only(top: 20.0),
                         child: new ExpansionTile(
-                          leading: _idProofStatus?new Icon(Icons.check_circle,color: Colors.green,):new Icon(Icons.error,color: Colors.red,),
+                          leading: _emailStatus?new Icon(Icons.check_circle,color: Colors.green,):new Icon(Icons.error,color: Colors.red,),
                           title: Text('Basic information'),
                           children: <Widget>[
                             new ListTile(
                               onTap:()async{
-                                if(_userDetail.data.emailId.contains("@")){
+                                if(_emailStatus){
 
-                                }else{
-                                  int min = 1000;
-                                  int max = 9999;
-                                  int otp = min + (Random().nextInt(max-min));
-                                  VerifyPhoneKycModel.instance.setOTP(otp);
-                                  VerifyPhoneKycModel.instance.setContact(int.parse(_userDetail.data.emailId));
-                                  var msg = "Dear User, your OTP is ${VerifyPhoneKycModel.instance.getOTP()} to activate your account on Proxy Khel.";
-
-
-                                  http.Response response = await http.get("https://api.msg91.com/api/sendhttp.php?mobiles=${_userDetail.data.emailId}&authkey=281414AsacFSKmekD5d0773a5&route=4&sender=PRKHEL&message=$msg&country=91");
-                                  if(response.statusCode == 200){
-                                    SnackBar snackbar = new SnackBar(content: Text('OTP sent'),duration: Duration(seconds: 1),);
-                                    Scaffold.of(context).showSnackBar(snackbar);
-                                  }
-                                  Future.delayed(const Duration(milliseconds: 1200));
-
-                                  Navigator.push(context, SlideLeftRoute(widget: VerifyPhoneKyc()));
                                 }
+
+                                else if(!_emailStatus){
+                                  if(_userDetail.data.emailId.contains("@")){
+                                    showDialog(context: context,
+                                        builder: (context){
+                                          return new AlertDialog(
+                                            title: new Text("Success",style: TextStyle(color: Colors.green),),
+                                            content: new Text("Verification mail sent"),
+                                            actions: <Widget>[
+                                              OutlineButton(
+                                                child: new Text("OK",style: TextStyle(color: Colors.deepOrange),),
+                                                borderSide: BorderSide(
+                                                    color: Colors.deepOrange
+                                                ),
+                                                onPressed: (){
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                            ],
+                                          );
+                                        }
+                                    );
+                                    SendVerficationMail.instance.setEmail(_userDetail.data.emailId);
+                                    SendVerficationMail.instance.sendVerificationMail();
+                                  }else{
+                                    int min = 1000;
+                                    int max = 9999;
+                                    int otp = min + (Random().nextInt(max-min));
+                                    VerifyPhoneKycModel.instance.setOTP(otp);
+                                    VerifyPhoneKycModel.instance.setContact(int.parse(_userDetail.data.emailId));
+                                    var msg = "Dear User, your OTP is ${VerifyPhoneKycModel.instance.getOTP()} to activate your account on Proxy Khel.";
+
+                                    http.Response response = await http.get("https://api.msg91.com/api/sendhttp.php?mobiles=${_userDetail.data.emailId}&authkey=281414AsacFSKmekD5d0773a5&route=4&sender=PRKHEL&message=$msg&country=91");
+                                    if(response.statusCode == 200){
+                                      SnackBar snackbar = new SnackBar(content: Text('OTP sent'),duration: Duration(seconds: 1),);
+                                      Scaffold.of(context).showSnackBar(snackbar);
+                                    }
+
+                                    Future.delayed(const Duration(milliseconds: 1200));
+
+                                    Navigator.push(context, SlideLeftRoute(widget: VerifyPhoneKyc()));
+                                  }
+                                }
+
                               },
                               trailing: _emailStatus? Icon(Icons.check_circle,color: Colors.green,):Icon(Icons.error,color: Colors.red,),
                               title: Text("User Id"),
                               subtitle: Text("${_userDetail.data.emailId}"),
                             ),
-                            new ListTile(
-                              onTap:(){
-
-                              },
-                              trailing: _emailStatus? Icon(Icons.check_circle,color: Colors.green,):Icon(Icons.error,color: Colors.red,),
-                              title: Text("Date of birth"),
-                              subtitle: Text("${_userDetail.data.dateofbirth}"),
-                            )
-
                           ],
                         ),
                       ),
+
+
+
                       _idProofStatus?new Container(
                         child: new ExpansionTile(
                           leading: new Icon(Icons.check_circle,color: Colors.green,),
@@ -198,65 +274,96 @@ class _KycBodyState extends State<KycBody> {
 
                               },
                               trailing: Icon(Icons.check_circle,color: Colors.green,),
-                              title: Text(""),
-                              subtitle: Text(""),
+                              title: Text("${_getAadharAndPanStatus.data.aadharNo}"),
+                              subtitle: Text("${_getAadharAndPanStatus.data.panNo}"),
                             ),
                           ],
                         ),
-                      ):                          new Container(
+                      ): new Container(
                         child: new ExpansionTile(
-                          leading: new Icon(Icons.check_circle,color: Colors.green,),
+                          leading: new Icon(Icons.error,color: Colors.red,),
                           title: Text("Identity Proof"),
                           children: <Widget>[
+                            _aadharSubmited?new Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
+                                Expanded(flex:1,child: Container(
+                                    margin: EdgeInsets.symmetric(horizontal: 10.0),
+                                    child: new Text("Aadhar submitted for verification"))),
+                                Expanded(
+                                  flex:1,
+                                  child: Container(
+                                    margin: EdgeInsets.symmetric(horizontal: 10.0),
+                                    child: new RaisedButton(
+                                      onPressed: (){
+                                        getImage();
+                                      },
+                                      color: Colors.deepOrange,
+                                      child: new Text("Upload again",style: TextStyle(color: Colors.white),),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ):new Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
+                                Expanded(flex:1,child: Container(
+                                    margin: EdgeInsets.symmetric(horizontal: 10.0),
+                                    child: new Text("Aadhar not verified"))),
+                                Expanded(
+                                  flex:1,
+                                  child: Container(
+                                    margin: EdgeInsets.symmetric(horizontal: 10.0),
+                                    child: new RaisedButton(
+                                      onPressed: (){
+                                        getImage();
+
+                                      },
+                                      color: Colors.deepOrange,
+                                      child: new Text("Upload Aadhar",style: TextStyle(color: Colors.white),),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                            _panSubmited?new Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
+                                Expanded(flex:1,child: Container(margin: EdgeInsets.symmetric(horizontal: 10.0),
+                                    child: new Text("Pan submited for verification"))),
+                                Expanded(
+                                  flex:1,
+                                  child: Container(
+                                    margin: EdgeInsets.symmetric(horizontal: 10.0),
+                                    child: new RaisedButton(
+                                      color: Colors.deepOrange,
+                                      onPressed: (){
+                                        getPanImage();
+                                      },
+                                      child: new Text("Upload again",style: TextStyle(color: Colors.white)),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ):
                             new Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: <Widget>[
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    new DropdownButton(
-                                        value: UploadIdProofModel.instance.getType,
-                                        items: [
-                                          DropdownMenuItem(
-                                            value: 1,
-                                            child: new Text("Aadhar Card"),
-                                          ),
-                                          DropdownMenuItem(
-                                            value: 2,
-                                            child: new Text("Pan Card"),
-                                          )
-                                        ],
-                                        hint: Text("Select Id Type"),
-                                        onChanged: (value){
-                                          setState(() {
-                                            UploadIdProofModel.instance.setType(value);
-                                          });
-                                        }),
-                                    _docTypeError?new Container(child:new Text("Required",style: TextStyle(color: Colors.red,fontSize: 10.0),)):new Container(),
-                                  ],
-                                ),
-                                new Container(
-                                  height: 25.0,
-                                  margin: EdgeInsets.only(top: 10.0),
-                                  child: new RaisedButton(
-                                    onPressed: (){
-                                      if(UploadIdProofModel.instance.getType == null){
-                                        setState(() {
-                                          _docTypeError = true;
-                                        });
-                                      }
-                                      else{
-                                        setState(() {
-                                          _docTypeError = true;
-                                        });
-                                        getImage();
-                                      }
-                                    },
-                                    child: new Text("upload",style: TextStyle(color: Colors.white),),
-                                    color: Colors.deepOrange,
+                                Expanded(flex:1,child: Container(margin: EdgeInsets.symmetric(horizontal: 10.0),
+                                    child: new Text("Pan not verified"))),
+                                Expanded(
+                                  flex:1,
+                                  child: Container(
+                                    margin: EdgeInsets.symmetric(horizontal: 10.0),
+                                    child: new RaisedButton(
+                                      color: Colors.deepOrange,
+                                      onPressed: (){
+                                        getPanImage();
+                                      },
+                                      child: new Text("Upload Pan",style: TextStyle(color: Colors.white)),
+                                    ),
                                   ),
-                                ),
+                                )
                               ],
                             )
                           ],
@@ -299,7 +406,80 @@ class _KycBodyState extends State<KycBody> {
                                     labelText: "Eg: SBIO00001235"
                                 ),
                               ),
+                            ),
+                            new Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
+                                new Text("Passbook not verified\n ${_imageName}"),
+                                Container(
+                                  width: 150.0,
+                                  child: new RaisedButton(
+                                    onPressed: (){
+                                      getPassbookImage();
+                                    },
+                                    child: new Text("Upload Passbook"),
+                                  ),
+                                )
+                              ],
+                            ),
+                            new Center(
+                              child: new RaisedButton(
+                                  onPressed: () async{
+                                    if(_accountController.text == null || _holderController == null || _ifscContorller == null
+                                      || _passbookImage == null
+                                    ){
+                                      SnackBar snackbar  = new SnackBar(content: Text("Please fill all the details"));
+                                      _scaffoldKey.currentState.showSnackBar(snackbar);
+                                    }
+                                    InsertBankDetailsModel.instance.setAccount(_accountController.text);
+                                    InsertBankDetailsModel.instance.setHolder(_holderController.text);
+                                    InsertBankDetailsModel.instance.setIfsc(_ifscContorller.text);
+                                    showDialog(context: context,builder: (context){
+                                      return SimpleDialog(
+                                        children: <Widget>[
+                                          new Row(
+                                            children: <Widget>[
+                                              new SizedBox(width: 10.0,),
+                                              new CircularProgressIndicator(),
+                                              new SizedBox(width: 10.0,),
+                                              new Text("Please wait..."),
+                                            ],
+                                          )
+                                        ],
+                                      );
+                                    });
+                                    if(await InsertBankDetailsModel.instance.insertBankDetails(_passbookImage)){
+                                      Navigator.pop(context);
+                                      showDialog(
+                                        context: context,
+                                        builder: (context){
+                                          return AlertDialog(
+                                            title: Text("Success",style: TextStyle(color: Colors.green),),
+                                            content: Text("Bank details added successfully"),
+                                            actions: <Widget>[
+                                              OutlineButton(
+
+                                                child: new Text("OK",style: TextStyle(color: Colors.deepOrange),),
+                                                borderSide: BorderSide(
+                                                  color: Colors.deepOrange
+                                                ),
+                                                onPressed: (){
+                                                  Navigator.pop(context);
+                                                },
+                                              )
+                                            ],
+                                          );
+                                        }
+                                      );
+                                    }
+
+                                  },
+                                child: new Text("SUBMIT",style: TextStyle(color:Colors.white),),
+                                color: Colors.deepOrange,
+                              ),
                             )
+
+
                           ],
                         ),
                       )

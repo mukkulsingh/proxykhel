@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:proxykhel/Model/CreateTeam.model.dart';
 import 'package:proxykhel/Model/GetContestDetail.model.dart';
 import 'package:proxykhel/Model/ViewTeam.model.dart';
@@ -83,6 +84,12 @@ class ContestDetail extends StatelessWidget {
                 value: 1,
                 child: new Text('My Profile'),
               ),
+
+              PopupMenuItem<int>(
+                value: 2,
+                child: new Text('Refer And Earn'),
+              ),
+
               PopupMenuItem<int>(
                 value: 2,
                 child: new Text('Logout'),
@@ -93,6 +100,9 @@ class ContestDetail extends StatelessWidget {
                 _showLogoutDialog('Warning', 'You sure you want to logout?');
               } else if (value == 1) {
                 Navigator.push(context, SlideLeftRoute(widget: MyProfile()));
+              }
+              else if(value == 1){
+                Navigator.push(context,SlideLeftRoute(widget: MyProfile()));
               }
             },
           )
@@ -112,6 +122,8 @@ class Contestdetail extends StatefulWidget {
 class _ContestdetailState extends State<Contestdetail> {
   GetContestDetail _getContestDetail;
   GetAllUserTeamDetail _allUserTeamDetail;
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+
 
   static bool _isPageLoading;
   static bool _joined;
@@ -199,6 +211,30 @@ class _ContestdetailState extends State<Contestdetail> {
     }
   }
 
+
+  Future onSelectNotification(String payload) async {
+    if (payload != null) {
+      debugPrint('notification payload: ' + payload);
+    }
+    await Navigator.push(
+      context,
+      new MaterialPageRoute(builder: (context) => new ContestDetail()),
+    );
+  }
+
+
+
+  Future _showNotificaitonWithDefault() async {
+    var androidPlatformChannelSpecifics = new AndroidNotificationDetails("notification_channel_id", "Channel Name", "channelDescription",
+        importance: Importance.Max,
+        priority: Priority.High
+    );
+    var iosPlatformChannelSpecifics = new IOSNotificationDetails();
+    var platformChannelSpecific = new NotificationDetails(androidPlatformChannelSpecifics, iosPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show(0, "Contest joined", "You have successfully joined contest", platformChannelSpecific);
+  }
+
+
   @override
   void initState() {
     super.initState();
@@ -206,6 +242,13 @@ class _ContestdetailState extends State<Contestdetail> {
     _isPageLoading = true;
     _joined = false;
     loadContestDetails();
+    var initializationSettingsAndroid =
+    new AndroidInitializationSettings('@mipmap/ic_launcher');
+    var initializationSettingsIOS = new IOSInitializationSettings();
+    var initializationSettings = new InitializationSettings(
+        initializationSettingsAndroid, initializationSettingsIOS);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: onSelectNotification);
   }
 
   @override
@@ -349,7 +392,7 @@ class _ContestdetailState extends State<Contestdetail> {
 //            ),
 //          ),
             Expanded(
-              flex: 5,
+              flex: 4,
               child: new Container(
                 margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
                 child: InkWell(
@@ -794,6 +837,7 @@ class _ContestdetailState extends State<Contestdetail> {
                                                   Scaffold.of(context).showSnackBar(snackbar);
                                                   setState(() {
                                                     loadContestDetails();
+                                                    _showNotificaitonWithDefault();
                                                   });
                                                 }
                                                 else if(res['data'] == 'not enough money'){

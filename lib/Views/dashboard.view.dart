@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:proxykhel/Views/ReferAndEarn.view.dart';
 import './../Views/wallet.view.dart';
 import './../Constants/slideTransitions.dart';
 import './../Model/logout.model.dart';
@@ -90,10 +91,15 @@ class _DashboardState extends State<Dashboard> {
                             value: 1,
                             child: new Text('My Profile'),
                           ),
+                      PopupMenuItem<int>(
+                        value: 3,
+                        child: new Text('Refer And Earn'),
+                      ),
                           PopupMenuItem<int>(
                             value: 2,
                             child: new Text('Logout'),
                           ),
+
                         ],
                     onSelected: (value) async {
                       if (value == 2) {
@@ -102,6 +108,8 @@ class _DashboardState extends State<Dashboard> {
                       }
                       else if(value == 1){
                         Navigator.push(context,SlideLeftRoute(widget: MyProfile()));
+                      }else if(value == 3){
+                        Navigator.push(context,SlideLeftRoute(widget: ReferAndEarn()));
                       }
                     },
                   ),

@@ -24,22 +24,49 @@ class UploadIdProofModel{
     String fileName = imageFile.path.split("/").last;
     String userId = await SavedPref.instance.getUserId();
     http.Response response = await http.post("https://www.proxykhel.com/android/UploadIdProof.php",body: {
-      "type":"uploadIdProof",
+      "type":"uploadIdProofAadhar",
       "userId":userId,
       "imageString":base64Image,
       "name":fileName,
-      "type":_type.toString()
     });
     if(response.statusCode == 200){
-      final res = json.decode(response.body);
-      print(res);
-//      if(res['success']==true){
-//        return true;
-//      }else{
-//        return false;
-//      }
+      if(response.body != null){
+        if(json.decode(response.body) == true){
+          return true;
+        }else{
+          return false;
+        }
+      }
+
     }else{
       return false;
     }
   }
+
+  Future uploadPan(var image) async  {
+    File imageFile = image;
+    List<int> imageBytes = imageFile.readAsBytesSync();
+    String base64Image = base64Encode(imageBytes);
+    String fileName = imageFile.path.split("/").last;
+    String userId = await SavedPref.instance.getUserId();
+    http.Response response = await http.post("https://www.proxykhel.com/android/UploadIdProof.php",body: {
+      "type":"uploadIdProofPan",
+      "userId":userId,
+      "imageString":base64Image,
+      "name":fileName
+    });
+    if(response.statusCode == 200){
+      if(response.body != null){
+        if(json.decode(response.body) == true){
+          return true;
+        }else{
+          return false;
+        }
+      }
+
+    }else{
+      return false;
+    }
+  }
+
 }
