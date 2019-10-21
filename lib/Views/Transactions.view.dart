@@ -112,11 +112,18 @@ class _TransactionsState extends State<Transactions> {
                       return ListView.builder(
                           itemCount: snapshot.data.data.length,
                           itemBuilder: (context,index){
+                            Color color = Color(0xffb7e897);
+                            if(snapshot.data.data[index].action == "pending"){
+                              color = Color(0xffd98f8f);
+                            }
                             return Container(
-                              margin: EdgeInsets.only(top: 20.0),
+                              height: 50.0,
+                              color: color,
+                              margin: EdgeInsets.only(top: 0.0),
                               child: Column(
                                 children: <Widget>[
                                   new Container(
+                                    margin:EdgeInsets.only(top:5.0),
                                     child: new Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: <Widget>[
@@ -147,7 +154,6 @@ class _TransactionsState extends State<Transactions> {
                                       ],
                                     ),
                                   ),
-                                  Divider(),
                                 ],
                               ),
                             );

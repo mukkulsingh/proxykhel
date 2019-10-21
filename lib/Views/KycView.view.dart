@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,6 @@ import 'package:proxykhel/Model/UploadIdProof.model.dart';
 import 'package:proxykhel/Model/VerifyPhoneKyc.model.dart';
 import 'package:proxykhel/Model/insertBankDetails.model.dart';
 import 'package:proxykhel/Model/kyc.model.dart';
-import 'package:proxykhel/Model/uploadPassbook.model.dart';
 
 import 'VerifyPhoneKyc.view.dart';
 
@@ -58,8 +58,6 @@ class _KycBodyState extends State<KycBody> {
   TextEditingController _ifscContorller;
   TextEditingController _accountController;
 
-  final _scaffoldKey = new GlobalKey<ScaffoldState>();
-
   Future getProfileDetail()async{
     _userDetail = await GetProfileDetailModel.instance.getProfileDetail();
     _getAadharAndPanStatus = await GetAadharAndPanStatusModel.instance.getAadharAndPanStatus();
@@ -71,24 +69,101 @@ class _KycBodyState extends State<KycBody> {
     }
   }
 
+  Future uploadAadhar(var image) async {
+    if(await UploadIdProofModel.instance.uploadIdProof(image)){
+      Navigator.pop(context);
+      showDialog(context:context,
+          builder:(context){
+            return new AlertDialog(
+              title: Text("Success",style: TextStyle(color: Colors.green),),
+              content:new Text("Aadhar successfully uploaded"),
+              actions: <Widget>[
+                new OutlineButton(onPressed: (){
+                  Navigator.pop(context);
+                },
+                  child: new Text("OK"),
+                )
+              ],
+            );
+          });
+    }
+  }
+
+
+  Future uploadPan(var image) async {
+    if(await UploadIdProofModel.instance.uploadPan(image)){
+      Navigator.pop(context);
+      showDialog(context:context,
+          builder:(context){
+            return new AlertDialog(
+              title: Text("Success",style: TextStyle(color: Colors.green),),
+              content:new Text("Pan Card successfully uploaded"),
+              actions: <Widget>[
+                new OutlineButton(onPressed: (){
+                  Navigator.pop(context);
+                },
+                  child: new Text("OK"),
+                )
+              ],
+            );
+          });
+    }
+  }
+
   Future getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      _image = image;
-      UploadIdProofModel.instance.uploadIdProof(image);
-      initState();
-    });
+    if(image != null){
+      setState(()  {
+        _image = image;
+        uploadAadhar(_image);
+      });
+
+      showDialog(context:context,
+          builder:(context){
+            return new SimpleDialog(
+              children: <Widget>[
+                new Row(
+                  children: <Widget>[
+                    new SizedBox(width:10.0),
+                    new CircularProgressIndicator(),
+                    new SizedBox(width:10.0),
+                    new Text("Please wait..."),
+                  ],
+                )
+              ],
+            );
+          });
+    }
   }
 
 
   Future getPanImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      _PanImage = image;
-      UploadIdProofModel.instance.uploadPan(image);
-      initState();
-    });
+    if(image != null){
+      setState(() {
+        _PanImage = image;
+        uploadPan(_PanImage);
+      });
+      showDialog(context:context,
+          builder:(context){
+            return new SimpleDialog(
+              children: <Widget>[
+                new Row(
+                  children: <Widget>[
+                    new SizedBox(width:10.0),
+                    new CircularProgressIndicator(),
+                    new SizedBox(width:10.0),
+                    new Text("Please wait..."),
+                  ],
+                )
+              ],
+            );
+          });
+    }
+
   }
+
+
   Future getPassbookImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
     setState(() {
@@ -379,6 +454,7 @@ class _KycBodyState extends State<KycBody> {
                               title: Text("Holder Name"),
                               leading: Icon(Icons.person),
                               subtitle: new TextField(
+                                inputFormatters: [WhitelistingTextInputFormatter(RegExp('[a-zA-Z ]'))],
                                 controller: _holderController,
                                 decoration: InputDecoration(
                                     labelText: "Eg: Ramesh"
@@ -390,6 +466,11 @@ class _KycBodyState extends State<KycBody> {
                               title: Text("Account Number"),
                               leading: Icon(Icons.account_circle),
                               subtitle: TextField(
+                                keyboardType: TextInputType.number,
+                                inputFormatters: [WhitelistingTextInputFormatter(RegExp('[0-9]')),
+                                  LengthLimitingTextInputFormatter(20)
+
+                                ],
                                 controller: _accountController,
                                 decoration: InputDecoration(
                                     labelText: "Eg: 120003015456"
@@ -401,6 +482,10 @@ class _KycBodyState extends State<KycBody> {
                               title: Text("IFSC Code"),
                               leading: Icon(Icons.account_balance),
                               subtitle: TextField(
+                                inputFormatters: [WhitelistingTextInputFormatter(RegExp('[a-zA-Z0-9]')),
+                                  LengthLimitingTextInputFormatter(15)
+                                ],
+
                                 controller: _ifscContorller,
                                 decoration: InputDecoration(
                                     labelText: "Eg: SBIO00001235"
@@ -426,52 +511,58 @@ class _KycBodyState extends State<KycBody> {
                               child: new RaisedButton(
                                   onPressed: () async{
                                     if(_accountController.text == null || _holderController == null || _ifscContorller == null
-                                      || _passbookImage == null
+                                      || _passbookImage == null || _accountController.text == '' || _holderController.text == '' || _ifscContorller.text == ''
                                     ){
                                       SnackBar snackbar  = new SnackBar(content: Text("Please fill all the details"));
-                                      _scaffoldKey.currentState.showSnackBar(snackbar);
+                                      Scaffold.of(context).showSnackBar(snackbar);
                                     }
-                                    InsertBankDetailsModel.instance.setAccount(_accountController.text);
-                                    InsertBankDetailsModel.instance.setHolder(_holderController.text);
-                                    InsertBankDetailsModel.instance.setIfsc(_ifscContorller.text);
-                                    showDialog(context: context,builder: (context){
-                                      return SimpleDialog(
-                                        children: <Widget>[
-                                          new Row(
-                                            children: <Widget>[
-                                              new SizedBox(width: 10.0,),
-                                              new CircularProgressIndicator(),
-                                              new SizedBox(width: 10.0,),
-                                              new Text("Please wait..."),
-                                            ],
-                                          )
-                                        ],
-                                      );
-                                    });
-                                    if(await InsertBankDetailsModel.instance.insertBankDetails(_passbookImage)){
-                                      Navigator.pop(context);
-                                      showDialog(
-                                        context: context,
-                                        builder: (context){
-                                          return AlertDialog(
-                                            title: Text("Success",style: TextStyle(color: Colors.green),),
-                                            content: Text("Bank details added successfully"),
-                                            actions: <Widget>[
-                                              OutlineButton(
+                                    else{
+                                      showDialog(context: context,
+                                          barrierDismissible: false,
+                                          builder: (context){
+                                            return SimpleDialog(
+                                              children: <Widget>[
+                                                new Row(
+                                                  children: <Widget>[
+                                                    new SizedBox(width: 10.0,),
+                                                    new CircularProgressIndicator(),
+                                                    new SizedBox(width: 10.0,),
+                                                    new Text("Please wait..."),
+                                                  ],
+                                                )
+                                              ],
+                                            );
+                                          });
+                                      InsertBankDetailsModel.instance.setAccount(_accountController.text);
+                                      InsertBankDetailsModel.instance.setHolder(_holderController.text);
+                                      InsertBankDetailsModel.instance.setIfsc(_ifscContorller.text);
 
-                                                child: new Text("OK",style: TextStyle(color: Colors.deepOrange),),
-                                                borderSide: BorderSide(
-                                                  color: Colors.deepOrange
-                                                ),
-                                                onPressed: (){
-                                                  Navigator.pop(context);
-                                                },
-                                              )
-                                            ],
-                                          );
-                                        }
-                                      );
+                                      if(await InsertBankDetailsModel.instance.insertBankDetails(_passbookImage)){
+                                        Navigator.pop(context);
+                                        showDialog(
+                                            context: context,
+                                            builder: (context){
+                                              return AlertDialog(
+                                                title: Text("Success",style: TextStyle(color: Colors.green),),
+                                                content: Text("Bank details added successfully"),
+                                                actions: <Widget>[
+                                                  OutlineButton(
+
+                                                    child: new Text("OK",style: TextStyle(color: Colors.deepOrange),),
+                                                    borderSide: BorderSide(
+                                                        color: Colors.deepOrange
+                                                    ),
+                                                    onPressed: (){
+                                                      Navigator.pop(context);
+                                                    },
+                                                  )
+                                                ],
+                                              );
+                                            }
+                                        );
+                                      }
                                     }
+
 
                                   },
                                 child: new Text("SUBMIT",style: TextStyle(color:Colors.white),),

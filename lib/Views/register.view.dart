@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import './../Constants/theme.dart' as Theme;
 import './../Constants/slideTransitions.dart';
 import 'package:connectivity/connectivity.dart';
@@ -214,6 +215,8 @@ class _RegisterState extends State<Register> {
                       new Container(
                         margin: const EdgeInsets.only(top: 20,left: 15.0,right: 15.0),
                         child: new TextField(
+                          inputFormatters: [WhitelistingTextInputFormatter(RegExp('[0-9]'))],
+                          keyboardType: TextInputType.number,
                           controller: emailOrPhoneController,
                           onChanged: (value){
                             _emailOrPhone = value;
@@ -224,7 +227,7 @@ class _RegisterState extends State<Register> {
                           decoration: InputDecoration(
                             errorText: _emailOrPhoneError ? 'Invalid input': '',
                               errorStyle: TextStyle(color:Colors.red),
-                              hintText: 'Phone Number OR Email ID',
+                              hintText: 'Phone Number',
                               hintStyle: new TextStyle(color:Colors.black,fontWeight: FontWeight.bold),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30.0),

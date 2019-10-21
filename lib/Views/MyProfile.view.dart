@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:proxykhel/Constants/slideTransitions.dart';
 import './../Model/GetProfileDetailModel.model.dart';
 import './../Model/kyc.model.dart';
@@ -77,9 +78,9 @@ class MapScreenState extends State<ProfilePage>
   Future _dob(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
-        initialDate: DateTime.now().subtract(Duration(days: 10)),
+        initialDate: DateTime.now().subtract(Duration(days: 6570)),
         firstDate: DateTime(1950,1),
-        lastDate: DateTime.now().subtract(Duration(days: 9)));
+        lastDate: DateTime.now().subtract(Duration(days: 6570)));
     if (picked != null)
       setState(() {
         _DobController.text = picked.day.toString()+'-'+picked.month.toString()+'-'+picked.year.toString();
@@ -440,6 +441,10 @@ class MapScreenState extends State<ProfilePage>
                               children: <Widget>[
                                 new Flexible(
                                   child: new TextField(
+                                    inputFormatters: [WhitelistingTextInputFormatter(RegExp('[0-9]')),
+                                      LengthLimitingTextInputFormatter(10),
+                                    ],
+                                    keyboardType: TextInputType.phone,
                                     controller:_mobileController,
                                     decoration: const InputDecoration(
                                         hintText: "Enter Mobile Number"),

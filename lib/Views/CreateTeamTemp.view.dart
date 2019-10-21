@@ -50,7 +50,7 @@ class _CreateTeamtempState extends State<CreateTeamtemp> {
   }
   Future onSelectNotification(String payload) async {
     if (payload != null) {
-      debugPrint('notification payload: ' + payload);
+//      debugPrint('notification payload: ' + payload);
     }
     await Navigator.push(
       context,

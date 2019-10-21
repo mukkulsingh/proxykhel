@@ -18,7 +18,6 @@ class _LeaderBoardState extends State<LeaderBoard> {
             child: FutureBuilder(
               future: LeaderBoardModel.instance.getLeaderBoard(),
               builder: (context,snapshot){
-                print(snapshot.data.data.length);
                 return new Container();
               },
             ),

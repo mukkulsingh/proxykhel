@@ -189,9 +189,10 @@ class _WithdrawState extends State<Withdraw> {
                               children: <Widget>[
                                 new FlatButton(
                                     onPressed: ()async{
-                                      Navigator.of(context).pop();
+                                      Navigator.pop(context);
                                       WithdrawModel.instance.setWithdrawAmount(_amountController.text);
                                       showDialog(
+                                        barrierDismissible: false,
                                           context: context,
                                           builder: (context){
                                             return SimpleDialog(
@@ -209,9 +210,8 @@ class _WithdrawState extends State<Withdraw> {
                                           }
                                       );
                                       if(await WithdrawModel.instance.withdraw()){
-                                        Navigator.of(context).pop();
                                         showDialog(
-                                            context: context,
+                                            context: _scaffoldKey.currentContext,
                                             builder: (context){
                                               return AlertDialog(
                                                 title: new Text("Transaction Successful",style: TextStyle(color: Colors.green),),
@@ -220,6 +220,7 @@ class _WithdrawState extends State<Withdraw> {
                                                   new FlatButton(
                                                       onPressed: (){
                                                         setState(() {
+                                                          Navigator.pop(context);
                                                           Navigator.pop(context);
                                                         });
                                                       },

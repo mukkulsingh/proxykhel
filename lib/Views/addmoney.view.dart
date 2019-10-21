@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import './../Model/wallet.model.dart';
 import 'package:paytm_payments/paytm_payments.dart';
 import './../Model/savedpref.model.dart';
@@ -157,6 +158,7 @@ class _AddMoneyState extends State<AddMoney> {
         Container(
           margin: EdgeInsets.symmetric(horizontal: 20.0,vertical: 10.0),
           child: TextField(
+            inputFormatters: [WhitelistingTextInputFormatter(RegExp('[0-9]'))],
             decoration: InputDecoration(
                 labelText: 'Amount To Add',
                 border: OutlineInputBorder(),

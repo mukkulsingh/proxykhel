@@ -222,6 +222,8 @@ class _ViewteamState extends State<Viewteam> {
                   new Container(
                     child: new Column(
                       children: <Widget>[
+                        new SizedBox(height: 30.0,),
+                        new Text("Super Five"),
                         new CircleAvatar(
                           backgroundColor: Colors.deepOrange,
                           child: Image(image: NetworkImage("https://www.proxykhel.com/assets/image/icons-ground/Fantasy-Five.png"),),
@@ -301,6 +303,8 @@ class _ViewteamState extends State<Viewteam> {
                   new Container(
                     child: new Column(
                       children: <Widget>[
+                        new SizedBox(height: 30.0,),
+                        new Text("Bowler"),
                         new CircleAvatar(
                           backgroundColor: Colors.deepOrange,
                           child: Image(image: NetworkImage("https://www.proxykhel.com/assets/image/icons-ground/Bawler.png"),),
@@ -317,7 +321,10 @@ class _ViewteamState extends State<Viewteam> {
                   new Container(
                     child: new Column(
                       children: <Widget>[
+                        new SizedBox(height: 30.0,),
+                        new Text("All Rounder"),
                         new CircleAvatar(
+
                           backgroundColor: Colors.deepOrange,
                           child: Image(image: NetworkImage("https://www.proxykhel.com/assets/image/icons-ground/All%20Rounder.png"),),
                         ),
