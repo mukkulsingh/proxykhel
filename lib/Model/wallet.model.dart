@@ -2,7 +2,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'savedpref.model.dart';
 import 'package:async/async.dart';
-import 'package:paytm/paytm.dart';
 
 class WalletModel{
 

@@ -812,18 +812,19 @@ class _ContestdetailState extends State<Contestdetail> {
                                           height: 30.0,
                                           width: 60.0,
                                           child: new FlatButton(onPressed: () async {
-                                            if(_allUserTeamDetail.data[index].joined == 1){
+                                            if(_allUserTeamDetail.data[index].joined == true){
                                               SnackBar snackbar = new SnackBar(content: Text("Already joined witht this team"),duration: Duration(seconds: 1),);
                                               Scaffold.of(context).showSnackBar(snackbar);
                                             }else{
                                               String userId = await SavedPref.instance.getUserId();
+                                              List fees = _contestFees.split(' ');
                                               http.Response response  = await http.post("https://www.proxykhel.com/android/contest.php",body:{
                                                 "type":"joinUserTeam",
                                                 "matchId":ContestDetailModel.instance.getMatchId(),
                                                 "contestId":ContestDetailModel.instance.getContestId(),
                                                 "userId":userId,
                                                 "squadId":_allUserTeamDetail.data[index].id,
-                                                "contestAmt":_contestFees,
+                                                "contestAmt":fees[1],
                                                 "team_1_name":ContestDetailModel.instance.getTeam1Name(),
                                                 "team_2_name":ContestDetailModel.instance.getTeam2Name(),
                                                 "matchType":ContestDetailModel.instance.getMatchType(),

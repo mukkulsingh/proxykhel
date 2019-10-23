@@ -1,5 +1,7 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:proxykhel/Model/AddMoneyWallet.model.dart';
 import './../Model/wallet.model.dart';
 import 'package:paytm_payments/paytm_payments.dart';
 import './../Model/savedpref.model.dart';
@@ -12,11 +14,19 @@ class _AddMoneyState extends State<AddMoney> {
 
   static bool _isLoading;
 
+  static bool _transactionSuccess;
+
+  static bool _internet;
   void setResponseListener(){
 
     // setting a listener on payment response
     PaytmPayments.responseStream.listen((Map<dynamic, dynamic> responseData){
+      if(responseData['STATUS'] == "TXN_SUCCESS"){
+        _transactionSuccess = true;
 
+      }else{
+        _transactionSuccess = false;
+      }
 
       /*
       * {RESPMSG : [MSG]} // this is the type of map object received, except for one case.
@@ -39,6 +49,16 @@ class _AddMoneyState extends State<AddMoney> {
   TextEditingController _amountController;
   static bool _amountToAddError;
 
+  Future checkinternet() async{
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      _internet = false;
+    }
+    else{
+      _internet = true;
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -48,6 +68,7 @@ class _AddMoneyState extends State<AddMoney> {
     _amountToAdd='0';
     _amountController = TextEditingController();
     _amountToAddError = false;
+    _internet = false;
   }
 
   Future<void> initPayment(String txnAmount) async {
@@ -55,7 +76,7 @@ class _AddMoneyState extends State<AddMoney> {
     // try/catch any Exceptions.
     try {
       var userId = await SavedPref.instance.getUserId();
-      await PaytmPayments.makePaytmPayment(
+   await PaytmPayments.makePaytmPayment(
         "WGlUpt31068318705253", // [YOUR_MERCHANT_ID] (required field)
         "https://www.proxykhel.com/android/generateChecksum.php", // [YOUR_CHECKSUM_URL] (required field)
         customerId: userId, // [UNIQUE_ID_FOR_YOUR_CUSTOMER] (auto generated if not specified)
@@ -67,9 +88,8 @@ class _AddMoneyState extends State<AddMoney> {
         staging: false, // default: true (by default paytm staging environment is used)
         showToast: false, // default: true (by default shows callback messages from paytm in Android Toasts)
       );
-
+      setResponseListener();
     } on Exception {
-
     }
 
     // If the widget was removed from the tree while the asynchronous platform
@@ -90,7 +110,6 @@ class _AddMoneyState extends State<AddMoney> {
   Widget build(BuildContext context) {
     _isLoading=false;
 
-
     return Scaffold(
       appBar: new AppBar(
         title: Text(
@@ -101,7 +120,7 @@ class _AddMoneyState extends State<AddMoney> {
           color: Colors.white,
         ),
       ),
-      body: Center(
+      body: _internet?Center(
         child: new Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -141,7 +160,6 @@ class _AddMoneyState extends State<AddMoney> {
                         }
                         else{
                           return new Text(snapshot.data.walletAmount??"0",style: TextStyle(color: Colors.deepOrangeAccent,fontSize: 16.0),);
-                          break;
                         }
                     }
 
@@ -191,7 +209,7 @@ class _AddMoneyState extends State<AddMoney> {
                         borderRadius: BorderRadius.circular(32.0),
                       ),
                       color: Colors.deepOrange,
-                      onPressed: (){
+                      onPressed: ()async{
                         if(_amountToAdd == "0" || _amountToAdd == null || _amountToAdd == ''){
                           setState(() {
                             _amountToAddError = true;
@@ -200,13 +218,89 @@ class _AddMoneyState extends State<AddMoney> {
                             setState(() {
                               _isLoading=true;
                             });
-                          initPayment(_amountToAdd);
+                      initPayment(_amountToAdd);
+
+                      if(_transactionSuccess){
+                        AddMoneyWalletModel.instance.setBalance(_amountToAdd);
+                          if(await AddMoneyWalletModel.instance.addBalance()){
+                            showDialog(
+                                context: context,
+                                builder: (context){
+                                  return AlertDialog(
+                                    title: Text("Success",style: TextStyle(color: Colors.green),),
+                                    content: Text("Transaction successfull"),
+                                    actions: <Widget>[
+                                      OutlineButton(
+                                        borderSide: BorderSide(
+                                            color: Colors.deepOrange
+                                        ),
+                                        child: new Text("OK",style: TextStyle(color: Colors.deepOrange),),
+                                        onPressed: (){
+                                          Navigator.pop(context);
+                                        },
+                                      )
+                                    ],
+                                  );
+                                }
+                            );
+                          }else{
+                            showDialog(
+                                context: context,
+                                builder: (context){
+                                  return AlertDialog(
+                                    title: Text("Error",style: TextStyle(color: Colors.red),),
+                                    content: Text("Transaction Failed"),
+                                    actions: <Widget>[
+                                      OutlineButton(
+                                        borderSide: BorderSide(
+                                            color: Colors.deepOrange
+                                        ),
+                                        child: new Text("OK",style: TextStyle(color: Colors.deepOrange),),
+                                        onPressed: (){
+                                          Navigator.pop(context);
+                                        },
+                                      )
+                                    ],
+                                  );
+                                }
+                            );
+                          }
+
+                      }
                         }
                       },
                       child: new Text('ADD MONEY',style: TextStyle(color: Colors.white),),
                     ),
                   ),
                 ],
+              ),
+            )
+          ],
+        ),
+      ):new Center(
+        child: new Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            new Text("Please check internet connectivity"),
+            Container(
+              width: 100.0,
+              child: new OutlineButton(onPressed: (){
+                setState(() {
+
+                });
+              },
+                borderSide: BorderSide(
+                  color: Colors.deepOrange
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    new Text("Retry",style: TextStyle(color: Colors.deepOrange),),
+                    new SizedBox(width: 2.0,),
+                    new Icon(Icons.refresh,color: Colors.deepOrange,),
+                  ],
+                ),
               ),
             )
           ],
