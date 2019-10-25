@@ -31,80 +31,6 @@ class _TabBarMegaState extends State<TabBarMega> {
   static String _opponent = '';
   static String _amountVaries = '';
 
-  void _showDialogWinningBreakdown() {
-    // flutter defined function
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          title: new Text("WINNINGS BREAKDOWN"),
-          content: new Column(
-            children: <Widget>[
-              new Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  new Text('Rank 1'),
-                  new Text('Rs. 50'),
-                ],
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              new Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  new Text('Rank 2'),
-                  new Text('Rs. 30'),
-                ],
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              new Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  new Text('Rank 3'),
-                  new Text('Rs. 25'),
-                ],
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              new Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  new Text('Rank 4'),
-                  new Text('Rs. 20'),
-                ],
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              new Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  new Text('Rank 5'),
-                  new Text('Rs. 15'),
-                ],
-              ),
-
-            ],
-          ),
-          actions: <Widget>[
-            // usually buttons at the bottom of the dialog
-            new FlatButton(
-              child: new Text("Got it !",textAlign: TextAlign.center,),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   static String matchId;
   @override
   void initState() {
@@ -197,10 +123,32 @@ class _TabBarMegaState extends State<TabBarMega> {
                                               Builder(builder: (context){
                                                 if(_singleEntry != null){
                                                   return new Container(
-                                                    child: new CircleAvatar(
-                                                      backgroundColor: Colors.deepOrange,
-                                                      child: new Text(_singleEntry,style: TextStyle(color: Colors.white,fontSize: 12.0)),
-                                                      radius: 8.0,
+                                                    child: InkWell(
+                                                      onTap: (){
+                                                        showDialog(context: context,
+                                                            builder: (context){
+                                                              return AlertDialog(
+                                                                title: new Text("S",style: TextStyle(color: Colors.deepOrange),),
+                                                                content: new Text("You can join only one team"),
+                                                                actions: <Widget>[
+                                                                  new OutlineButton(onPressed: (){
+                                                                    Navigator.pop(context);
+                                                                  },
+                                                                    child: new Text("OK",style:TextStyle(color: Colors.deepOrange)),
+                                                                    borderSide: BorderSide(
+                                                                      color: Colors.deepOrange,
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              );
+                                                            }
+                                                        );
+                                                      },
+                                                      child: new CircleAvatar(
+                                                        backgroundColor: Colors.deepOrange,
+                                                        child: new Text(_singleEntry,style: TextStyle(color: Colors.white,fontSize: 12.0)),
+                                                        radius: 8.0,
+                                                      ),
                                                     ),
                                                   );
                                                 }else
@@ -210,10 +158,32 @@ class _TabBarMegaState extends State<TabBarMega> {
                                               Builder(builder: (context){
                                                 if(_multipleEntry != null){
                                                   return new Container(
-                                                    child: new CircleAvatar(
-                                                      backgroundColor: Colors.deepOrange,
-                                                      child: new Text(_multipleEntry,style: TextStyle(color: Colors.white,fontSize: 12.0),),
-                                                      radius: 8.0,
+                                                    child: InkWell(
+                                                      onTap: (){
+                                                        showDialog(context: context,
+                                                          builder: (context){
+                                                          return AlertDialog(
+                                                            title: new Text("M",style: TextStyle(color: Colors.deepOrange),),
+                                                            content: new Text("You can join more than 4 teams"),
+                                                            actions: <Widget>[
+                                                              new OutlineButton(onPressed: (){
+                                                                Navigator.pop(context);
+                                                              },
+                                                                child: new Text("OK",style:TextStyle(color: Colors.deepOrange)),
+                                                                borderSide: BorderSide(
+                                                                  color: Colors.deepOrange,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          );
+                                                          }
+                                                        );
+                                                      },
+                                                      child: new CircleAvatar(
+                                                        backgroundColor: Colors.deepOrange,
+                                                        child: new Text(_multipleEntry,style: TextStyle(color: Colors.white,fontSize: 12.0),),
+                                                        radius: 8.0,
+                                                      ),
                                                     ),
                                                   );
                                                 }else
@@ -223,10 +193,32 @@ class _TabBarMegaState extends State<TabBarMega> {
                                               Builder(builder: (context){
                                                 if(_opponent != null){
                                                   return new Container(
-                                                    child: new CircleAvatar(
-                                                      backgroundColor: Colors.deepOrange,
-                                                      child: new Text(_opponent,style: TextStyle(color: Colors.white,fontSize: 12.0)),
-                                                      radius: 8.0,
+                                                    child: InkWell(
+                                                      onTap: (){
+                                                        showDialog(context: context,
+                                                            builder: (context){
+                                                              return AlertDialog(
+                                                                title: new Text("P",style: TextStyle(color: Colors.deepOrange),),
+                                                                content: new Text("Contest will be deemed cancelled if opponent is not joined"),
+                                                                actions: <Widget>[
+                                                                  new OutlineButton(onPressed: (){
+                                                                    Navigator.pop(context);
+                                                                  },
+                                                                    child: new Text("OK",style:TextStyle(color: Colors.deepOrange)),
+                                                                    borderSide: BorderSide(
+                                                                      color: Colors.deepOrange,
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              );
+                                                            }
+                                                        );
+                                                      },
+                                                      child: new CircleAvatar(
+                                                        backgroundColor: Colors.deepOrange,
+                                                        child: new Text(_opponent,style: TextStyle(color: Colors.white,fontSize: 12.0)),
+                                                        radius: 8.0,
+                                                      ),
                                                     ),
                                                   );
                                                 }else
@@ -236,10 +228,32 @@ class _TabBarMegaState extends State<TabBarMega> {
                                               Builder(builder: (context){
                                                 if(_contestCancel != null){
                                                   return new Container(
-                                                    child: new CircleAvatar(
-                                                      backgroundColor: Colors.deepOrange,
-                                                      child: new Text(_contestCancel,style: TextStyle(color: Colors.white,fontSize: 12.0)),
-                                                      radius: 8.0,
+                                                    child: InkWell(
+                                                      onTap: (){
+                                                        showDialog(context: context,
+                                                            builder: (context){
+                                                              return AlertDialog(
+                                                                title: new Text("U",style: TextStyle(color: Colors.deepOrange),),
+                                                                content: new Text("Contest will be deemed cancelled if not full"),
+                                                                actions: <Widget>[
+                                                                  new OutlineButton(onPressed: (){
+                                                                    Navigator.pop(context);
+                                                                  },
+                                                                    child: new Text("OK",style:TextStyle(color: Colors.deepOrange)),
+                                                                    borderSide: BorderSide(
+                                                                      color: Colors.deepOrange,
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              );
+                                                            }
+                                                        );
+                                                      },
+                                                      child: new CircleAvatar(
+                                                        backgroundColor: Colors.deepOrange,
+                                                        child: new Text(_contestCancel,style: TextStyle(color: Colors.white,fontSize: 12.0)),
+                                                        radius: 8.0,
+                                                      ),
                                                     ),
                                                   );
                                                 }else
@@ -249,10 +263,32 @@ class _TabBarMegaState extends State<TabBarMega> {
                                               Builder(builder: (context){
                                                 if(_amountVaries != null){
                                                   return new Container(
-                                                    child: new CircleAvatar(
-                                                      backgroundColor: Colors.deepOrange,
-                                                      child: new Text(_amountVaries,style: TextStyle(color: Colors.white,fontSize: 12.0)),
-                                                      radius: 8.0,
+                                                    child: InkWell(
+                                                      onTap: (){
+                                                        showDialog(context: context,
+                                                            builder: (context){
+                                                              return AlertDialog(
+                                                                title: new Text("C",style: TextStyle(color: Colors.deepOrange),),
+                                                                content: new Text("Winning prize will varies on the basis of joined"),
+                                                                actions: <Widget>[
+                                                                  new OutlineButton(onPressed: (){
+                                                                    Navigator.pop(context);
+                                                                  },
+                                                                    child: new Text("OK",style:TextStyle(color: Colors.deepOrange)),
+                                                                    borderSide: BorderSide(
+                                                                      color: Colors.deepOrange,
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              );
+                                                            }
+                                                        );
+                                                      },
+                                                      child: new CircleAvatar(
+                                                        backgroundColor: Colors.deepOrange,
+                                                        child: new Text(_amountVaries,style: TextStyle(color: Colors.white,fontSize: 12.0)),
+                                                        radius: 8.0,
+                                                      ),
                                                     ),
                                                   );
                                                 }else

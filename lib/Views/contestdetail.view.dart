@@ -419,98 +419,186 @@ class _ContestdetailState extends State<Contestdetail> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         children: <Widget>[
-                                          Builder(builder: (context) {
-                                            if (_singleEntry != null) {
+                                          Builder(builder: (context){
+                                            if(_singleEntry != null){
                                               return new Container(
-                                                child: new CircleAvatar(
-                                                  backgroundColor:
-                                                      Colors.deepOrange,
-                                                  child: new Text(_singleEntry,
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 12.0)),
-                                                  radius: 8.0,
-                                                ),
-                                              );
-                                            } else
-                                              return new Container();
-                                          }),
-                                          SizedBox(
-                                            width: 2.0,
-                                          ),
-                                          Builder(builder: (context) {
-                                            if (_multipleEntry != null) {
-                                              return new Container(
-                                                child: new CircleAvatar(
-                                                  backgroundColor:
-                                                      Colors.deepOrange,
-                                                  child: new Text(
-                                                    _multipleEntry,
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 12.0),
+                                                child: InkWell(
+                                                  onTap: (){
+                                                    showDialog(context: context,
+                                                        builder: (context){
+                                                          return AlertDialog(
+                                                            title: new Text("S",style: TextStyle(color: Colors.deepOrange),),
+                                                            content: new Text("You can join only one team"),
+                                                            actions: <Widget>[
+                                                              new OutlineButton(onPressed: (){
+                                                                Navigator.pop(context);
+                                                              },
+                                                                child: new Text("OK",style:TextStyle(color: Colors.deepOrange)),
+                                                                borderSide: BorderSide(
+                                                                  color: Colors.deepOrange,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          );
+                                                        }
+                                                    );
+                                                  },
+                                                  child: new CircleAvatar(
+                                                    backgroundColor: Colors.deepOrange,
+                                                    child: new Text(_singleEntry,style: TextStyle(color: Colors.white,fontSize: 12.0)),
+                                                    radius: 8.0,
                                                   ),
-                                                  radius: 8.0,
                                                 ),
                                               );
-                                            } else
+                                            }else
                                               return new Container();
                                           }),
                                           SizedBox(
                                             width: 2.0,
                                           ),
-                                          Builder(builder: (context) {
-                                            if (_opponent != null) {
+                                          Builder(builder: (context){
+                                            if(_multipleEntry != null){
                                               return new Container(
-                                                child: new CircleAvatar(
-                                                  backgroundColor:
-                                                      Colors.deepOrange,
-                                                  child: new Text(_opponent,
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 12.0)),
-                                                  radius: 8.0,
+                                                child: InkWell(
+                                                  onTap: (){
+                                                    showDialog(context: context,
+                                                        builder: (context){
+                                                          return AlertDialog(
+                                                            title: new Text("M",style: TextStyle(color: Colors.deepOrange),),
+                                                            content: new Text("You can join more than 4 teams"),
+                                                            actions: <Widget>[
+                                                              new OutlineButton(onPressed: (){
+                                                                Navigator.pop(context);
+                                                              },
+                                                                child: new Text("OK",style:TextStyle(color: Colors.deepOrange)),
+                                                                borderSide: BorderSide(
+                                                                  color: Colors.deepOrange,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          );
+                                                        }
+                                                    );
+                                                  },
+                                                  child: new CircleAvatar(
+                                                    backgroundColor: Colors.deepOrange,
+                                                    child: new Text(_multipleEntry,style: TextStyle(color: Colors.white,fontSize: 12.0),),
+                                                    radius: 8.0,
+                                                  ),
                                                 ),
                                               );
-                                            } else
+                                            }else
                                               return new Container();
                                           }),
                                           SizedBox(
                                             width: 2.0,
                                           ),
-                                          Builder(builder: (context) {
-                                            if (_contestCancel != null) {
+                                          Builder(builder: (context){
+                                            if(_opponent != null){
                                               return new Container(
-                                                child: new CircleAvatar(
-                                                  backgroundColor:
-                                                      Colors.deepOrange,
-                                                  child: new Text(_contestCancel,
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 12.0)),
-                                                  radius: 8.0,
+                                                child: InkWell(
+                                                  onTap: (){
+                                                    showDialog(context: context,
+                                                        builder: (context){
+                                                          return AlertDialog(
+                                                            title: new Text("P",style: TextStyle(color: Colors.deepOrange),),
+                                                            content: new Text("Contest will be deemed cancelled if opponent is not joined"),
+                                                            actions: <Widget>[
+                                                              new OutlineButton(onPressed: (){
+                                                                Navigator.pop(context);
+                                                              },
+                                                                child: new Text("OK",style:TextStyle(color: Colors.deepOrange)),
+                                                                borderSide: BorderSide(
+                                                                  color: Colors.deepOrange,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          );
+                                                        }
+                                                    );
+                                                  },
+                                                  child: new CircleAvatar(
+                                                    backgroundColor: Colors.deepOrange,
+                                                    child: new Text(_opponent,style: TextStyle(color: Colors.white,fontSize: 12.0)),
+                                                    radius: 8.0,
+                                                  ),
                                                 ),
                                               );
-                                            } else
+                                            }else
                                               return new Container();
                                           }),
                                           SizedBox(
                                             width: 2.0,
                                           ),
-                                          Builder(builder: (context) {
-                                            if (_amountVaries != null) {
+                                          Builder(builder: (context){
+                                            if(_contestCancel != null){
                                               return new Container(
-                                                child: new CircleAvatar(
-                                                  backgroundColor:
-                                                      Colors.deepOrange,
-                                                  child: new Text(_amountVaries,
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 12.0)),
-                                                  radius: 8.0,
+                                                child: InkWell(
+                                                  onTap: (){
+                                                    showDialog(context: context,
+                                                        builder: (context){
+                                                          return AlertDialog(
+                                                            title: new Text("U",style: TextStyle(color: Colors.deepOrange),),
+                                                            content: new Text("Contest will be deemed cancelled if not full"),
+                                                            actions: <Widget>[
+                                                              new OutlineButton(onPressed: (){
+                                                                Navigator.pop(context);
+                                                              },
+                                                                child: new Text("OK",style:TextStyle(color: Colors.deepOrange)),
+                                                                borderSide: BorderSide(
+                                                                  color: Colors.deepOrange,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          );
+                                                        }
+                                                    );
+                                                  },
+                                                  child: new CircleAvatar(
+                                                    backgroundColor: Colors.deepOrange,
+                                                    child: new Text(_contestCancel,style: TextStyle(color: Colors.white,fontSize: 12.0)),
+                                                    radius: 8.0,
+                                                  ),
                                                 ),
                                               );
-                                            } else
+                                            }else
+                                              return new Container();
+                                          }),
+                                          SizedBox(
+                                            width: 2.0,
+                                          ),
+                                          Builder(builder: (context){
+                                            if(_amountVaries != null){
+                                              return new Container(
+                                                child: InkWell(
+                                                  onTap: (){
+                                                    showDialog(context: context,
+                                                        builder: (context){
+                                                          return AlertDialog(
+                                                            title: new Text("C",style: TextStyle(color: Colors.deepOrange),),
+                                                            content: new Text("Winning prize will varies on the basis of joined"),
+                                                            actions: <Widget>[
+                                                              new OutlineButton(onPressed: (){
+                                                                Navigator.pop(context);
+                                                              },
+                                                                child: new Text("OK",style:TextStyle(color: Colors.deepOrange)),
+                                                                borderSide: BorderSide(
+                                                                  color: Colors.deepOrange,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          );
+                                                        }
+                                                    );
+                                                  },
+                                                  child: new CircleAvatar(
+                                                    backgroundColor: Colors.deepOrange,
+                                                    child: new Text(_amountVaries,style: TextStyle(color: Colors.white,fontSize: 12.0)),
+                                                    radius: 8.0,
+                                                  ),
+                                                ),
+                                              );
+                                            }else
                                               return new Container();
                                           }),
                                         ],

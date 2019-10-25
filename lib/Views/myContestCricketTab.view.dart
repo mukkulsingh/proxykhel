@@ -18,6 +18,13 @@ class _MyContestCricketTabState extends State<MyContestCricketTab> {
   static bool _isUpcomingButtonSelected;
   static bool _isFinishedButtonSelected;
 
+  static String _contestFees='';
+  static String _contestCancel = '';
+  static String _multipleEntry = '';
+  static String _singleEntry = '';
+  static String _opponent = '';
+  static String _amountVaries = '';
+
   String convertDateFromString(Duration difference){
 
     String d = difference.toString();
@@ -158,7 +165,8 @@ class _MyContestCricketTabState extends State<MyContestCricketTab> {
                             Duration difference = (snapshot.data.data[index].matchDateTime).difference(DateTime.now());
                             String _visibility =  snapshot.data.data[index].visibility;
                             if(_currentScreen == 0 && difference < Duration(hours:0,minutes: 0, seconds: 0) && difference > Duration(hours: -8)){
-                               return new Container(
+
+                              return new Container(
                                   margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                                   height: 120,
                                   child: InkWell(
@@ -228,8 +236,7 @@ class _MyContestCricketTabState extends State<MyContestCricketTab> {
                                 );
                             }else
                             if(_currentScreen == 1 && difference > Duration(hours: 0,minutes: 0,seconds: 0)){
-
-                               return new Container(
+                              return new Container(
                                   margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                                   height: 120,
                                   child: InkWell(

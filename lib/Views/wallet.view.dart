@@ -13,6 +13,7 @@ class Wallet extends StatefulWidget {
 class _WalletState extends State<Wallet> {
 
   final GlobalKey<ScaffoldState> _scadffoldKey = new GlobalKey<ScaffoldState>();
+  static String bonus="0";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,6 +56,7 @@ class _WalletState extends State<Wallet> {
                           else {
                             WalletModel.instance.setBalance(
                                 snapshot.data.walletAmount);
+                            WalletModel.instance.setBonusAmount(snapshot.data.bonus);
                             return new RichText(
                               text: TextSpan(
                                   children: <TextSpan>[
@@ -106,7 +108,15 @@ class _WalletState extends State<Wallet> {
                 new Column(
                   children: <Widget>[
                     new Text('Bonus'),
-                    new Text('-'),
+                    FutureBuilder(
+                      future: WalletModel.instance.getWalletBalance(),
+                      builder: (context, snapshot){
+                      if(snapshot.connectionState != ConnectionState.done){
+                        return new Center(child: Container(height:10.0,width:10.0,child: new CircularProgressIndicator()),);
+                      }else
+                        return new Text("${snapshot.data.bonus}");
+                      },
+                    ),
                   ],
                 ),
               ],

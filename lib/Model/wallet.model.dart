@@ -9,7 +9,7 @@ class WalletModel{
 
 
   static String balanceAmount;
-
+  static String _bonusAmount="0";
   static WalletModel _instance;
   static WalletModel get instance{
 
@@ -33,6 +33,8 @@ class WalletModel{
     }
   }
 
+  void setBonusAmount(String bonusAount){_bonusAmount = bonusAount;}
+
   void setBalance(String balance){
     balanceAmount = balance;
   }
@@ -40,6 +42,8 @@ class WalletModel{
   String getBalance(){
     return balanceAmount;
   }
+
+  String get getBonusAoumnt=>_bonusAmount;
 
 }
 
@@ -53,12 +57,14 @@ class WalletDetails {
   String userId;
   String walletAmount;
   DateTime created;
+  String bonus;
 
   WalletDetails({
     this.id,
     this.userId,
     this.walletAmount,
     this.created,
+    this.bonus
   });
 
   factory WalletDetails.fromJson(Map<String, dynamic> json) => new WalletDetails(
@@ -66,6 +72,7 @@ class WalletDetails {
     userId: json["user_id"],
     walletAmount: json["wallet_amount"],
     created: DateTime.parse(json["created"]),
+    bonus: json["bonus"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -73,5 +80,6 @@ class WalletDetails {
     "user_id": userId,
     "wallet_amount": walletAmount,
     "created": created.toIso8601String(),
+    "bonus":bonus
   };
 }

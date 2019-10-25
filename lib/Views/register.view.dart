@@ -194,6 +194,7 @@ class _RegisterState extends State<Register> {
                       new Container(
                         margin: const EdgeInsets.only(top: 20,left: 15.0,right: 15.0),
                         child: new TextField(
+                          inputFormatters: [WhitelistingTextInputFormatter(RegExp('[a-zA-Z ]'))],
                           controller: fullNameController,
                           onChanged:(value){
                             _fullName = value;
@@ -215,7 +216,9 @@ class _RegisterState extends State<Register> {
                       new Container(
                         margin: const EdgeInsets.only(top: 20,left: 15.0,right: 15.0),
                         child: new TextField(
-                          inputFormatters: [WhitelistingTextInputFormatter(RegExp('[0-9]'))],
+                          inputFormatters: [WhitelistingTextInputFormatter(RegExp('[0-9]')),
+                            LengthLimitingTextInputFormatter(10),
+                          ],
                           keyboardType: TextInputType.number,
                           controller: emailOrPhoneController,
                           onChanged: (value){
@@ -298,8 +301,6 @@ class _RegisterState extends State<Register> {
                                         content: Text('User Exists'),duration: const Duration(milliseconds: 1500),);
                                     _scaffoldKey.currentState.showSnackBar(snackBar);
                                     emailOrPhoneController.clear();
-//                                    fullNameController.clear();
-//                                    passwordController.clear();
                                     await new Future.delayed(const Duration(seconds: 2),);
                                     setState(() {
                                       _isLoading=false;

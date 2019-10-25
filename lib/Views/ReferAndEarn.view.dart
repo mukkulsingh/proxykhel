@@ -55,17 +55,26 @@ class _ReferAndEarnViewState extends State<ReferAndEarnView> {
         new SizedBox(height: 20.0,),
         new Center(child: new Text("How it works",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24.0),),),
         Divider(),
-        Padding(padding:EdgeInsets.only(left: 4.0),child: new Text("REFER",style: TextStyle(color:Colors.deepOrange,fontWeight: FontWeight.bold,fontSize: 18.0))),
-        Padding(padding:EdgeInsets.only(left: 8.0),child: new Text("Share yore referral code with your friend",style: TextStyle(color: Colors.blueGrey,fontSize: 16.0),)),
+        Padding(padding:EdgeInsets.only(left: 4.0),child: new Text("REFER",style: TextStyle(color:Colors.deepOrange,fontWeight: FontWeight.bold,fontSize: 18.0),textAlign: TextAlign.center,)),
+        new Image(image: AssetImage("assets/images/REFER.png"),width: 250,height: 150,),
+        Padding(padding:EdgeInsets.only(left: 8.0),child: new Text("Share your referral code with your friend",style: TextStyle(color: Colors.blueGrey,fontSize: 16.0),textAlign: TextAlign.center)),
         new SizedBox(height: 20.0,),
-        Padding(padding:EdgeInsets.only(left: 4.0),child: new Text("ADD",style: TextStyle(color:Colors.deepOrange,fontWeight: FontWeight.bold,fontSize: 18.0))),
-        Padding(padding:EdgeInsets.only(left: 8.0),child: new Text("Your friend successfully registers to proxykhel using your referral code",style: TextStyle(color: Colors.blueGrey,fontSize: 16.0))),
+        Padding(padding:EdgeInsets.only(left: 4.0),child: new Text("ADD",style: TextStyle(color:Colors.deepOrange,fontWeight: FontWeight.bold,fontSize: 18.0),textAlign: TextAlign.center)),
+        new Image(image: AssetImage("assets/images/ADD.png"),width: 250,height: 150,),
+        Padding(padding:EdgeInsets.only(left: 8.0),child: new Text("Your friend successfully registers to proxykhel using your referral code",style: TextStyle(color: Colors.blueGrey,fontSize: 16.0),textAlign: TextAlign.center)),
         new SizedBox(height: 20.0,),
-        Padding(padding:EdgeInsets.only(left: 4.0),child: new Text("EARN",style: TextStyle(color:Colors.deepOrange,fontWeight: FontWeight.bold,fontSize: 18.0))),
-        Padding(padding:EdgeInsets.only(left: 8.0),child: new Text("Your friend & you both get Rs.100 Bonus",style: TextStyle(color: Colors.blueGrey,fontSize: 16.0))),
+        Padding(padding:EdgeInsets.only(left: 4.0),child: new Text("EARN",style: TextStyle(color:Colors.deepOrange,fontWeight: FontWeight.bold,fontSize: 18.0),textAlign: TextAlign.center)),
+        new Image(image: AssetImage("assets/images/EARN.png"),width: 250,height: 150,),
+        Padding(padding:EdgeInsets.only(left: 8.0),child: new Text("Your friend & you both get Rs.100 Bonus",style: TextStyle(color: Colors.blueGrey,fontSize: 16.0),textAlign: TextAlign.center)),
 
         new SizedBox(height: 20.0,),
-        new Text(referralCode,style: TextStyle(color: Colors.deepOrange,fontSize: 18.0),textAlign: TextAlign.center,),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            new Text("Referral code: "),
+            new Text('$referralCode',style: TextStyle(color: Colors.deepOrange,fontSize: 18.0),textAlign: TextAlign.center,),
+          ],
+        ),
         new SizedBox(height: 20.0,),
 
         Padding(

@@ -21,10 +21,10 @@ class AddMoneyWalletModel{
   get getBalance=>_balance;
   Future addBalance() async {
     String userId = await SavedPref.instance.getUserId();
-    http.Response response = await http.post("https://proxykhel.com/android/AddBalance.php",body: {
-      "type":"addBalance",
+    http.Response response = await http.post("https://www.proxykhel.com/android/AddMoneyWallet.php",body: {
+      "type":"addMoneyWallet",
       "userId":userId,
-      "balance":_balance,
+      "amount":_balance,
     });
 
     if(response.statusCode  == 200){
