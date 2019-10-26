@@ -88,6 +88,7 @@ class _TabBarCricketState extends State<TabBarCricket> {
               itemCount: snapshot.data.matchData.length,
               itemBuilder: (BuildContext context,int index){
                 String matchDateTime = snapshot.data.matchData[index].matchDateTime;
+                print(matchDateTime);
                 String formattedMatchDateTime = matchDateTime.replaceAll('/', '-');
                 convertDateFromString(formattedMatchDateTime);
                 if(snapshot.data.matchData[index].visibility == '0'){

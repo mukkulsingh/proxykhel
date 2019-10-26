@@ -16,7 +16,6 @@ class JoinedContestModel{
   
   Future getJoinedContestDetail() async {
     String userId = await SavedPref.instance.getUserId();
-
     http.Response response = await http.post("https://www.proxykhel.com/android/joinedmatches.php",body: {"type":"getJoinedContest","userId":userId});
     if(response.statusCode == 200){
       final res = json.decode(response.body);

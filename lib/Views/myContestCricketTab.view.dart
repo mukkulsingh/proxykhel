@@ -159,233 +159,246 @@ class _MyContestCricketTabState extends State<MyContestCricketTab> {
                       );
                     }
                     else if(snapshot.hasData){
-                      return  new ListView.builder(
-                          itemCount: snapshot.data.data.length,
-                          itemBuilder: (BuildContext context, int index){
-                            Duration difference = (snapshot.data.data[index].matchDateTime).difference(DateTime.now());
-                            String _visibility =  snapshot.data.data[index].visibility;
-                            if(_currentScreen == 0 && difference < Duration(hours:0,minutes: 0, seconds: 0) && difference > Duration(hours: -8)){
+                      return  RefreshIndicator(
+                        onRefresh: ()async{
+                          setState(() {
 
-                              return new Container(
-                                  margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                                  height: 120,
-                                  child: InkWell(
-                                    onTap: () {
-                                      JoinedContestListModel.instance.setMatchId(snapshot.data.data[index].id);
-                                      JoinedContestListModel.instance.setTeam1(snapshot.data.data[index].team1Name);
-                                      JoinedContestListModel.instance.setTeam2(snapshot.data.data[index].team2Name);
-                                      JoinedContestListModel.instance.setMatchType(snapshot.data.data[index].matchType);
-                                      Navigator.push(context, SlideLeftRoute(widget: JoinedContestList()));
-                                    },
-                                    child: Stack(
-                                      children: <Widget>[
-
-                                        new Card(
-                                          elevation:4,
-                                          child: new Column(
-                                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            children: <Widget>[
-                                              new Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                  children: <Widget>[
-                                                    new Column(
-                                                      children: <Widget>[
-                                                        new Image(image: NetworkImage('https://www.proxykhel.com/public/teamLogo/'+snapshot.data.data[index].team1Image),height: 80,width: 80,),
-                                                        new Text(snapshot.data.data[index].team1Name,style: TextStyle(fontWeight: FontWeight.bold),),
-                                                      ],
-                                                    ),
-                                                    new Column(
-                                                      mainAxisAlignment: MainAxisAlignment.center
-                                                      ,
-                                                      children: <Widget>[
-                                                        new SizedBox(
-                                                          height: 30,
-                                                          width: 80,
-                                                          child: Container(
-                                                            decoration: BoxDecoration(
-                                                                color: Colors.deepOrange,
-                                                                borderRadius: BorderRadius.circular(32.0)
-                                                            ),
-                                                            child: Padding(
-                                                              padding: const EdgeInsets.only(top:8.0),
-                                                              child: new Text(snapshot.data.data[index].matchType,style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),textAlign: TextAlign.center,),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        new SizedBox(
-                                                          height: 20.0,
-                                                        ),
-                                                        new Text(convertDateFromString(difference),style: TextStyle(fontSize: 12.0,color: Colors.deepOrange,fontWeight: FontWeight.w900),),
-                                                      ],
-                                                    ),
-                                                    new Column(
-                                                      children: <Widget>[
-                                                        new Image(image: NetworkImage('https://www.proxykhel.com/public/teamLogo/'+snapshot.data.data[index].team2Image),height: 80,width: 80,),
-                                                        new Text(snapshot.data.data[index].team2Name,style: TextStyle(fontWeight: FontWeight.bold),),
-                                                      ],
-                                                    ),
-                                                  ]
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                            }else
-                            if(_currentScreen == 1 && difference > Duration(hours: 0,minutes: 0,seconds: 0)){
-                              return new Container(
-                                  margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                                  height: 120,
-                                  child: InkWell(
-                                    onTap: () {
-                                      JoinedContestListModel.instance.setMatchId(snapshot.data.data[index].id);
-                                      JoinedContestListModel.instance.setTeam1(snapshot.data.data[index].team1Name);
-                                      JoinedContestListModel.instance.setTeam2(snapshot.data.data[index].team2Name);
-                                      JoinedContestListModel.instance.setMatchType(snapshot.data.data[index].matchType);
-                                      Navigator.push(context, SlideLeftRoute(widget: JoinedContestList()));
-                                    },
-                                    child: Stack(
-                                      children: <Widget>[
-
-                                        new Card(
-                                          elevation:4,
-                                          child: new Column(
-                                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            children: <Widget>[
-                                              new Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                  children: <Widget>[
-                                                    new Column(
-                                                      children: <Widget>[
-                                                        new Image(image: NetworkImage('https://www.proxykhel.com/public/teamLogo/'+snapshot.data.data[index].team1Image),height: 80,width: 80,),
-                                                        new Text(snapshot.data.data[index].team1Name,style: TextStyle(fontWeight: FontWeight.bold),),
-                                                      ],
-                                                    ),
-                                                    new Column(
-                                                      mainAxisAlignment: MainAxisAlignment.center
-                                                      ,
-                                                      children: <Widget>[
-                                                        new SizedBox(
-                                                          height: 30,
-                                                          width: 80,
-                                                          child: Container(
-                                                            decoration: BoxDecoration(
-                                                                color: Colors.deepOrange,
-                                                                borderRadius: BorderRadius.circular(32.0)
-                                                            ),
-                                                            child: Padding(
-                                                              padding: const EdgeInsets.only(top:8.0),
-                                                              child: new Text(snapshot.data.data[index].matchType,style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),textAlign: TextAlign.center,),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        new SizedBox(
-                                                          height: 20.0,
-                                                        ),
-                                                        new Text(convertDateFromString(difference),style: TextStyle(fontSize: 12.0,color: Colors.deepOrange,fontWeight: FontWeight.w900),),
-                                                      ],
-                                                    ),
-                                                    new Column(
-                                                      children: <Widget>[
-                                                        new Image(image: NetworkImage('https://www.proxykhel.com/public/teamLogo/'+snapshot.data.data[index].team2Image),height: 80,width: 80,),
-                                                        new Text(snapshot.data.data[index].team2Name,style: TextStyle(fontWeight: FontWeight.bold),),
-                                                      ],
-                                                    ),
-                                                  ]
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-
-
-                            }else
-                            if( _currentScreen==2 ){
-                              if(difference >= Duration(hours: -8))
-                                return new Container();
-                              else
-                              return new  Container(
-                                  margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                                  height: 120,
-                                  child: InkWell(
-                                    onTap: () {
-                                      JoinedContestListModel.instance.setMatchId(snapshot.data.data[index].id);
-                                      JoinedContestListModel.instance.setTeam1(snapshot.data.data[index].team1Name);
-                                      JoinedContestListModel.instance.setTeam2(snapshot.data.data[index].team2Name);
-                                      JoinedContestListModel.instance.setMatchType(snapshot.data.data[index].matchType);
-                                      Navigator.push(context, SlideLeftRoute(widget: JoinedContestList()));
-                                    },
-                                    child: Stack(
-                                      children: <Widget>[
-
-                                        new Card(
-                                          elevation:4,
-                                          child: new Column(
-                                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            children: <Widget>[
-                                              new Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                  children: <Widget>[
-                                                    new Column(
-                                                      children: <Widget>[
-                                                        new Image(image: NetworkImage('https://www.proxykhel.com/public/teamLogo/'+snapshot.data.data[index].team1Image),height: 80,width: 80,),
-                                                        new Text(snapshot.data.data[index].team1Name,style: TextStyle(fontWeight: FontWeight.bold),),
-                                                      ],
-                                                    ),
-                                                    new Column(
-                                                      mainAxisAlignment: MainAxisAlignment.center
-                                                      ,
-                                                      children: <Widget>[
-                                                        new SizedBox(
-                                                          height: 30,
-                                                          width: 80,
-                                                          child: Container(
-                                                            decoration: BoxDecoration(
-                                                                color: Colors.deepOrange,
-                                                                borderRadius: BorderRadius.circular(32.0)
-                                                            ),
-                                                            child: Padding(
-                                                              padding: const EdgeInsets.only(top:8.0),
-                                                              child: new Text(snapshot.data.data[index].matchType,style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),textAlign: TextAlign.center,),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        new SizedBox(
-                                                          height: 20.0,
-                                                        ),
-                                                        new Text("Finished",style: TextStyle(fontSize: 12.0,color: Colors.deepOrange,fontWeight: FontWeight.w900),),
-                                                        new Text(snapshot.data.data[index].matchDate.day.toString()+'-'+snapshot.data.data[index].matchDate.month.toString()+'-'+snapshot.data.data[index].matchDate.year.toString(),
-                                                          style: TextStyle(color: Colors.deepOrangeAccent[400],fontSize: 12.0),
-                                                        )
-                                                      ],
-                                                    ),
-                                                    new Column(
-                                                      children: <Widget>[
-                                                        new Image(image: NetworkImage('https://www.proxykhel.com/public/teamLogo/'+snapshot.data.data[index].team2Image),height: 80,width: 80,),
-                                                        new Text(snapshot.data.data[index].team2Name,style: TextStyle(fontWeight: FontWeight.bold),),
-                                                      ],
-                                                    ),
-                                                  ]
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-
-                              }
-                            return new Container();
                           });
+                        },
+                        child: new ListView.builder(
+                            itemCount: snapshot.data.data.length,
+                            itemBuilder: (BuildContext context, int index){
+                              String dateTimeGmt  = snapshot.data.data[index].dateTimeGmt;
+                              List d = dateTimeGmt.split('T');
+                              String b = d[1];
+                              List t = b.split('Z');
+                              var dateTime = d[0] +' '+ t[0];
+                              DateTime MatchDateTime = DateTime.parse(dateTime);
+                              print(MatchDateTime);
+                              Duration difference = (snapshot.data.data[index].matchDateTime).difference(DateTime.now());
+                              String _visibility =  snapshot.data.data[index].visibility;
+                              if(_currentScreen == 0 && difference < Duration(hours:0,minutes: 0, seconds: 0) && difference > Duration(hours: -8)){
+                                return new Container(
+                                    margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                                    height: 120,
+                                    child: InkWell(
+                                      onTap: () {
+                                        JoinedContestListModel.instance.setMatchId(snapshot.data.data[index].id);
+                                        JoinedContestListModel.instance.setTeam1(snapshot.data.data[index].team1Name);
+                                        JoinedContestListModel.instance.setTeam2(snapshot.data.data[index].team2Name);
+                                        JoinedContestListModel.instance.setMatchType(snapshot.data.data[index].matchType);
+                                        Navigator.push(context, SlideLeftRoute(widget: JoinedContestList()));
+                                      },
+                                      child: Stack(
+                                        children: <Widget>[
+
+                                          new Card(
+                                            elevation:4,
+                                            child: new Column(
+                                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              children: <Widget>[
+                                                new Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                    children: <Widget>[
+                                                      new Column(
+                                                        children: <Widget>[
+                                                          new Image(image: NetworkImage('https://www.proxykhel.com/public/teamLogo/'+snapshot.data.data[index].team1Image),height: 80,width: 80,),
+                                                          new Text(snapshot.data.data[index].team1Name,style: TextStyle(fontWeight: FontWeight.bold),),
+                                                        ],
+                                                      ),
+                                                      new Column(
+                                                        mainAxisAlignment: MainAxisAlignment.center
+                                                        ,
+                                                        children: <Widget>[
+                                                          new SizedBox(
+                                                            height: 30,
+                                                            width: 80,
+                                                            child: Container(
+                                                              decoration: BoxDecoration(
+                                                                  color: Colors.deepOrange,
+                                                                  borderRadius: BorderRadius.circular(32.0)
+                                                              ),
+                                                              child: Padding(
+                                                                padding: const EdgeInsets.only(top:8.0),
+                                                                child: new Text(snapshot.data.data[index].matchType,style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),textAlign: TextAlign.center,),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          new SizedBox(
+                                                            height: 20.0,
+                                                          ),
+                                                          new Text(convertDateFromString(difference),style: TextStyle(fontSize: 12.0,color: Colors.deepOrange,fontWeight: FontWeight.w900),),
+                                                        ],
+                                                      ),
+                                                      new Column(
+                                                        children: <Widget>[
+                                                          new Image(image: NetworkImage('https://www.proxykhel.com/public/teamLogo/'+snapshot.data.data[index].team2Image),height: 80,width: 80,),
+                                                          new Text(snapshot.data.data[index].team2Name,style: TextStyle(fontWeight: FontWeight.bold),),
+                                                        ],
+                                                      ),
+                                                    ]
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                              }else
+                              if(_currentScreen == 1 && difference > Duration(hours: 0,minutes: 0,seconds: 0)){
+                                return new Container(
+                                    margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                                    height: 120,
+                                    child: InkWell(
+                                      onTap: () {
+                                        JoinedContestListModel.instance.setMatchId(snapshot.data.data[index].id);
+                                        JoinedContestListModel.instance.setTeam1(snapshot.data.data[index].team1Name);
+                                        JoinedContestListModel.instance.setTeam2(snapshot.data.data[index].team2Name);
+                                        JoinedContestListModel.instance.setMatchType(snapshot.data.data[index].matchType);
+                                        Navigator.push(context, SlideLeftRoute(widget: JoinedContestList()));
+                                      },
+                                      child: Stack(
+                                        children: <Widget>[
+
+                                          new Card(
+                                            elevation:4,
+                                            child: new Column(
+                                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              children: <Widget>[
+                                                new Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                    children: <Widget>[
+                                                      new Column(
+                                                        children: <Widget>[
+                                                          new Image(image: NetworkImage('https://www.proxykhel.com/public/teamLogo/'+snapshot.data.data[index].team1Image),height: 80,width: 80,),
+                                                          new Text(snapshot.data.data[index].team1Name,style: TextStyle(fontWeight: FontWeight.bold),),
+                                                        ],
+                                                      ),
+                                                      new Column(
+                                                        mainAxisAlignment: MainAxisAlignment.center
+                                                        ,
+                                                        children: <Widget>[
+                                                          new SizedBox(
+                                                            height: 30,
+                                                            width: 80,
+                                                            child: Container(
+                                                              decoration: BoxDecoration(
+                                                                  color: Colors.deepOrange,
+                                                                  borderRadius: BorderRadius.circular(32.0)
+                                                              ),
+                                                              child: Padding(
+                                                                padding: const EdgeInsets.only(top:8.0),
+                                                                child: new Text(snapshot.data.data[index].matchType,style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),textAlign: TextAlign.center,),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          new SizedBox(
+                                                            height: 20.0,
+                                                          ),
+                                                          new Text(convertDateFromString(difference),style: TextStyle(fontSize: 12.0,color: Colors.deepOrange,fontWeight: FontWeight.w900),),
+                                                        ],
+                                                      ),
+                                                      new Column(
+                                                        children: <Widget>[
+                                                          new Image(image: NetworkImage('https://www.proxykhel.com/public/teamLogo/'+snapshot.data.data[index].team2Image),height: 80,width: 80,),
+                                                          new Text(snapshot.data.data[index].team2Name,style: TextStyle(fontWeight: FontWeight.bold),),
+                                                        ],
+                                                      ),
+                                                    ]
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+
+
+                              }else
+                              if( _currentScreen==2 ){
+                                if(difference >= Duration(hours: -8))
+                                  return new Container();
+                                else
+                                return new  Container(
+                                    margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                                    height: 120,
+                                    child: InkWell(
+                                      onTap: () {
+                                        JoinedContestListModel.instance.setMatchId(snapshot.data.data[index].id);
+                                        JoinedContestListModel.instance.setTeam1(snapshot.data.data[index].team1Name);
+                                        JoinedContestListModel.instance.setTeam2(snapshot.data.data[index].team2Name);
+                                        JoinedContestListModel.instance.setMatchType(snapshot.data.data[index].matchType);
+                                        Navigator.push(context, SlideLeftRoute(widget: JoinedContestList()));
+                                      },
+                                      child: Stack(
+                                        children: <Widget>[
+
+                                          new Card(
+                                            elevation:4,
+                                            child: new Column(
+                                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              children: <Widget>[
+                                                new Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                    children: <Widget>[
+                                                      new Column(
+                                                        children: <Widget>[
+                                                          new Image(image: NetworkImage('https://www.proxykhel.com/public/teamLogo/'+snapshot.data.data[index].team1Image),height: 80,width: 80,),
+                                                          new Text(snapshot.data.data[index].team1Name,style: TextStyle(fontWeight: FontWeight.bold),),
+                                                        ],
+                                                      ),
+                                                      new Column(
+                                                        mainAxisAlignment: MainAxisAlignment.center
+                                                        ,
+                                                        children: <Widget>[
+                                                          new SizedBox(
+                                                            height: 30,
+                                                            width: 80,
+                                                            child: Container(
+                                                              decoration: BoxDecoration(
+                                                                  color: Colors.deepOrange,
+                                                                  borderRadius: BorderRadius.circular(32.0)
+                                                              ),
+                                                              child: Padding(
+                                                                padding: const EdgeInsets.only(top:8.0),
+                                                                child: new Text(snapshot.data.data[index].matchType,style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),textAlign: TextAlign.center,),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          new SizedBox(
+                                                            height: 20.0,
+                                                          ),
+                                                          new Text("Finished",style: TextStyle(fontSize: 12.0,color: Colors.deepOrange,fontWeight: FontWeight.w900),),
+                                                          new Text(snapshot.data.data[index].matchDate.day.toString()+'-'+snapshot.data.data[index].matchDate.month.toString()+'-'+snapshot.data.data[index].matchDate.year.toString(),
+                                                            style: TextStyle(color: Colors.deepOrangeAccent[400],fontSize: 12.0),
+                                                          )
+                                                        ],
+                                                      ),
+                                                      new Column(
+                                                        children: <Widget>[
+                                                          new Image(image: NetworkImage('https://www.proxykhel.com/public/teamLogo/'+snapshot.data.data[index].team2Image),height: 80,width: 80,),
+                                                          new Text(snapshot.data.data[index].team2Name,style: TextStyle(fontWeight: FontWeight.bold),),
+                                                        ],
+                                                      ),
+                                                    ]
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+
+                                }
+                              return new Container();
+                            }),
+                      );
                     }
                     else{
                       return new Column(

@@ -55,7 +55,9 @@ class _AddMoneyState extends State<AddMoney> {
       _internet = false;
     }
     else{
-      _internet = true;
+      setState(() {
+        _internet = true;
+      });
     }
   }
 
@@ -68,7 +70,8 @@ class _AddMoneyState extends State<AddMoney> {
     _amountToAdd='0';
     _amountController = TextEditingController();
     _amountToAddError = false;
-    _internet = false;
+    _internet = true;
+    checkinternet();
   }
 
   Future<void> initPayment(String txnAmount) async {
@@ -162,8 +165,6 @@ class _AddMoneyState extends State<AddMoney> {
                           return new Text(snapshot.data.walletAmount??"0",style: TextStyle(color: Colors.deepOrangeAccent,fontSize: 16.0),);
                         }
                     }
-
-
                     return new Container();
                   }
                 )),

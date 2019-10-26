@@ -7,7 +7,6 @@ class WalletModel{
 
   AsyncMemoizer _memoizer = new AsyncMemoizer();
 
-
   static String balanceAmount;
   static String _bonusAmount="0";
   static WalletModel _instance;
