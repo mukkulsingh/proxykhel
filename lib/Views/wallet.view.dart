@@ -3,7 +3,6 @@ import 'package:proxykhel/Views/Transactions.view.dart';
 import './../Constants/slideTransitions.dart';
 import './../Views/addmoney.view.dart';
 import './../Model/wallet.model.dart';
-import 'AddMoney.view.dart';
 import 'Withdraw.view.dart';
 
 class Wallet extends StatefulWidget {

@@ -584,12 +584,17 @@ class MapScreenState extends State<ProfilePage>
                           showDialog(
                             context: context,
                             builder: (context){
-                              return AlertDialog(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18.0)
-                                ),
-                                backgroundColor: Colors.transparent,
-                                content: new Center(child: CircularProgressIndicator(),),
+                              return SimpleDialog(
+                                children: <Widget>[
+                                  new Row(
+                                    children: <Widget>[
+                                      new SizedBox(width:10.0),
+                                      new CircularProgressIndicator(),
+                                      new SizedBox(width:10.0),
+                                      new Text("Please Wait..."),
+                                    ],
+                                  )
+                                ],
                               );
                             }
                           );

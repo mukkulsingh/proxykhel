@@ -17,6 +17,8 @@ class _AddMoneyState extends State<AddMoney> {
   static bool _transactionSuccess;
 
   static bool _internet;
+
+  final _scaffoldKey = new GlobalKey<ScaffoldState>();
   void setResponseListener(){
 
     // setting a listener on payment response
@@ -38,6 +40,8 @@ class _AddMoneyState extends State<AddMoney> {
       * handleResponse();
       *
       * */
+
+
     });
   }
 
@@ -60,6 +64,73 @@ class _AddMoneyState extends State<AddMoney> {
       });
     }
   }
+
+  void handleResponse(Map<dynamic, dynamic> responseData)async {
+    if(responseData["STATUS"] == "TXN_SUCCESS"){
+      AddMoneyWalletModel.instance.setBalance(_amountToAdd);
+      if(await AddMoneyWalletModel.instance.addBalance()){
+        showDialog(
+            context: context,
+            builder: (context){
+              return AlertDialog(
+                title: Text("Success",style: TextStyle(color: Colors.green),),
+                content: Text("Transaction successfull"),
+                actions: <Widget>[
+                  OutlineButton(
+                    borderSide: BorderSide(
+                        color: Colors.deepOrange
+                    ),
+                    child: new Text("OK",style: TextStyle(color: Colors.deepOrange),),
+                    onPressed: (){
+                      Navigator.pop(context);
+                    },
+                  )
+                ],
+              );
+            }
+        );
+      }
+
+//      showDialog(context: _scaffoldKey.currentContext,
+//          builder: (context){
+//            return AlertDialog(
+//              title: new Text("Success"),
+//              content: new Text("Money successfully added to account"),
+//              actions: <Widget>[
+//                new FlatButton(onPressed: (){
+//                  Navigator.pop(context);
+//                  Navigator.pop(context);
+//                  setState(() {
+//
+//                  });
+//                }, child: new Text("OK"))
+//              ],
+//            );
+//          }
+//      );
+    }else if(responseData["STATUS"] == "TXN_FAILURE"){
+      showDialog(context: _scaffoldKey.currentContext,
+          builder: (context){
+            return AlertDialog(
+              title: new Text("Error"),
+              content: new Text("Error adding money"),
+              actions: <Widget>[
+                new FlatButton(onPressed: (){
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  setState(() {
+
+                  });
+                }, child: new Text("OK"))
+              ],
+            );
+          }
+      );
+    }else{
+      Navigator.pop(context);
+    }
+  }
+
 
   @override
   void initState() {
@@ -91,7 +162,6 @@ class _AddMoneyState extends State<AddMoney> {
         staging: false, // default: true (by default paytm staging environment is used)
         showToast: false, // default: true (by default shows callback messages from paytm in Android Toasts)
       );
-      setResponseListener();
     } on Exception {
     }
 
@@ -114,6 +184,7 @@ class _AddMoneyState extends State<AddMoney> {
     _isLoading=false;
 
     return Scaffold(
+      key: _scaffoldKey,
       appBar: new AppBar(
         title: Text(
           'Add Money',
@@ -221,53 +292,6 @@ class _AddMoneyState extends State<AddMoney> {
                             });
                       initPayment(_amountToAdd);
 
-                      if(_transactionSuccess){
-                        AddMoneyWalletModel.instance.setBalance(_amountToAdd);
-                          if(await AddMoneyWalletModel.instance.addBalance()){
-                            showDialog(
-                                context: context,
-                                builder: (context){
-                                  return AlertDialog(
-                                    title: Text("Success",style: TextStyle(color: Colors.green),),
-                                    content: Text("Transaction successfull"),
-                                    actions: <Widget>[
-                                      OutlineButton(
-                                        borderSide: BorderSide(
-                                            color: Colors.deepOrange
-                                        ),
-                                        child: new Text("OK",style: TextStyle(color: Colors.deepOrange),),
-                                        onPressed: (){
-                                          Navigator.pop(context);
-                                        },
-                                      )
-                                    ],
-                                  );
-                                }
-                            );
-                          }else{
-                            showDialog(
-                                context: context,
-                                builder: (context){
-                                  return AlertDialog(
-                                    title: Text("Error",style: TextStyle(color: Colors.red),),
-                                    content: Text("Transaction Failed"),
-                                    actions: <Widget>[
-                                      OutlineButton(
-                                        borderSide: BorderSide(
-                                            color: Colors.deepOrange
-                                        ),
-                                        child: new Text("OK",style: TextStyle(color: Colors.deepOrange),),
-                                        onPressed: (){
-                                          Navigator.pop(context);
-                                        },
-                                      )
-                                    ],
-                                  );
-                                }
-                            );
-                          }
-
-                      }
                         }
                       },
                       child: new Text('ADD MONEY',style: TextStyle(color: Colors.white),),
