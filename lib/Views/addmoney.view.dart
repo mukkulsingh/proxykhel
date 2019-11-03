@@ -5,6 +5,10 @@ import 'package:proxykhel/Model/AddMoneyWallet.model.dart';
 import './../Model/wallet.model.dart';
 import 'package:paytm_payments/paytm_payments.dart';
 import './../Model/savedpref.model.dart';
+
+import 'package:razorpay_flutter/razorpay_flutter.dart';
+
+import 'package:fluttertoast/fluttertoast.dart';
 class AddMoney extends StatefulWidget {
   @override
   _AddMoneyState createState() => _AddMoneyState();
@@ -17,6 +21,9 @@ class _AddMoneyState extends State<AddMoney> {
   static bool _transactionSuccess;
 
   static bool _internet;
+  static const platform = const MethodChannel("razorpay_flutter");
+
+  Razorpay _razorpay;
 
   final _scaffoldKey = new GlobalKey<ScaffoldState>();
   void setResponseListener(){
@@ -24,7 +31,7 @@ class _AddMoneyState extends State<AddMoney> {
     // setting a listener on payment response
     PaytmPayments.responseStream.listen((Map<dynamic, dynamic> responseData){
 
-
+    print(responseData);
       /*
       * {RESPMSG : [MSG]} // this is the type of map object received, except for one case.
       *
@@ -78,6 +85,8 @@ class _AddMoneyState extends State<AddMoney> {
                     child: new Text("OK",style: TextStyle(color: Colors.deepOrange),),
                     onPressed: (){
                       Navigator.pop(context);
+                      Navigator.pop(context);
+                      Navigator.pop(context);
                     },
                   )
                 ],
@@ -86,23 +95,6 @@ class _AddMoneyState extends State<AddMoney> {
         );
       }
 
-//      showDialog(context: _scaffoldKey.currentContext,
-//          builder: (context){
-//            return AlertDialog(
-//              title: new Text("Success"),
-//              content: new Text("Money successfully added to account"),
-//              actions: <Widget>[
-//                new FlatButton(onPressed: (){
-//                  Navigator.pop(context);
-//                  Navigator.pop(context);
-//                  setState(() {
-//
-//                  });
-//                }, child: new Text("OK"))
-//              ],
-//            );
-//          }
-//      );
     }else if(responseData["STATUS"] == "TXN_FAILURE"){
       showDialog(context: _scaffoldKey.currentContext,
           builder: (context){
@@ -111,6 +103,7 @@ class _AddMoneyState extends State<AddMoney> {
               content: new Text("Error adding money"),
               actions: <Widget>[
                 new FlatButton(onPressed: (){
+                  Navigator.pop(context);
                   Navigator.pop(context);
                   Navigator.pop(context);
                   setState(() {
@@ -125,7 +118,67 @@ class _AddMoneyState extends State<AddMoney> {
       Navigator.pop(context);
     }
   }
+  void openCheckout(String amount) async {
+    String newAmount = amount + "00";
+    var options = {
+      'key': 'rzp_test_1DP5mmOlF5G5ag',
+      'amount': newAmount,
+      'name': 'ProxyKhel',
+      'description': 'Add money to proxykhel wallet',
+      'prefill': {'contact': '', 'email': ''},
+      'external': {
+        'wallets': ['paytm']
+      }
+    };
 
+    try {
+      _razorpay.open(options);
+    } catch (e) {
+      debugPrint(e);
+    }
+  }
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) async {
+    Fluttertoast.showToast(
+        msg: "SUCCESS: " + response.paymentId, timeInSecForIos: 4);
+
+      AddMoneyWalletModel.instance.setBalance(_amountToAdd);
+      if(await AddMoneyWalletModel.instance.addBalance()){
+        showDialog(
+            context: context,
+            builder: (context){
+              return AlertDialog(
+                title: Text("Success",style: TextStyle(color: Colors.green),),
+                content: Text("Transaction successfull"),
+                actions: <Widget>[
+                  OutlineButton(
+                    borderSide: BorderSide(
+                        color: Colors.deepOrange
+                    ),
+                    child: new Text("OK",style: TextStyle(color: Colors.deepOrange),),
+                    onPressed: (){
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },
+                  )
+                ],
+              );
+            }
+        );
+      }
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    Fluttertoast.showToast(
+        msg: "ERROR: " + response.code.toString() + " - " + response.message,
+        timeInSecForIos: 4);
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    Fluttertoast.showToast(
+        msg: "EXTERNAL_WALLET: " + response.walletName, timeInSecForIos: 4);
+  }
 
   @override
   void initState() {
@@ -138,6 +191,10 @@ class _AddMoneyState extends State<AddMoney> {
     _amountToAddError = false;
     _internet = true;
     checkinternet();
+    _razorpay = Razorpay();
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
   }
 
   Future<void> initPayment(String txnAmount) async {
@@ -146,6 +203,8 @@ class _AddMoneyState extends State<AddMoney> {
     try {
       var userId = await SavedPref.instance.getUserId();
    await PaytmPayments.makePaytmPayment(
+
+
         "WGlUpt31068318705253", // [YOUR_MERCHANT_ID] (required field)
         "https://www.proxykhel.com/android/generateChecksum.php", // [YOUR_CHECKSUM_URL] (required field)
         customerId: userId, // [UNIQUE_ID_FOR_YOUR_CUSTOMER] (auto generated if not specified)
@@ -156,6 +215,8 @@ class _AddMoneyState extends State<AddMoney> {
         website: "DEFAULT", // default: APPSTAGING (STAGING value)
         staging: false, // default: true (by default paytm staging environment is used)
         showToast: false, // default: true (by default shows callback messages from paytm in Android Toasts)
+
+
 //     "rxazcv89315285244163", // [YOUR_MERCHANT_ID] (required field)
 //     "https://ajax8732.000webhostapp.com/generateChecksum.php", // [YOUR_CHECKSUM_URL] (required field)
 //     customerId: "12345", // [UNIQUE_ID_FOR_YOUR_CUSTOMER] (auto generated if not specified)
@@ -182,6 +243,7 @@ class _AddMoneyState extends State<AddMoney> {
     // TODO: implement dispose
     super.dispose();
     _amountController.dispose();
+    _razorpay.clear();
   }
 
   @override
@@ -295,7 +357,51 @@ class _AddMoneyState extends State<AddMoney> {
                             setState(() {
                               _isLoading=true;
                             });
-                      initPayment(_amountToAdd);
+
+                            showDialog(context: context,
+                            builder: (context){
+                              return SimpleDialog(
+                                children: <Widget>[
+                                 ListTile(
+                                   title: Text("PayTM"),
+                                   onTap: (){
+                                     initPayment(_amountToAdd);
+                                   },
+                                 ),
+                                  ListTile(
+                                    title: Text("Other Payment Method"),
+                                    onTap: (){
+                                      print("here");
+                                      openCheckout(_amountToAdd);
+                                    },
+                                  )
+                                ],
+                              );
+                            }
+                            );
+
+//                            _scaffoldKey.currentState.showBottomSheet(
+//
+//                                    (context){
+//                              return new ListView(
+//                                shrinkWrap: true,
+//                                children: <Widget>[
+//                                  new ListTile(
+//                                    title: new Text("PayTM",style: TextStyle(color: Colors.white),),
+//                                    onTap: (){
+//
+//                                      initPayment(_amountToAdd);
+//
+//                                    },
+//                                  ),
+//                                  new ListTile(
+//                                    title: new Text("Other",style: TextStyle(color: Colors.white)),
+//                                  )
+//                                ],
+//                              );
+//                            },
+//                            backgroundColor: Colors.grey[900]
+//                            );
 
                         }
                       },

@@ -39,6 +39,8 @@ dependencies:
   flutter_local_notifications: ^0.8.4
   share: ^0.6.2+4
   paytm: ^1.0.0
+  razorpay_flutter: 1.1.0
+  fluttertoast: ^3.0.4
 
 dev_dependencies:
   flutter_test:
