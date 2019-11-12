@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:proxykhel/Model/JoinedContestListModel.model.dart' as prefix0;
 import './../Model/joinedContestDetail.model.dart';
 import './../Model/JoinedContestListModel.model.dart';
 import './../Constants/slideTransitions.dart';
@@ -174,7 +175,6 @@ class _MyContestCricketTabState extends State<MyContestCricketTab> {
                               List t = b.split('Z');
                               var dateTime = d[0] +' '+ t[0];
                               DateTime MatchDateTime = DateTime.parse(dateTime);
-                              print(MatchDateTime);
                               Duration difference = (snapshot.data.data[index].matchDateTime).difference(DateTime.now());
                               String _visibility =  snapshot.data.data[index].visibility;
                               if(_currentScreen == 0 && difference < Duration(hours:0,minutes: 0, seconds: 0) && difference > Duration(hours: -8)){
@@ -183,6 +183,7 @@ class _MyContestCricketTabState extends State<MyContestCricketTab> {
                                     height: 120,
                                     child: InkWell(
                                       onTap: () {
+                                        JoinedContestListModel.instance.setClicable(true);
                                         JoinedContestListModel.instance.setMatchId(snapshot.data.data[index].id);
                                         JoinedContestListModel.instance.setTeam1(snapshot.data.data[index].team1Name);
                                         JoinedContestListModel.instance.setTeam2(snapshot.data.data[index].team2Name);
@@ -253,6 +254,7 @@ class _MyContestCricketTabState extends State<MyContestCricketTab> {
                                     height: 120,
                                     child: InkWell(
                                       onTap: () {
+                                        JoinedContestListModel.instance.setClicable(false);
                                         JoinedContestListModel.instance.setMatchId(snapshot.data.data[index].id);
                                         JoinedContestListModel.instance.setTeam1(snapshot.data.data[index].team1Name);
                                         JoinedContestListModel.instance.setTeam2(snapshot.data.data[index].team2Name);
@@ -328,6 +330,7 @@ class _MyContestCricketTabState extends State<MyContestCricketTab> {
                                     height: 120,
                                     child: InkWell(
                                       onTap: () {
+                                        JoinedContestListModel.instance.setClicable(true);
                                         JoinedContestListModel.instance.setMatchId(snapshot.data.data[index].id);
                                         JoinedContestListModel.instance.setTeam1(snapshot.data.data[index].team1Name);
                                         JoinedContestListModel.instance.setTeam2(snapshot.data.data[index].team2Name);

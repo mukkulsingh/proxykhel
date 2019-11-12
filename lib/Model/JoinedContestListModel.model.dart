@@ -9,6 +9,13 @@ class JoinedContestListModel {
   static String _team1;
   static String _team2;
   static String _matchType;
+  static bool _isClickable = false;
+
+  void setClicable(bool isClickable){
+    _isClickable = isClickable;
+  }
+
+  get getIsClickable=>_isClickable;
 
   void setTeam1(String team1){
     _team1 = team1;
@@ -28,6 +35,7 @@ class JoinedContestListModel {
   get getTeam1=>_team1;
   get getTeam2=>_team2;
   get getMatchType=>_matchType;
+  get getMatchId=>_matchId;
 
   static JoinedContestListModel _instance ;
   static JoinedContestListModel get instance {

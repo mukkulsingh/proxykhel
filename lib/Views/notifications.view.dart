@@ -38,7 +38,6 @@ class _NotificationsState extends State<Notifications>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     foreground = (state == AppLifecycleState.resumed);
     if (foreground && completer != null) {
-      //debugPrint("complete on didChangeAppLifecycleState");
       completer.complete();
       completer = null;
     }

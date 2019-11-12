@@ -31,7 +31,6 @@ class _AddMoneyState extends State<AddMoney> {
     // setting a listener on payment response
     PaytmPayments.responseStream.listen((Map<dynamic, dynamic> responseData){
 
-    print(responseData);
       /*
       * {RESPMSG : [MSG]} // this is the type of map object received, except for one case.
       *
@@ -121,7 +120,7 @@ class _AddMoneyState extends State<AddMoney> {
   void openCheckout(String amount) async {
     String newAmount = amount + "00";
     var options = {
-      'key': 'rzp_test_1DP5mmOlF5G5ag',
+      'key': 'rzp_live_qBuBu3vEQNfiux',
       'amount': newAmount,
       'name': 'ProxyKhel',
       'description': 'Add money to proxykhel wallet',
@@ -134,7 +133,6 @@ class _AddMoneyState extends State<AddMoney> {
     try {
       _razorpay.open(options);
     } catch (e) {
-      debugPrint(e);
     }
   }
 
@@ -371,7 +369,6 @@ class _AddMoneyState extends State<AddMoney> {
                                   ListTile(
                                     title: Text("Other Payment Method"),
                                     onTap: (){
-                                      print("here");
                                       openCheckout(_amountToAdd);
                                     },
                                   )

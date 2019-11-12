@@ -85,7 +85,7 @@ class _ViewteamState extends State<Viewteam> {
                 color: Colors.transparent,
                 border: Border.all(color: Colors.white, width: 0.0),
                 borderRadius: new BorderRadius.all(Radius.elliptical(150, 150)),
-              ),
+              ),  
               child: Text('     '),
             ),
           ),

@@ -42,6 +42,7 @@ class LeaderBoardModel{
   }
 }
 
+
 LeaderBoardDetail leaderBoardDetailFromJson(String str) => LeaderBoardDetail.fromJson(json.decode(str));
 
 String leaderBoardDetailToJson(LeaderBoardDetail data) => json.encode(data.toJson());
@@ -73,7 +74,7 @@ class Datum {
   AllRounder allRounder;
   ManOfTheMatch manOfTheMatch;
   AllRounder superStriker;
-  FantasyWinningPoint fantasyWinningPoint;
+//  FantasyWinningPoint fantasyWinningPoint;
   List<Map<String, AllRounder>> fantasyWinningPlayersPoint;
   double totalPoints;
   Teamdata teamdata;
@@ -85,7 +86,7 @@ class Datum {
     this.allRounder,
     this.manOfTheMatch,
     this.superStriker,
-    this.fantasyWinningPoint,
+//    this.fantasyWinningPoint,
     this.fantasyWinningPlayersPoint,
     this.totalPoints,
     this.teamdata,
@@ -98,9 +99,9 @@ class Datum {
     allRounder: AllRounder.fromJson(json["AllRounder"]),
     manOfTheMatch: ManOfTheMatch.fromJson(json["ManOfTheMatch"]),
     superStriker: AllRounder.fromJson(json["SuperStriker"]),
-    fantasyWinningPoint: json["FantasyWinningPoint"] == null ? null : FantasyWinningPoint.fromJson(json["FantasyWinningPoint"]),
+//    fantasyWinningPoint: FantasyWinningPoint.fromJson(json["FantasyWinningPoint"]),
     fantasyWinningPlayersPoint: List<Map<String, AllRounder>>.from(json["FantasyWinningPlayersPoint"].map((x) => Map.from(x).map((k, v) => MapEntry<String, AllRounder>(k, AllRounder.fromJson(v))))),
-    totalPoints: json["totalPoints"].toDouble(),
+    totalPoints: json["totalPoints"] == null ? 0 : json["totalPoints"].toDouble(),
     teamdata: Teamdata.fromJson(json["teamdata"]),
   );
 
@@ -111,7 +112,7 @@ class Datum {
     "AllRounder": allRounder.toJson(),
     "ManOfTheMatch": manOfTheMatch.toJson(),
     "SuperStriker": superStriker.toJson(),
-    "FantasyWinningPoint": fantasyWinningPoint == null ? null : fantasyWinningPoint.toJson(),
+//    "FantasyWinningPoint": fantasyWinningPoint.toJson(),
     "FantasyWinningPlayersPoint": List<dynamic>.from(fantasyWinningPlayersPoint.map((x) => Map.from(x).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())))),
     "totalPoints": totalPoints,
     "teamdata": teamdata.toJson(),
@@ -120,31 +121,29 @@ class Datum {
 
 class AllRounder {
   String eligibiltyPoint;
-  Type type;
+  String type;
   dynamic name;
-  double perRun;
-  double perFour;
-  int perSix;
+  dynamic perRun;
+  dynamic perFour;
+  dynamic perSix;
   String perStrikeRate;
-  int allRounderCatch;
+  dynamic allRounderCatch;
   String runout;
-  int runoutStump;
-  int lbw;
-  int bowled;
-  int perWicket;
-  double perDotBall;
-  String runsPerOver7;
-  String runsPerOver4;
+  dynamic runoutStump;
+  dynamic lbw;
+  dynamic bowled;
+  dynamic perWicket;
+  dynamic perDotBall;
+  String maidenOver;
+  String runsPerOver5;
   String eligibility;
-  double rewardSixesPoint;
+  dynamic rewardFoursPoint;
   String rewardStrikeRatePoint;
-  double rewardWicketPoint;
-  String runsPerOver1;
   String runsPerOver6;
-  String runsPerOver3;
+  String runsPerOver2;
   dynamic rewardBattingPoint;
+  String moreRuns1;
   String eligibilityPoints;
-  String rewardStrikeRatePoints;
 
   AllRounder({
     this.eligibiltyPoint,
@@ -161,26 +160,24 @@ class AllRounder {
     this.bowled,
     this.perWicket,
     this.perDotBall,
-    this.runsPerOver7,
-    this.runsPerOver4,
+    this.maidenOver,
+    this.runsPerOver5,
     this.eligibility,
-    this.rewardSixesPoint,
+    this.rewardFoursPoint,
     this.rewardStrikeRatePoint,
-    this.rewardWicketPoint,
-    this.runsPerOver1,
     this.runsPerOver6,
-    this.runsPerOver3,
+    this.runsPerOver2,
     this.rewardBattingPoint,
+    this.moreRuns1,
     this.eligibilityPoints,
-    this.rewardStrikeRatePoints,
   });
 
   factory AllRounder.fromJson(Map<String, dynamic> json) => AllRounder(
-    eligibiltyPoint: json["eligibiltyPoint"] == null ? null : json["eligibiltyPoint"],
-    type: json["type"] == null ? null : typeValues.map[json["type"]],
+    eligibiltyPoint: json["eligibiltyPoint"] == null ? "0" : json["eligibiltyPoint"],
+    type: json["type"] == null ? null : json["type"],
     name: json["Name"],
-    perRun: json["perRun"].toDouble(),
-    perFour: json["perFour"].toDouble(),
+    perRun: json["perRun"] == null? 0.0 : json["perRun"].toDouble(),
+    perFour: json["perFour"] == null ? 0.0 : json["perFour"].toDouble(),
     perSix: json["perSix"],
     perStrikeRate: json["perStrikeRate"],
     allRounderCatch: json["catch"],
@@ -189,24 +186,22 @@ class AllRounder {
     lbw: json["lbw"],
     bowled: json["bowled"],
     perWicket: json["perWicket"],
-    perDotBall: json["perDotBall"].toDouble(),
-    runsPerOver7: json["runsPerOver7"] == null ? null : json["runsPerOver7"],
-    runsPerOver4: json["runsPerOver4"] == null ? null : json["runsPerOver4"],
+    perDotBall: json["perDotBall"] == null ? 0.0 : json["perDotBall"].toDouble(),
+    maidenOver: json["maidenOver"] == null ? null : json["maidenOver"],
+    runsPerOver5: json["runsPerOver5"] == null ? null : json["runsPerOver5"],
     eligibility: json["eligibility"] == null ? null : json["eligibility"],
-    rewardSixesPoint: json["rewardSixesPoint"] == null ? null : json["rewardSixesPoint"].toDouble(),
+    rewardFoursPoint: json["rewardFoursPoint"] == null ? null : json["rewardFoursPoint"],
     rewardStrikeRatePoint: json["rewardStrikeRatePoint"] == null ? null : json["rewardStrikeRatePoint"],
-    rewardWicketPoint: json["rewardWicketPoint"] == null ? null : json["rewardWicketPoint"].toDouble(),
-    runsPerOver1: json["runsPerOver1"] == null ? null : json["runsPerOver1"],
     runsPerOver6: json["runsPerOver6"] == null ? null : json["runsPerOver6"],
-    runsPerOver3: json["runsPerOver3"] == null ? null : json["runsPerOver3"],
+    runsPerOver2: json["runsPerOver2"] == null ? null : json["runsPerOver2"],
     rewardBattingPoint: json["rewardBattingPoint"],
+    moreRuns1: json["moreRuns1"] == null ? null : json["moreRuns1"],
     eligibilityPoints: json["eligibilityPoints"] == null ? null : json["eligibilityPoints"],
-    rewardStrikeRatePoints: json["rewardStrikeRatePoints"] == null ? null : json["rewardStrikeRatePoints"],
   );
 
   Map<String, dynamic> toJson() => {
     "eligibiltyPoint": eligibiltyPoint == null ? null : eligibiltyPoint,
-    "type": type == null ? null : typeValues.reverse[type],
+    "type": type == null ? null : type,
     "Name": name,
     "perRun": perRun,
     "perFour": perFour,
@@ -219,53 +214,41 @@ class AllRounder {
     "bowled": bowled,
     "perWicket": perWicket,
     "perDotBall": perDotBall,
-    "runsPerOver7": runsPerOver7 == null ? null : runsPerOver7,
-    "runsPerOver4": runsPerOver4 == null ? null : runsPerOver4,
+    "maidenOver": maidenOver == null ? null : maidenOver,
+    "runsPerOver5": runsPerOver5 == null ? null : runsPerOver5,
     "eligibility": eligibility == null ? null : eligibility,
-    "rewardSixesPoint": rewardSixesPoint == null ? null : rewardSixesPoint,
+    "rewardFoursPoint": rewardFoursPoint == null ? null : rewardFoursPoint,
     "rewardStrikeRatePoint": rewardStrikeRatePoint == null ? null : rewardStrikeRatePoint,
-    "rewardWicketPoint": rewardWicketPoint == null ? null : rewardWicketPoint,
-    "runsPerOver1": runsPerOver1 == null ? null : runsPerOver1,
     "runsPerOver6": runsPerOver6 == null ? null : runsPerOver6,
-    "runsPerOver3": runsPerOver3 == null ? null : runsPerOver3,
+    "runsPerOver2": runsPerOver2 == null ? null : runsPerOver2,
     "rewardBattingPoint": rewardBattingPoint,
+    "moreRuns1": moreRuns1 == null ? null : moreRuns1,
     "eligibilityPoints": eligibilityPoints == null ? null : eligibilityPoints,
-    "rewardStrikeRatePoints": rewardStrikeRatePoints == null ? null : rewardStrikeRatePoints,
   };
 }
 
-enum Type { ALL_ROUNDER, BATSMAN, BOWLER, SUPER_STRIKER, WICKET_KEEPER }
-
-final typeValues = EnumValues({
-  "AllRounder": Type.ALL_ROUNDER,
-  "Batsman": Type.BATSMAN,
-  "Bowler": Type.BOWLER,
-  "SuperStriker": Type.SUPER_STRIKER,
-  "WicketKeeper": Type.WICKET_KEEPER
-});
-
-class FantasyWinningPoint {
-  String fantasyEligibilityPoint;
-  String fantasyRewardPoint2;
-
-  FantasyWinningPoint({
-    this.fantasyEligibilityPoint,
-    this.fantasyRewardPoint2,
-  });
-
-  factory FantasyWinningPoint.fromJson(Map<String, dynamic> json) => FantasyWinningPoint(
-    fantasyEligibilityPoint: json["fantasyEligibilityPoint"],
-    fantasyRewardPoint2: json["fantasyRewardPoint2"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "fantasyEligibilityPoint": fantasyEligibilityPoint,
-    "fantasyRewardPoint2": fantasyRewardPoint2,
-  };
-}
+//class FantasyWinningPoint {
+//  String fantasyEligibilityPoint;
+//  String fantasyRewardPoint2;
+//
+//  FantasyWinningPoint({
+//    this.fantasyEligibilityPoint,
+//    this.fantasyRewardPoint2,
+//  });
+//
+//  factory FantasyWinningPoint.fromJson(Map<String, dynamic> json) => FantasyWinningPoint(
+//    fantasyEligibilityPoint: json["fantasyEligibilityPoint"] == null ? "0" : json["fantasyEligibilityPoint"],
+//    fantasyRewardPoint2: json["fantasyRewardPoint2"] == null ? "0" : json["fantasyRewardPoint2"],
+//  );
+//
+//  Map<String, dynamic> toJson() => {
+//    "fantasyEligibilityPoint": fantasyEligibilityPoint,
+//    "fantasyRewardPoint2": fantasyRewardPoint2,
+//  };
+//}
 
 class ManOfTheMatch {
-  dynamic eligibilityPoint;
+//  dynamic eligibilityPoint;
   String type;
   String rewardSixesPoint;
   String rewardFoursPoint;
@@ -273,22 +256,21 @@ class ManOfTheMatch {
   String rewardWicketPoint;
   dynamic rewardFiveWicketsPoint;
   dynamic name;
-  double perRun;
-  int perFour;
-  int perSix;
+  dynamic perRun;
+  dynamic perFour;
+  dynamic perSix;
   String perStrikeRate;
-  int manOfTheMatchCatch;
+  dynamic manOfTheMatchCatch;
   String runout;
-  int runoutStump;
-  int lbw;
-  int bowled;
-  int perWicket;
-  double perDotBall;
-  String runsPerOver4;
-  String runsPerOver6;
+  dynamic runoutStump;
+  dynamic lbw;
+  dynamic bowled;
+  dynamic perWicket;
+  dynamic perDotBall;
+  String runsPerOver5;
 
   ManOfTheMatch({
-    this.eligibilityPoint,
+//    this.eligibilityPoint,
     this.type,
     this.rewardSixesPoint,
     this.rewardFoursPoint,
@@ -307,12 +289,11 @@ class ManOfTheMatch {
     this.bowled,
     this.perWicket,
     this.perDotBall,
-    this.runsPerOver4,
-    this.runsPerOver6,
+    this.runsPerOver5,
   });
 
   factory ManOfTheMatch.fromJson(Map<String, dynamic> json) => ManOfTheMatch(
-    eligibilityPoint: json["eligibilityPoint"],
+//    eligibilityPoint: json["eligibilityPoint"] == null ? "0":json["eligibilityPoint"],
     type: json["type"],
     rewardSixesPoint: json["rewardSixesPoint"],
     rewardFoursPoint: json["rewardFoursPoint"],
@@ -320,8 +301,8 @@ class ManOfTheMatch {
     rewardWicketPoint: json["rewardWicketPoint"],
     rewardFiveWicketsPoint: json["rewardFiveWicketsPoint"],
     name: json["Name"],
-    perRun: json["perRun"].toDouble(),
-    perFour: json["perFour"],
+    perRun: json["perRun"] == null ? 0.0 : json["perRun"].toDouble(),
+    perFour: json["perFour"] == null ? 0.0 :json["perFour"].toDouble(),
     perSix: json["perSix"],
     perStrikeRate: json["perStrikeRate"],
     manOfTheMatchCatch: json["catch"],
@@ -330,13 +311,12 @@ class ManOfTheMatch {
     lbw: json["lbw"],
     bowled: json["bowled"],
     perWicket: json["perWicket"],
-    perDotBall: json["perDotBall"].toDouble(),
-    runsPerOver4: json["runsPerOver4"] == null ? null : json["runsPerOver4"],
-    runsPerOver6: json["runsPerOver6"] == null ? null : json["runsPerOver6"],
+    perDotBall: json["perDotBall"]== null ? 0.0 : json["perDotBall"].toDouble(),
+    runsPerOver5: json["runsPerOver5"] == null ? "0" : json["runsPerOver5"],
   );
 
   Map<String, dynamic> toJson() => {
-    "eligibilityPoint": eligibilityPoint,
+//    "eligibilityPoint": eligibilityPoint,
     "type": type,
     "rewardSixesPoint": rewardSixesPoint,
     "rewardFoursPoint": rewardFoursPoint,
@@ -355,8 +335,7 @@ class ManOfTheMatch {
     "bowled": bowled,
     "perWicket": perWicket,
     "perDotBall": perDotBall,
-    "runsPerOver4": runsPerOver4 == null ? null : runsPerOver4,
-    "runsPerOver6": runsPerOver6 == null ? null : runsPerOver6,
+    "runsPerOver5": runsPerOver5 == null ? null : runsPerOver5,
   };
 }
 
@@ -470,18 +449,4 @@ class Teamdata {
     "teamname": teamname,
     "credit": credit,
   };
-}
-
-class EnumValues<T> {
-  Map<String, T> map;
-  Map<T, String> reverseMap;
-
-  EnumValues(this.map);
-
-  Map<T, String> get reverse {
-    if (reverseMap == null) {
-      reverseMap = map.map((k, v) => new MapEntry(v, k));
-    }
-    return reverseMap;
-  }
 }

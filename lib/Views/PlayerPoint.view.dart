@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:proxykhel/Model/leaderboard.model.dart';
+import 'package:proxykhel/Model/LeaderBoard.model.dart';
+import 'package:proxykhel/Model/PlayerPointModel.model.dart';
 import './../Constants/slideTransitions.dart';
 import './wallet.view.dart';
 import './../Model/logout.model.dart';
 import './login.view.dart';
 import './profile.view.dart';
 import './../Model/JoinedContestListModel.model.dart';
-import './../Model/leaderboard.model.dart';
 
 class PlayerPoint extends StatefulWidget {
   @override
@@ -46,12 +46,14 @@ class _PlayerPointState extends State<PlayerPoint> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: new AppBar(
         iconTheme: IconThemeData(
           color: Colors.white,
         ),
-        title: Text('Leader Board',style: TextStyle(fontSize: 16.0,color: Colors.white),),
+        title: Text('Player Point',style: TextStyle(fontSize: 16.0,color: Colors.white),),
         actions: <Widget>[
           new IconButton(
             icon: Icon(
@@ -83,18 +85,17 @@ class _PlayerPointState extends State<PlayerPoint> {
           )
         ],
       ),
-      body: Column(
-        children: <Widget>[
-          new Expanded(
-              flex:1,
-              child: Container(
+      body: FutureBuilder(
+        future: PlayerPointModel.instance.getPlayerPoint(),
+        builder: (context,snapshot){
+          return new ListView(
+            children: <Widget>[
+              Container(
                   height: 65.0,
                   color: Color(0XFFc4301e),
                   child: Row(
-
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-
                       new Text('${JoinedContestListModel.instance.getTeam1}  VS  ${JoinedContestListModel.instance.getTeam2}',style: TextStyle(color: Colors.white),),
                       new Text('EXPIRED',style: TextStyle(color: Colors.white),),
                       Padding(
@@ -103,140 +104,245 @@ class _PlayerPointState extends State<PlayerPoint> {
                       )
                     ],
                   )
-              )
-          ),
-          new Expanded(
-            flex:1,
-            child: new Card(
-                child:ListTile(
-                  title: Text("Player",style: TextStyle(color: Colors.deepOrange),),
-                  trailing: new Icon(Icons.chevron_right,color: Colors.deepOrange,),
-                  onTap: (){
+              ),
 
-                  },
-                )
-            ),
-          ),
-          new Expanded(
-              flex:7,
-              child: new FutureBuilder(
-                  future:LeaderBoardModel.instance.getLeaderBoardDetail("1687","12" ),
-                  builder: (context, snapshot){
-                    switch(snapshot.connectionState){
-                      case ConnectionState.none:
-                      case ConnectionState.active:
-                      case ConnectionState.waiting:
-                        return new Center(child: new CircularProgressIndicator(),);
-                        break;
-                      case ConnectionState.done:
-                        if(snapshot.hasError){
-                          return new Center(child: new Text("Error fetching contests"),);
-                        }else if(!snapshot.hasData){
-                          return new Center(child: new Text("0 contests joined"),);
-                        }else if(snapshot.hasData){
-                          return new ListView.builder(
-                              itemCount: snapshot.data.data.length,
-                              itemBuilder: (context,index){
-                                return new Container(
-                                  height: 100,
-                                  child: new Card(
-                                      child:new Column(
-                                        children: <Widget>[
-                                          LinearProgressIndicator(
-                                            value:(int.parse(snapshot.data.data[index].totlaJoin) / int.parse(snapshot.data.data[index].maxTeam)),
-                                            backgroundColor: Colors.grey[300],
-                                          ),
-                                          new Column(
-                                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                                            children: <Widget>[
-                                              new Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                                children: <Widget>[
-                                                  Padding(
-                                                    padding: const EdgeInsets.all(8.0),
-                                                    child: new Column(
-                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                      children: <Widget>[
-                                                        new CircleAvatar(
-                                                          radius: 10.0,
-                                                          backgroundColor: Colors.deepOrange,
-                                                          child: new Text('M',style: TextStyle(color:Colors.white,fontSize: 10),),
-                                                        ),
-                                                        new InkWell(
-                                                            onTap: (){},
-                                                            child:new Row(
-                                                              children: <Widget>[
-                                                                new Text('Winning'),
-                                                                new Icon(Icons.arrow_drop_down),
-                                                              ],
-                                                            )
-                                                        ),
-                                                        new Text('Rs. '+snapshot.data.data[index].winnersAmt),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  new Column(
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    children: <Widget>[
-                                                      new Text('Winners'),
-                                                      new Text(snapshot.data.data[index].winner,style: TextStyle(fontWeight: FontWeight.bold),),
-                                                      Padding(
-                                                        padding: const EdgeInsets.only(top:18.0),
-                                                        child: new Text(snapshot.data.data[index].totlaJoin+'/'+snapshot.data.data[index].maxTeam+' Joined',style: TextStyle(fontSize: 12.0),),
-                                                      ),
+              new Container(
+                height: 80.0,
+                child: new Row(
+                  mainAxisAlignment:MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    new Row(
+                      children: <Widget>[
+                        new Image(image: NetworkImage("https://www.proxykhel.com/assets/image/hp.png",),height: 50.0,width: 50.0,),
+                        new SizedBox(width: 12.0,),
+                        new Text("${PlayerPointModel.instance.getName}"),
+                      ],
+                    ),
+                    new Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        new Text("Total Points"),
+                        new SizedBox(height: 4.0,),
+                        new Text("${PlayerPointModel.instance.getPlayerpoint}",style: TextStyle(fontWeight: FontWeight.bold),),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              new Container(
+                height: 50.0,
+                child: Card(
+                  color: Colors.grey[100],
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      new Text("   Event"),
+                      new Text("Points   ")
+                    ],
+                  ),
+                ),
+              ),
 
-                                                    ],
-                                                  ),
-                                                  new Column(
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    children: <Widget>[
-                                                      Container(margin: EdgeInsets.only(top: 10.0), child: new Text('Entry')),
-                                                      Container(
-                                                        margin: EdgeInsets.only(top :20.0,right: 8.0),
-                                                        child: new Text(snapshot.data.data[index].entryfee),
-                                                      ),
-                                                    ],
-                                                  ),
+              new Container(
+                height: 50.0,
+                child: Card(
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      new Text("   Run"),
+                      new Text("${PlayerPointModel.instance.getPerRun}      ")
+                    ],
+                  ),
+                ),
+              ),
+              new Container(
+                height: 50.0,
+                child: Card(
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      new Text("   Four"),
+                      new Text("${PlayerPointModel.instance.getPerFour}      ")
+                    ],
+                  ),
+                ),
+              ),
+              new Container(
+                height: 50.0,
+                child: Card(
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      new Text("   Six"),
+                      new Text("${PlayerPointModel.instance.getPerSix}       ")
+                    ],
+                  ),
+                ),
+              ),
 
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                          new Column(
-                                            children: <Widget>[
-                                              new Row(
-                                                children: <Widget>[
+              new Container(
+                height: 50.0,
+                child: Card(
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      new Text("   Wicket"),
+                      new Text("${PlayerPointModel.instance.getPerWicket}       ")
+                    ],
+                  ),
+                ),
+              ),
+              new Container(
+                height: 50.0,
+                child: Card(
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      new Text("   Dot Ball"),
+                      new Text("${PlayerPointModel.instance.getPerDotBall}      ")
+                    ],
+                  ),
+                ),
+              ),
+              new Container(
+                height: 50.0,
+                child: Card(
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      new Text("   Maiden Over"),
+                      new Text("${PlayerPointModel.instance.getMaidenOver}      ")
+                    ],
+                  ),
+                ),
+              ),
+              new Container(
+                height: 50.0,
+                child: Card(
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      new Text("   Economy Rate"),
+                      new Text("0      ")
+                    ],
+                  ),
+                ),
+              ),
+              new Container(
+                height: 50.0,
+                child: Card(
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      new Text("   Catch"),
+                      new Text("${PlayerPointModel.instance.getCatch}      ")
+                    ],
+                  ),
+                ),
+              ),
+              new Container(
+                height: 50.0,
+                child: Card(
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      new Text("   Runout"),
+                      new Text("${PlayerPointModel.instance.getRunOut}      ")
+                    ],
+                  ),
+                ),
+              ),
+              new Container(
+                height: 50.0,
+                child: Card(
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      new Text("   Stump"),
+                      new Text("${PlayerPointModel.instance.getRunOutStump}      ")
+                    ],
+                  ),
+                ),
+              ),
+              new Container(
+                height: 50.0,
+                child: Card(
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      new Text("   lbw"),
+                      new Text("${PlayerPointModel.instance.getLbw}      ")
+                    ],
+                  ),
+                ),
+              ),
+              new Container(
+                height: 50.0,
+                child: Card(
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      new Text("   Bowled"),
+                      new Text("${PlayerPointModel.instance.getBowled}      ")
+                    ],
+                  ),
+                ),
+              ),
+              new Container(
+                height: 50.0,
+                child: Card(
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      new Text("   50's"),
+                      new Text("0      ")
+                    ],
+                  ),
+                ),
+              ),
+              new Container(
+                height: 50.0,
+                child: Card(
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      new Text("   75's"),
+                      new Text("0      ")
+                    ],
+                  ),
+                ),
+              ),
+              new Container(
+                height: 50.0,
+                child: Card(
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      new Text("   100's"),
+                      new Text("0      ")
+                    ],
+                  ),
+                ),
+              ),
+              new Container(
+                height: 50.0,
+                child: Card(
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      new Text("   120's"),
+                      new Text("0      ")
+                    ],
+                  ),
+                ),
+              ),
 
-                                                ],
-                                              )
-                                            ],
-                                          )
-                                        ],
-                                      )
-                                  ),
-                                );
 
-                              });
-                        }else{
-                          new Center(child: Column(
-                            children: <Widget>[
-                              new Text("Something went wrong retry"),
-                              new RaisedButton(onPressed: (){
-                                setState(() {
-
-                                });
-                              },
-                                child: new Text("Retry",style: TextStyle(color: Colors.white),),
-                                color: Colors.deepOrange,
-
-                              ),
-                            ],
-                          ),);
-                        }
-                    }
-
-                  })),
-        ],
+              
+            ],
+          );
+        },
       ),
     );
   }

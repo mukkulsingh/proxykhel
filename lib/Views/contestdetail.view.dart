@@ -214,7 +214,6 @@ class _ContestdetailState extends State<Contestdetail> {
 
   Future onSelectNotification(String payload) async {
     if (payload != null) {
-//      debugPrint('notification payload: ' + payload);
     }
     await Navigator.push(
       context,
@@ -268,540 +267,388 @@ class _ContestdetailState extends State<Contestdetail> {
         child: new Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Expanded(
-              flex: 1,
-              child: Container(
-                height: 65.0,
-                color: Color(0XFFc4301e),
-                child: new Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    new Container(
-                      child: new Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          new Text(ContestDetailModel.instance.getTeam1Name(),
-                              style: TextStyle(color: Colors.white)),
-                          new Text(
-                            ' vs ',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          new Text(ContestDetailModel.instance.getTeam2Name(),
-                              style: TextStyle(color: Colors.white)),
-                        ],
-                      ),
-                    ),
-                    new Text(
-                      ContestDetailModel.instance.getContestDuration(),
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    new Text(
-                      ContestDetailModel.instance.getMatchType(),
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-//          Expanded(
-//            flex:3,
-//            child: new Container(
-//              child: Card(
-//                child: new Column(
-//                  children: <Widget>[
-//                    new LinearProgressIndicator(
-//                      value: (int.parse(_getContestDetail.data[0].totlaJoin) / int.parse(_getContestDetail.data[0].maxTeam)),
-//                      backgroundColor: Colors.grey[300],
-//                    ),
-//                    new Column(
-//                      crossAxisAlignment: CrossAxisAlignment.stretch,
-//                      children: <Widget>[
-//                        new Row(
-//                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-//                          children: <Widget>[
-//                            Padding(
-//                              padding: const EdgeInsets.all(8.0),
-//                              child: new Column(
-//                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-//                                children: <Widget>[
-//                                  new CircleAvatar(
-//                                    radius: 10.0,
-//                                    backgroundColor: Colors.deepOrange,
-//                                    child: new Text('M',style: TextStyle(color:Colors.white,fontSize: 10),),
-//                                  ),
-//                                  new InkWell(
-////                                      onTap: _showDialog,
-//                                      child:new Row(
-//                                        children: <Widget>[
-//                                          new Text('Winning',style: TextStyle(fontSize: 12.0),),
-//                                          new Icon(Icons.arrow_drop_down,color: Colors.black,),
-//                                        ],
-//                                      )
-//                                  ),
-//                                  new Row(
-//                                    children: <Widget>[
-//                                      new Text('₹'),
-//                                      new Text(contestData.entryfee),
-//                                    ],
-//                                  )
-//                                ],
-//                              ),
-//                            ),
-//                            new Column(
-//                              children: <Widget>[
-//                                new Text(''),
-//                                new Text('Winners',style: TextStyle(fontSize: 12.0),),
-//                                new Text(contestData.winner??'0',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0),),
-//                                new Text(''),
-//                                new Text(contestData.totlaJoin+'/'+contestData.maxTeam+' Joined',style: TextStyle(fontSize: 12.0),),
-//                                new Text(''),
-//                              ],
-//                            ),
-//                            new Column(
-//                              mainAxisAlignment: MainAxisAlignment  .center,
-//                              children: <Widget>[
-//                                new Text('Entry ₹ ${contestData.entryfee} '),
-//                                Container(
-//                                  height: 30.0,
-//                                  width: 85,
-//                                  margin: EdgeInsets.all(8.0),
-//                                  child: new FlatButton(onPressed: (){
-//                                    CreateTeamModel.instance.setActionType(1);
-//                                    Navigator.push(context, SlideLeftRoute(widget:CreateTeamTemp()));
-//                                  },
-//                                    color: Colors.deepOrange,
-//                                    shape: RoundedRectangleBorder(
-//                                        borderRadius: BorderRadius.circular(32.0)
-//                                    ),
-//                                    child: Text('CREATE TEAM',style: TextStyle(color: Colors.white,fontSize: 8.0),),
-//
-//                                  ),
-//                                ),
-//                              ],
-//                            ),
-//
-//                          ],
-//                        )
-//                      ],
-//                    ),
-//
-//                  ],
-//
-//                ),
-//              ),
-//            ),
-//          ),
-            Expanded(
-              flex: 4,
-              child: new Container(
-                margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
-                child: InkWell(
-                  child: new Card(
-                    child: new Column(
+            Container(
+              height: 65.0,
+              color: Color(0XFFc4301e),
+              child: new Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  new Container(
+                    child: new Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        LinearProgressIndicator(
-                          value: _t,
-                          backgroundColor: Colors.grey[300],
+                        new Text(ContestDetailModel.instance.getTeam1Name(),
+                            style: TextStyle(color: Colors.white)),
+                        new Text(
+                          ' vs ',
+                          style: TextStyle(color: Colors.white),
                         ),
-                        new Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: <Widget>[
-                            new Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: new Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      new Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: <Widget>[
-                                          Builder(builder: (context){
-                                            if(_singleEntry != null){
-                                              return new Container(
-                                                child: InkWell(
-                                                  onTap: (){
-                                                    showDialog(context: context,
-                                                        builder: (context){
-                                                          return AlertDialog(
-                                                            title: new Text("S",style: TextStyle(color: Colors.deepOrange),),
-                                                            content: new Text("You can join only one team"),
-                                                            actions: <Widget>[
-                                                              new OutlineButton(onPressed: (){
-                                                                Navigator.pop(context);
-                                                              },
-                                                                child: new Text("OK",style:TextStyle(color: Colors.deepOrange)),
-                                                                borderSide: BorderSide(
-                                                                  color: Colors.deepOrange,
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          );
-                                                        }
-                                                    );
-                                                  },
-                                                  child: new CircleAvatar(
-                                                    backgroundColor: Colors.deepOrange,
-                                                    child: new Text(_singleEntry,style: TextStyle(color: Colors.white,fontSize: 12.0)),
-                                                    radius: 8.0,
-                                                  ),
-                                                ),
-                                              );
-                                            }else
-                                              return new Container();
-                                          }),
-                                          SizedBox(
-                                            width: 2.0,
-                                          ),
-                                          Builder(builder: (context){
-                                            if(_multipleEntry != null){
-                                              return new Container(
-                                                child: InkWell(
-                                                  onTap: (){
-                                                    showDialog(context: context,
-                                                        builder: (context){
-                                                          return AlertDialog(
-                                                            title: new Text("M",style: TextStyle(color: Colors.deepOrange),),
-                                                            content: new Text("You can join more than 4 teams"),
-                                                            actions: <Widget>[
-                                                              new OutlineButton(onPressed: (){
-                                                                Navigator.pop(context);
-                                                              },
-                                                                child: new Text("OK",style:TextStyle(color: Colors.deepOrange)),
-                                                                borderSide: BorderSide(
-                                                                  color: Colors.deepOrange,
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          );
-                                                        }
-                                                    );
-                                                  },
-                                                  child: new CircleAvatar(
-                                                    backgroundColor: Colors.deepOrange,
-                                                    child: new Text(_multipleEntry,style: TextStyle(color: Colors.white,fontSize: 12.0),),
-                                                    radius: 8.0,
-                                                  ),
-                                                ),
-                                              );
-                                            }else
-                                              return new Container();
-                                          }),
-                                          SizedBox(
-                                            width: 2.0,
-                                          ),
-                                          Builder(builder: (context){
-                                            if(_opponent != null){
-                                              return new Container(
-                                                child: InkWell(
-                                                  onTap: (){
-                                                    showDialog(context: context,
-                                                        builder: (context){
-                                                          return AlertDialog(
-                                                            title: new Text("P",style: TextStyle(color: Colors.deepOrange),),
-                                                            content: new Text("Contest will be deemed cancelled if opponent is not joined"),
-                                                            actions: <Widget>[
-                                                              new OutlineButton(onPressed: (){
-                                                                Navigator.pop(context);
-                                                              },
-                                                                child: new Text("OK",style:TextStyle(color: Colors.deepOrange)),
-                                                                borderSide: BorderSide(
-                                                                  color: Colors.deepOrange,
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          );
-                                                        }
-                                                    );
-                                                  },
-                                                  child: new CircleAvatar(
-                                                    backgroundColor: Colors.deepOrange,
-                                                    child: new Text(_opponent,style: TextStyle(color: Colors.white,fontSize: 12.0)),
-                                                    radius: 8.0,
-                                                  ),
-                                                ),
-                                              );
-                                            }else
-                                              return new Container();
-                                          }),
-                                          SizedBox(
-                                            width: 2.0,
-                                          ),
-                                          Builder(builder: (context){
-                                            if(_contestCancel != null){
-                                              return new Container(
-                                                child: InkWell(
-                                                  onTap: (){
-                                                    showDialog(context: context,
-                                                        builder: (context){
-                                                          return AlertDialog(
-                                                            title: new Text("U",style: TextStyle(color: Colors.deepOrange),),
-                                                            content: new Text("Contest will be deemed cancelled if not full"),
-                                                            actions: <Widget>[
-                                                              new OutlineButton(onPressed: (){
-                                                                Navigator.pop(context);
-                                                              },
-                                                                child: new Text("OK",style:TextStyle(color: Colors.deepOrange)),
-                                                                borderSide: BorderSide(
-                                                                  color: Colors.deepOrange,
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          );
-                                                        }
-                                                    );
-                                                  },
-                                                  child: new CircleAvatar(
-                                                    backgroundColor: Colors.deepOrange,
-                                                    child: new Text(_contestCancel,style: TextStyle(color: Colors.white,fontSize: 12.0)),
-                                                    radius: 8.0,
-                                                  ),
-                                                ),
-                                              );
-                                            }else
-                                              return new Container();
-                                          }),
-                                          SizedBox(
-                                            width: 2.0,
-                                          ),
-                                          Builder(builder: (context){
-                                            if(_amountVaries != null){
-                                              return new Container(
-                                                child: InkWell(
-                                                  onTap: (){
-                                                    showDialog(context: context,
-                                                        builder: (context){
-                                                          return AlertDialog(
-                                                            title: new Text("C",style: TextStyle(color: Colors.deepOrange),),
-                                                            content: new Text("Winning prize will varies on the basis of joined"),
-                                                            actions: <Widget>[
-                                                              new OutlineButton(onPressed: (){
-                                                                Navigator.pop(context);
-                                                              },
-                                                                child: new Text("OK",style:TextStyle(color: Colors.deepOrange)),
-                                                                borderSide: BorderSide(
-                                                                  color: Colors.deepOrange,
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          );
-                                                        }
-                                                    );
-                                                  },
-                                                  child: new CircleAvatar(
-                                                    backgroundColor: Colors.deepOrange,
-                                                    child: new Text(_amountVaries,style: TextStyle(color: Colors.white,fontSize: 12.0)),
-                                                    radius: 8.0,
-                                                  ),
-                                                ),
-                                              );
-                                            }else
-                                              return new Container();
-                                          }),
-                                        ],
-                                      ),
-                                      new InkWell(
-//                                              onTap: _showDialogWinningBreakdown,
-                                          onTap: () {
-                                            List tileList = [];
-                                            int itemCount = 0,
-                                                singleDistribution = 0,
-                                                rangeDistribution = 0;
-                                            if (_getContestDetail
-                                                    .data[0].singleDistrubution !=
-                                                false) {
-                                              singleDistribution =
-                                                  _getContestDetail.data[0]
-                                                      .singleDistrubution.length;
-//                                              singleDistribution = 1;
-                                              tileList.add({
-                                                "name": "Single Distribution"
-                                              });
-                                            }
-                                            if (_getContestDetail
-                                                    .data[0].rangeDistrubution !=
-                                                false) {
-                                              rangeDistribution =
-                                                  _getContestDetail.data[0]
-                                                      .rangeDistrubution.length;
-//                                                rangeDistribution =1;
-                                              tileList.add(
-                                                  {"name": "Range Distribution"});
-                                            }
-                                            itemCount = singleDistribution +
-                                                rangeDistribution;
-
-                                            showDialog(
-                                                context: context,
-                                                builder: (context) => AlertDialog(
-                                                        title: new Text(
-                                                            "Winning Breakdown"),
-                                                        content: ListView(
-                                                          shrinkWrap: true,
-                                                          children: <Widget>[
-                                                            new ListView.builder(
-                                                                shrinkWrap: true,
-                                                                physics:
-                                                                    const NeverScrollableScrollPhysics(),
-                                                                itemCount:
-                                                                    singleDistribution,
-                                                                itemBuilder:
-                                                                    (context,
-                                                                        index2) {
-                                                                  return new Container(
-                                                                    margin: EdgeInsets
-                                                                        .only(
-                                                                            top:
-                                                                                10.0),
-                                                                    child:
-                                                                        new Row(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .spaceBetween,
-                                                                      children: <
-                                                                          Widget>[
-                                                                        new Text(
-                                                                            "Rank ${_getContestDetail.data[0].singleDistrubution[index2]['rank']}"),
-                                                                        Text(
-                                                                            "₹ ${_getContestDetail.data[0].singleDistrubution[index2]['winamt']}"),
-                                                                      ],
-                                                                    ),
-                                                                  );
-//
-                                                                }),
-                                                            new ListView.builder(
-                                                                shrinkWrap: true,
-                                                                physics:
-                                                                    const NeverScrollableScrollPhysics(),
-                                                                itemCount:
-                                                                    rangeDistribution,
-                                                                itemBuilder:
-                                                                    (context,
-                                                                        index3) {
-                                                                  double winper = ((double.tryParse(_getContestDetail
-                                                                              .data[0]
-                                                                              .rangeDistrubution[index3]
-                                                                          [
-                                                                          'winamt'])) /
-                                                                      ((double.parse(_getContestDetail.data[0].rangeDistrubution[index3]['lastrange']) +
-                                                                              1) -
-                                                                          double.parse(_getContestDetail
-                                                                              .data[0]
-                                                                              .rangeDistrubution[index3]['firstrange'])));
-                                                                  return new Container(
-                                                                    margin: EdgeInsets
-                                                                        .only(
-                                                                            top:
-                                                                                10.0),
-                                                                    child:
-                                                                        new Row(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .spaceBetween,
-                                                                      children: <
-                                                                          Widget>[
-                                                                        new Text(
-                                                                            "Rank ${_getContestDetail.data[0].rangeDistrubution[index3]['firstrange']} - ${_getContestDetail.data[0].rangeDistrubution[index3]['lastrange']}"),
-                                                                        Text(
-                                                                            "₹ ${winper.toString()}"
-//                                                                   "₹ ${snapshot.data.data[index].rangeDistrubution[index3]['winper']}"
-                                                                            ),
-                                                                      ],
-                                                                    ),
-                                                                  );
-                                                                })
-                                                          ],
-                                                        ),
-                                                        actions: <Widget>[
-                                                          new OutlineButton(
-                                                            color:
-                                                                Colors.deepOrange,
-                                                            borderSide: BorderSide(
-                                                                color: Colors
-                                                                    .deepOrange),
-                                                            child: new Text(
-                                                                "Got It!"),
-                                                            onPressed: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            },
-                                                          ),
-                                                        ]));
-                                          },
-                                          child: new Row(
-                                            children: <Widget>[
-                                              new Text('Winning'),
-                                              new Icon(
-                                                Icons.arrow_drop_down,
-                                                color: Colors.black,
-                                              ),
-                                            ],
-                                          )),
-                                      new Text('Rs. ' +
-                                          _getContestDetail.data[0].winnersAmt),
-                                    ],
-                                  ),
-                                ),
-                                new Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    new Text('Winners'),
-                                    new Text(
-                                      _getContestDetail.data[0].winner,
-                                      style:
-                                          TextStyle(fontWeight: FontWeight.bold),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 18.0),
-                                      child: new Text(
-                                        _getContestDetail.data[0].totlaJoin +
-                                            '/' +
-                                            _getContestDetail.data[0].maxTeam +
-                                            ' Joined',
-                                        style: TextStyle(fontSize: 12.0),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                new Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-//                                  Container(
-//                                      margin: EdgeInsets.only(top: 10.0),
-//                                      child: new Text('Entry')),
-                                    Container(
-                                        margin: EdgeInsets.only(top: 10.0),
-                                        child: new Text(_contestFees)),
-                                    Container(
-                                      margin:
-                                          EdgeInsets.only(top: 20.0, right: 8.0),
-                                      child: new FlatButton(
-                                        onPressed: () {
-                                          CreateTeamModel.instance.setActionType(1);
-                                          Navigator.push(context, SlideLeftRoute(widget:CreateTeamTemp()));
-                                        },
-                                        color: Colors.deepOrange,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(32.0)),
-                                        child: Text(
-                                          "Create team",
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            )
-                          ],
-                        )
+                        new Text(ContestDetailModel.instance.getTeam2Name(),
+                            style: TextStyle(color: Colors.white)),
                       ],
                     ),
+                  ),
+                  new Text(
+                    ContestDetailModel.instance.getContestDuration(),
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  new Text(
+                    ContestDetailModel.instance.getMatchType(),
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ],
+              ),
+            ),
+            new Container(
+              margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
+              child: InkWell(
+                child: new Card(
+                  child: new Column(
+                    children: <Widget>[
+                      LinearProgressIndicator(
+                        value: _t,
+                        backgroundColor: Colors.grey[300],
+                      ),
+                      new Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          new Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: new Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    new Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.start,
+                                      children: <Widget>[
+                                        Builder(builder: (context){
+                                          if(_singleEntry != null){
+                                            return new Container(
+                                              child: InkWell(
+                                                onTap: (){
+                                                  showDialog(context: context,
+                                                      builder: (context){
+                                                        return AlertDialog(
+                                                          title: new Text("S",style: TextStyle(color: Colors.deepOrange),),
+                                                          content: new Text("You can join only one team"),
+                                                          actions: <Widget>[
+                                                            new OutlineButton(onPressed: (){
+                                                              Navigator.pop(context);
+                                                            },
+                                                              child: new Text("OK",style:TextStyle(color: Colors.deepOrange)),
+                                                              borderSide: BorderSide(
+                                                                color: Colors.deepOrange,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        );
+                                                      }
+                                                  );
+                                                },
+                                                child: new CircleAvatar(
+                                                  backgroundColor: Colors.deepOrange,
+                                                  child: new Text(_singleEntry,style: TextStyle(color: Colors.white,fontSize: 12.0)),
+                                                  radius: 8.0,
+                                                ),
+                                              ),
+                                            );
+                                          }else
+                                            return new Container();
+                                        }),
+                                        SizedBox(
+                                          width: 2.0,
+                                        ),
+                                        Builder(builder: (context){
+                                          if(_multipleEntry != null){
+                                            return new Container(
+                                              child: InkWell(
+                                                onTap: (){
+                                                  showDialog(context: context,
+                                                      builder: (context){
+                                                        return AlertDialog(
+                                                          title: new Text("M",style: TextStyle(color: Colors.deepOrange),),
+                                                          content: new Text("You can join more than 4 teams"),
+                                                          actions: <Widget>[
+                                                            new OutlineButton(onPressed: (){
+                                                              Navigator.pop(context);
+                                                            },
+                                                              child: new Text("OK",style:TextStyle(color: Colors.deepOrange)),
+                                                              borderSide: BorderSide(
+                                                                color: Colors.deepOrange,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        );
+                                                      }
+                                                  );
+                                                },
+                                                child: new CircleAvatar(
+                                                  backgroundColor: Colors.deepOrange,
+                                                  child: new Text(_multipleEntry,style: TextStyle(color: Colors.white,fontSize: 12.0),),
+                                                  radius: 8.0,
+                                                ),
+                                              ),
+                                            );
+                                          }else
+                                            return new Container();
+                                        }),
+                                        SizedBox(
+                                          width: 2.0,
+                                        ),
+                                        Builder(builder: (context){
+                                          if(_opponent != null){
+                                            return new Container(
+                                              child: InkWell(
+                                                onTap: (){
+                                                  showDialog(context: context,
+                                                      builder: (context){
+                                                        return AlertDialog(
+                                                          title: new Text("P",style: TextStyle(color: Colors.deepOrange),),
+                                                          content: new Text("Contest will be deemed cancelled if opponent is not joined"),
+                                                          actions: <Widget>[
+                                                            new OutlineButton(onPressed: (){
+                                                              Navigator.pop(context);
+                                                            },
+                                                              child: new Text("OK",style:TextStyle(color: Colors.deepOrange)),
+                                                              borderSide: BorderSide(
+                                                                color: Colors.deepOrange,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        );
+                                                      }
+                                                  );
+                                                },
+                                                child: new CircleAvatar(
+                                                  backgroundColor: Colors.deepOrange,
+                                                  child: new Text(_opponent,style: TextStyle(color: Colors.white,fontSize: 12.0)),
+                                                  radius: 8.0,
+                                                ),
+                                              ),
+                                            );
+                                          }else
+                                            return new Container();
+                                        }),
+                                        SizedBox(
+                                          width: 2.0,
+                                        ),
+                                        Builder(builder: (context){
+                                          if(_contestCancel != null){
+                                            return new Container(
+                                              child: InkWell(
+                                                onTap: (){
+                                                  showDialog(context: context,
+                                                      builder: (context){
+                                                        return AlertDialog(
+                                                          title: new Text("U",style: TextStyle(color: Colors.deepOrange),),
+                                                          content: new Text("Contest will be deemed cancelled if not full"),
+                                                          actions: <Widget>[
+                                                            new OutlineButton(onPressed: (){
+                                                              Navigator.pop(context);
+                                                            },
+                                                              child: new Text("OK",style:TextStyle(color: Colors.deepOrange)),
+                                                              borderSide: BorderSide(
+                                                                color: Colors.deepOrange,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        );
+                                                      }
+                                                  );
+                                                },
+                                                child: new CircleAvatar(
+                                                  backgroundColor: Colors.deepOrange,
+                                                  child: new Text(_contestCancel,style: TextStyle(color: Colors.white,fontSize: 12.0)),
+                                                  radius: 8.0,
+                                                ),
+                                              ),
+                                            );
+                                          }else
+                                            return new Container();
+                                        }),
+                                        SizedBox(
+                                          width: 2.0,
+                                        ),
+                                        Builder(builder: (context){
+                                          if(_amountVaries != null){
+                                            return new Container(
+                                              child: InkWell(
+                                                onTap: (){
+                                                  showDialog(context: context,
+                                                      builder: (context){
+                                                        return AlertDialog(
+                                                          title: new Text("C",style: TextStyle(color: Colors.deepOrange),),
+                                                          content: new Text("Winning prize will varies on the basis of joined"),
+                                                          actions: <Widget>[
+                                                            new OutlineButton(onPressed: (){
+                                                              Navigator.pop(context);
+                                                            },
+                                                              child: new Text("OK",style:TextStyle(color: Colors.deepOrange)),
+                                                              borderSide: BorderSide(
+                                                                color: Colors.deepOrange,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        );
+                                                      }
+                                                  );
+                                                },
+                                                child: new CircleAvatar(
+                                                  backgroundColor: Colors.deepOrange,
+                                                  child: new Text(_amountVaries,style: TextStyle(color: Colors.white,fontSize: 12.0)),
+                                                  radius: 8.0,
+                                                ),
+                                              ),
+                                            );
+                                          }else
+                                            return new Container();
+                                        }),
+                                      ],
+                                    ),
+                                    new InkWell(
+                                        onTap: () {
+                                          List tileList = [];
+                                          int itemCount = 0,
+                                              singleDistribution = 0,
+                                              rangeDistribution = 0;
+                                          if (_getContestDetail
+                                              .data[0].singleDistrubution !=
+                                              false) {
+                                            singleDistribution =
+                                                _getContestDetail.data[0].singleDistrubution.length;
+                                            tileList.add({
+                                              "name": "Single Distribution"
+                                            });
+                                          }
+                                          if (_getContestDetail
+                                              .data[0].rangeDistrubution !=
+                                              false) {
+                                            rangeDistribution = _getContestDetail.data[0].rangeDistrubution.length;
+                                            tileList.add(
+                                                {"name": "Range Distribution"});
+                                          }
+                                          itemCount = singleDistribution +
+                                              rangeDistribution;
+
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) => AlertDialog(
+                                                  title: new Text(
+                                                      "Winning Breakdown"),
+                                                  content: ListView(
+                                                    shrinkWrap: true,
+                                                    children: <Widget>[
+                                                      new ListView.builder(
+                                                          shrinkWrap: true,
+                                                          physics:const NeverScrollableScrollPhysics(),
+                                                          itemCount:singleDistribution,
+                                                          itemBuilder: (context,index2) {
+                                                            return new Container(
+                                                              margin: EdgeInsets.only(top:10.0),
+                                                              child:
+                                                              new Row(
+                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                children: <
+                                                                    Widget>[
+                                                                  new Text(
+                                                                      "Rank ${_getContestDetail.data[0].singleDistrubution[index2]['rank']}"),
+                                                                  Text(
+                                                                      "₹ ${_getContestDetail.data[0].singleDistrubution[index2]['winamt']}"),
+                                                                ],
+                                                              ),
+                                                            );
+//
+                                                          }),
+                                                      new ListView.builder(
+                                                          shrinkWrap: true,
+                                                          physics:const NeverScrollableScrollPhysics(),
+                                                          itemCount:rangeDistribution,
+                                                          itemBuilder:(context,index3) {
+                                                            double winper = ((double.tryParse(_getContestDetail.data[0].rangeDistrubution[index3]['winamt'])) /
+                                                                ((double.parse(_getContestDetail.data[0].rangeDistrubution[index3]['lastrange']) + 1) -  double.parse(_getContestDetail.data[0].rangeDistrubution[index3]['firstrange'])));
+                                                            return new Container(
+                                                              margin: EdgeInsets.only(top:10.0),
+                                                              child:new Row(
+                                                                mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                                                                children: <Widget>[
+                                                                  new Text("Rank ${_getContestDetail.data[0].rangeDistrubution[index3]['firstrange']} - ${_getContestDetail.data[0].rangeDistrubution[index3]['lastrange']}"),
+                                                                  Text("₹ ${winper.toString()}"),
+                                                                ],
+                                                              ),
+                                                            );
+                                                          })
+                                                    ],
+                                                  ),
+                                                  actions: <Widget>[
+                                                    new OutlineButton(
+                                                      color:Colors.deepOrange,
+                                                      borderSide: BorderSide(color: Colors.deepOrange),
+                                                      child: new Text( "Got It!"),
+                                                      onPressed: () {
+                                                        Navigator.of(context).pop();
+                                                      },
+                                                    ),
+                                                  ]));
+                                        },
+                                        child: new Row(
+                                          children: <Widget>[
+                                            new Text('Winning'),
+                                            new Icon(
+                                              Icons.arrow_drop_down,
+                                              color: Colors.black,
+                                            ),
+                                          ],
+                                        )),
+                                    new Text('Rs. ' +_getContestDetail.data[0].winnersAmt),
+                                  ],
+                                ),
+                              ),
+                              new Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  new Text('Winners'),
+                                  new Text(_getContestDetail.data[0].winner,style:TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 18.0),
+                                    child: new Text(_getContestDetail.data[0].totlaJoin +'/' +_getContestDetail.data[0].maxTeam +' Joined',
+                                      style: TextStyle(fontSize: 12.0),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              new Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Container(
+                                      margin: EdgeInsets.only(top: 10.0),
+                                      child: new Text(_contestFees)),
+                                  Container(
+                                    margin:
+                                    EdgeInsets.only(top: 20.0, right: 8.0),
+                                    child: new FlatButton(
+                                      onPressed: () {
+                                        CreateTeamModel.instance.setActionType(1);
+                                        Navigator.push(context, SlideLeftRoute(widget:CreateTeamTemp()));
+                                      },
+                                      color: Colors.deepOrange,
+                                      shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(32.0)),
+                                      child: Text( "Create team",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          )
+                        ],
+                      )
+                    ],
                   ),
                 ),
               ),
@@ -901,18 +748,25 @@ class _ContestdetailState extends State<Contestdetail> {
                                           width: 60.0,
                                           child: new FlatButton(onPressed: () async {
                                             if(_allUserTeamDetail.data[index].joined == true){
-                                              SnackBar snackbar = new SnackBar(content: Text("Already joined witht this team"),duration: Duration(seconds: 1),);
+                                              SnackBar snackbar = new SnackBar(content: Text("Already joined with this team"),duration: Duration(seconds: 1),);
                                               Scaffold.of(context).showSnackBar(snackbar);
                                             }else{
                                               String userId = await SavedPref.instance.getUserId();
                                               List fees = _contestFees.split(' ');
+                                              String contestFees;
+                                              if(fees[0] == "free"){
+                                                contestFees = "0";
+                                              }
+                                              else{
+                                                contestFees = fees[1];
+                                              }
                                               http.Response response  = await http.post("https://www.proxykhel.com/android/contest.php",body:{
                                                 "type":"joinUserTeam",
                                                 "matchId":ContestDetailModel.instance.getMatchId(),
                                                 "contestId":ContestDetailModel.instance.getContestId(),
                                                 "userId":userId,
                                                 "squadId":_allUserTeamDetail.data[index].id,
-                                                "contestAmt":fees[1],
+                                                "contestAmt":contestFees,
                                                 "team_1_name":ContestDetailModel.instance.getTeam1Name(),
                                                 "team_2_name":ContestDetailModel.instance.getTeam2Name(),
                                                 "matchType":ContestDetailModel.instance.getMatchType(),
@@ -936,7 +790,12 @@ class _ContestdetailState extends State<Contestdetail> {
                                                 else if(res['data'] == 'swap'){
                                                   SnackBar snackbar = new SnackBar(content: Text("Team swapped"),duration: Duration(seconds: 1),);
                                                   Scaffold.of(context).showSnackBar(snackbar);
-                                                }else{
+                                                }
+                                                else if(res['data'] == 4){
+                                                  SnackBar snackbar = new SnackBar(content: Text("Sorry! Contest full."),duration: Duration(seconds: 1),);
+                                                  Scaffold.of(context).showSnackBar(snackbar);
+                                                }
+                                                else{
                                                   SnackBar snackbar = new SnackBar(content: Text("Already joined"),duration: Duration(seconds: 1),);
                                                   Scaffold.of(context).showSnackBar(snackbar);
                                                 }
@@ -1060,25 +919,6 @@ class _ContestdetailState extends State<Contestdetail> {
                       children: <Widget>[
                         new Text("Please create a team"),
                         new SizedBox(height: 2.0),
-//                      InkWell(
-//                        onTap: () {
-//                          setState(() {});
-//                        },
-//                        child: new Row(
-//                          mainAxisSize: MainAxisSize.min,
-//                          mainAxisAlignment: MainAxisAlignment.center,
-//                          children: <Widget>[
-//                            new Text("Retry",
-//                                style: TextStyle(
-//                                    color: Colors.deepOrange, fontSize: 16.0)),
-//                            SizedBox(width: 5.0),
-//                            Icon(
-//                              Icons.refresh,
-//                              color: Colors.deepOrange,
-//                            )
-//                          ],
-//                        ),
-//                      )
                       ],
                     ),
                   ),

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:proxykhel/Model/LeaderBoard.model.dart';
+import 'package:proxykhel/Model/PlayerPointModel.model.dart';
 import './../Constants/slideTransitions.dart';
 import './wallet.view.dart';
 import './../Model/logout.model.dart';
 import './login.view.dart';
 import './profile.view.dart';
 import './../Model/JoinedContestListModel.model.dart';
-import './PlayerPoint.view.dart';
+import 'GeneralPoints.view.dart';
 import 'LeaderBoard.view.dart';
 
 class JoinedContestList extends StatefulWidget {
@@ -116,7 +117,19 @@ class _JoinedContestListState extends State<JoinedContestList> {
                 )
             ),
 
-
+            new Container(
+              width: double.infinity,
+              height: 45.0,
+              child: InkWell(
+                onTap: (){
+                  PlayerPointModel.instance.setMatchId(JoinedContestListModel.instance.getMatchId);
+                  Navigator.push(context,SlideLeftRoute(widget: new GeneralPoints()));
+                },
+                child: new Card(
+                  child: Container(margin:EdgeInsets.only(top: 6.0),child: Text("   View Player Point",style:TextStyle(color:Colors.deepOrange))),
+                ),
+              ),
+            ),
             new Expanded(
                 flex:7,
                 child: new FutureBuilder(
@@ -150,9 +163,11 @@ class _JoinedContestListState extends State<JoinedContestList> {
                                     height: 100,
                                     child: InkWell(
                                       onTap: (){
+                                        if(JoinedContestListModel.instance.getIsClickable){
                                         LeaderBoardModel.instance.setContestId(snapshot.data.data[index].id);
                                         LeaderBoardModel.instance.setMatchId(snapshot.data.data[index].matchId);
-//                                        Navigator.push(context, SlideLeftRoute(widget:LeaderBoard()));
+                                        Navigator.push(context, SlideLeftRoute(widget:LeaderBoard()));
+                                        }else{}
                                       },
                                       child: new Card(
                                         child:new Column(
@@ -353,6 +368,7 @@ class _JoinedContestListState extends State<JoinedContestList> {
                                                             ],
                                                           ),
                                                           new InkWell(
+                                                            splashColor: Colors.white,
 //                                              onTap: _showDialogWinningBreakdown,
                                                               onTap: (){
                                                                 List tileList =[];
