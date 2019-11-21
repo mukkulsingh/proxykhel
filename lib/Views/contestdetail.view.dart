@@ -790,6 +790,9 @@ class _ContestdetailState extends State<Contestdetail> {
                                                 else if(res['data'] == 'swap'){
                                                   SnackBar snackbar = new SnackBar(content: Text("Team swapped"),duration: Duration(seconds: 1),);
                                                   Scaffold.of(context).showSnackBar(snackbar);
+                                                  setState(() {
+                                                    loadContestDetails();
+                                                  });
                                                 }
                                                 else if(res['data'] == 4){
                                                   SnackBar snackbar = new SnackBar(content: Text("Sorry! Contest full."),duration: Duration(seconds: 1),);

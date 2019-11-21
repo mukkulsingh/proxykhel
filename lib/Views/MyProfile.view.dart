@@ -604,7 +604,7 @@ class MapScreenState extends State<ProfilePage>
                           int num = await UpdateProfileModel.instance.updateProfile();
                           if(num == 1){
                             setState(() {
-                              Navigator.of(context).maybePop();
+                              Navigator.of(context, rootNavigator: true).pop(true);
                               _status = true;
                               FocusScope.of(context).requestFocus(new FocusNode());
                             });

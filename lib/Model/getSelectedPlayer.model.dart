@@ -15,6 +15,9 @@ class GetSelectedPlayerModel{
   }
   
   Future getSelectedPlayer(String teamId) async {
+    print(teamId);
+    print(ContestDetailModel.instance.getTeam1Name());
+    print(ContestDetailModel.instance.getTeam2Name());
     http.Response response = await http.post("https://www.proxykhel.com/android/GetSelectedPlayers.php",body: {
       "type":"getSelectedPlayers",
       "teamId":teamId,

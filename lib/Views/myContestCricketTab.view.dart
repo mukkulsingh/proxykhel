@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:proxykhel/Model/JoinedContestListModel.model.dart' as prefix0;
 import './../Model/joinedContestDetail.model.dart';
 import './../Model/JoinedContestListModel.model.dart';
 import './../Constants/slideTransitions.dart';
@@ -174,8 +173,8 @@ class _MyContestCricketTabState extends State<MyContestCricketTab> {
                               String b = d[1];
                               List t = b.split('Z');
                               var dateTime = d[0] +' '+ t[0];
-                              DateTime MatchDateTime = DateTime.parse(dateTime);
-                              Duration difference = (snapshot.data.data[index].matchDateTime).difference(DateTime.now());
+                              DateTime matchDateTime = DateTime.parse(dateTime);
+                              Duration difference = (matchDateTime).difference(DateTime.now());
                               String _visibility =  snapshot.data.data[index].visibility;
                               if(_currentScreen == 0 && difference < Duration(hours:0,minutes: 0, seconds: 0) && difference > Duration(hours: -8)){
                                 return new Container(

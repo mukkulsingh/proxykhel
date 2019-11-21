@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:proxykhel/Constants/slideTransitions.dart';
 import 'package:proxykhel/Model/Withdraw.model.dart';
 import 'package:proxykhel/Model/wallet.model.dart';
+
+import 'MyProfile.view.dart';
 
 class Withdraw extends StatefulWidget {
   @override
@@ -161,7 +164,7 @@ class _WithdrawState extends State<Withdraw> {
             child: Container(
               width: 120.0,
               child: new RaisedButton(
-                onPressed: (){
+                onPressed: ()async{
                   if(_amountController.text == null || _amountController.text == ""){
                     setState(() {
                       _invalidAmount=true;
@@ -175,24 +178,27 @@ class _WithdrawState extends State<Withdraw> {
                     SnackBar snackbar = new SnackBar(content: Text("Amount should be greater than or eqaul to current balance"));
                     _scaffoldKey.currentState.showSnackBar(snackbar);
                   }
-                  else{
+                  else if(await WithdrawModel.instance.chekcKyc()){
                     showDialog(
-                      context: context,
-                      builder: (context){
-                        return AlertDialog(
-                          title:new Text("Withdraw Money"),
-                          content: new Text("Amount will get transferred to your account within 2 days",style: TextStyle(fontSize:16.0,color: Colors.red),),
-                          actions: <Widget>[
-                            new Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                new FlatButton(
+                        context: context,
+                        builder: (context){
+                          return AlertDialog(
+                            title:new Text("Withdraw Money"),
+                            content: new Text("Amount will get transferred to your account within 2 days",style: TextStyle(fontSize:16.0,color: Colors.red),),
+                            actions: <Widget>[
+                              new Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  new FlatButton(
                                     onPressed: ()async{
+
+
+
                                       Navigator.pop(context);
                                       WithdrawModel.instance.setWithdrawAmount(_amountController.text);
                                       showDialog(
-                                        barrierDismissible: false,
+                                          barrierDismissible: false,
                                           context: context,
                                           builder: (context){
                                             return SimpleDialog(
@@ -240,8 +246,8 @@ class _WithdrawState extends State<Withdraw> {
                                             context: context,
                                             builder: (context){
                                               return AlertDialog(
-                                                  title: new Text("Transaction Failed"),
-                                                  content: new Text(""),
+                                                title: new Text("Transaction Failed"),
+                                                content: new Text(""),
                                               );
                                             }
                                         );
@@ -252,23 +258,30 @@ class _WithdrawState extends State<Withdraw> {
                                       }
                                     },
                                     child: Text("Transfer Money to bank",style: TextStyle(color: Colors.white),),
-                                  color: Colors.blueAccent,
-                                ),
-                                new SizedBox(width: 10.0,),
-                                new FlatButton(
-                                  color:Colors.grey[400],
-                                    onPressed: (){
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Text("Cancel",style: TextStyle(color: Colors.white),)
-                                )
+                                    color: Colors.blueAccent,
+                                  ),
+                                  new SizedBox(width: 10.0,),
+                                  new FlatButton(
+                                      color:Colors.grey[400],
+                                      onPressed: (){
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text("Cancel",style: TextStyle(color: Colors.white),)
+                                  )
 
-                              ],
-                            )
-                          ],
-                        );
-                      }
+                                ],
+                              )
+                            ],
+                          );
+                        }
                     );
+                  }
+                  else{
+                    SnackBar snackbar =new SnackBar(content: new Text("KYC not verified"),duration: Duration(seconds: 1),);
+                    _scaffoldKey.currentState.showSnackBar(snackbar);
+                    Future.delayed(Duration(seconds: 2),(){
+                      Navigator.push(context, SlideLeftRoute(widget:MyProfile()));
+                    });
                   }
                 },
                 child: new Text("Withdraw",style: TextStyle(color: Colors.white),),

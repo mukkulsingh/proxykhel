@@ -82,6 +82,7 @@ class CreateTeamModel{
       chosenPlayer = [];
       for(int i=0;i<allPlayers.length;i++){
         if(getSelectedPlayerDetail.data.bt.id == allPlayers[i].id){
+          print(i);
           Map playerMap = new Map();
           playerMap['playerId'] = allPlayers[i].id;
           playerMap['playerIndex'] = i.toString();
@@ -90,6 +91,8 @@ class CreateTeamModel{
           chosenPlayer.add(playerMap);
         }
         if(getSelectedPlayerDetail.data.bw.id == allPlayers[i].id){
+          print(i);
+
           Map playerMap = new Map();
           playerMap['playerId'] = allPlayers[i].id;
           playerMap['playerIndex'] = i.toString();
@@ -98,6 +101,8 @@ class CreateTeamModel{
           chosenPlayer.add(playerMap);
         }
         if(getSelectedPlayerDetail.data.wk.id == allPlayers[i].id){
+          print(i);
+
           Map playerMap = new Map();
           playerMap['playerId'] = allPlayers[i].id;
           playerMap['playerIndex'] = i.toString();
@@ -106,6 +111,8 @@ class CreateTeamModel{
           chosenPlayer.add(playerMap);
         }
         if(getSelectedPlayerDetail.data.ar.id == allPlayers[i].id){
+          print(i);
+
           Map playerMap = new Map();
           playerMap['playerId'] = allPlayers[i].id;
           playerMap['playerIndex'] = i.toString();
@@ -114,6 +121,8 @@ class CreateTeamModel{
           chosenPlayer.add(playerMap);
         }
         if(getSelectedPlayerDetail.data.sp.id == allPlayers[i].id){
+          print(i);
+
           Map playerMap = new Map();
           playerMap['playerId'] = allPlayers[i].id;
           playerMap['playerIndex'] = i.toString();
@@ -122,6 +131,8 @@ class CreateTeamModel{
           chosenPlayer.add(playerMap);
         }
         if(getSelectedPlayerDetail.data.ss.id == allPlayers[i].id){
+          print(i);
+
           Map playerMap = new Map();
           playerMap['playerId'] = allPlayers[i].id;
           playerMap['playerIndex'] = i.toString();
@@ -130,6 +141,8 @@ class CreateTeamModel{
           chosenPlayer.add(playerMap);
         }
         if(getSelectedPlayerDetail.data.p1.id == allPlayers[i].id){
+          print(i);
+
           Map playerMap = new Map();
           playerMap['playerId'] = allPlayers[i].id;
           playerMap['playerIndex'] = i.toString();
@@ -138,6 +151,8 @@ class CreateTeamModel{
           chosenPlayer.add(playerMap);
         }
         if(getSelectedPlayerDetail.data.p2.id == allPlayers[i].id){
+          print(i);
+
           Map playerMap = new Map();
           playerMap['playerId'] = allPlayers[i].id;
           playerMap['playerIndex'] = i.toString();
@@ -146,6 +161,8 @@ class CreateTeamModel{
           chosenPlayer.add(playerMap);
         }
         if(getSelectedPlayerDetail.data.p3.id == allPlayers[i].id){
+          print(i);
+
           Map playerMap = new Map();
           playerMap['playerId'] = allPlayers[i].id;
           playerMap['playerIndex'] = i.toString();
@@ -154,6 +171,8 @@ class CreateTeamModel{
           chosenPlayer.add(playerMap);
         }
         if(getSelectedPlayerDetail.data.p4.id == allPlayers[i].id){
+          print(i);
+
           Map playerMap = new Map();
           playerMap['playerId'] = allPlayers[i].id;
           playerMap['playerIndex'] = i.toString();
@@ -162,6 +181,8 @@ class CreateTeamModel{
           chosenPlayer.add(playerMap);
         }
         if(getSelectedPlayerDetail.data.p5.id == allPlayers[i].id){
+          print(i);
+
           Map playerMap = new Map();
           playerMap['playerId'] = allPlayers[i].id;
           playerMap['playerIndex'] = i.toString();
@@ -170,6 +191,7 @@ class CreateTeamModel{
           chosenPlayer.add(playerMap);
         }
       }
+      print(chosenPlayer);
     }
   }
 

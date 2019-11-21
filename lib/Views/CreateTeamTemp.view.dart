@@ -72,7 +72,7 @@ class _CreateTeamtempState extends State<CreateTeamtemp> {
     _isPageLoading = true;
     CreateTeamModel.instance.resetAll();
     CreateTeamModel.instance.setPlayerType(1);
-    CreateTeamModel.instance.setBatsman(true);
+      CreateTeamModel.instance.setBatsman(true);
     getMatchDetails();
     var initializationSettingsAndroid =
     new AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -702,7 +702,7 @@ class _CreateTeamtempState extends State<CreateTeamtemp> {
                             Scaffold.of(context).showSnackBar(snackBar);
                             break;
                           case 4:
-                            SnackBar snackBar = new SnackBar(content: Text('Low creadit'),duration: const Duration(seconds: 1));
+                            SnackBar snackBar = new SnackBar(content: Text('Low credit'),duration: const Duration(seconds: 1));
                             Scaffold.of(context).showSnackBar(snackBar);
                             break;
                           case 5:
