@@ -24,9 +24,9 @@ class GetSelectedPlayerModel{
       "country1name":ContestDetailModel.instance.getTeam1Name(),
       "country2name":ContestDetailModel.instance.getTeam2Name()
     });
-
     if(response.statusCode == 200){
       final res = json.decode(response.body);
+      print(res);
       if(res['success']==true){
         return getSelectedPlayerDetailFromJson(response.body);
       }else{

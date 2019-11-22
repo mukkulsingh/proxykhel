@@ -168,12 +168,13 @@ class _MyContestCricketTabState extends State<MyContestCricketTab> {
                         child: new ListView.builder(
                             itemCount: snapshot.data.data.length,
                             itemBuilder: (BuildContext context, int index){
-                              String dateTimeGmt  = snapshot.data.data[index].dateTimeGmt;
-                              List d = dateTimeGmt.split('T');
-                              String b = d[1];
-                              List t = b.split('Z');
-                              var dateTime = d[0] +' '+ t[0];
-                              DateTime matchDateTime = DateTime.parse(dateTime);
+                              String dateTimeGmt  = snapshot.data.data[index].matchDateTime;
+//                              List d = dateTimeGmt.split('T');
+//                              String b = d[1];
+//                              List t = b.split('Z');
+//                              var dateTime = d[0] +' '+ t[0];
+                              String formattedMatchDateTime = dateTimeGmt.replaceAll('/', '-');
+                              DateTime matchDateTime = DateTime.parse(formattedMatchDateTime);
                               Duration difference = (matchDateTime).difference(DateTime.now());
                               String _visibility =  snapshot.data.data[index].visibility;
                               if(_currentScreen == 0 && difference < Duration(hours:0,minutes: 0, seconds: 0) && difference > Duration(hours: -8)){

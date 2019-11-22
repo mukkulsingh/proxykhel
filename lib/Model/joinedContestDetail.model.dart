@@ -45,14 +45,14 @@ class JoinedContestDetail {
     this.data,
   });
 
-  factory JoinedContestDetail.fromJson(Map<String, dynamic> json) => new JoinedContestDetail(
+  factory JoinedContestDetail.fromJson(Map<String, dynamic> json) => JoinedContestDetail(
     success: json["success"],
-    data: new List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+    data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
     "success": success,
-    "data": new List<dynamic>.from(data.map((x) => x.toJson())),
+    "data": List<dynamic>.from(data.map((x) => x.toJson())),
   };
 }
 
@@ -62,7 +62,7 @@ class Datum {
   String team2;
   String team1;
   String matchType;
-  DateTime matchDateTime;
+  String matchDateTime;
   String dateTimeGmt;
   DateTime matchDate;
   String squad;
@@ -117,13 +117,13 @@ class Datum {
     this.team2Name,
   });
 
-  factory Datum.fromJson(Map<String, dynamic> json) => new Datum(
+  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
     id: json["id"],
     uniqueId: json["unique_id"],
     team2: json["team_2"],
     team1: json["team_1"],
     matchType: json["matchType"],
-    matchDateTime: DateTime.parse(json["matchDateTime"]),
+    matchDateTime: json["matchDateTime"],
     dateTimeGmt: json["dateTimeGMT"],
     matchDate: DateTime.parse(json["matchDate"]),
     squad: json["squad"],
@@ -154,7 +154,7 @@ class Datum {
     "team_2": team2,
     "team_1": team1,
     "matchType": matchType,
-    "matchDateTime": matchDateTime.toIso8601String(),
+    "matchDateTime": matchDateTime,
     "dateTimeGMT": dateTimeGmt,
     "matchDate": "${matchDate.year.toString().padLeft(4, '0')}-${matchDate.month.toString().padLeft(2, '0')}-${matchDate.day.toString().padLeft(2, '0')}",
     "squad": squad,

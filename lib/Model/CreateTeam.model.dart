@@ -7,73 +7,73 @@ import 'package:proxykhel/Model/savedpref.model.dart';
 
 class CreateTeamModel{
 
- static CreateTeamModel _instance;
+  static CreateTeamModel _instance;
 
- static CreateTeamModel get instance{
-   if(_instance == null){
-     _instance = new CreateTeamModel();
-   }
-   return _instance;
- }
- static bool _isBatsman=true;
- static bool _isBowler=false;
- static bool _isWicketee=false;
- static bool _isAllRounder=false;
- static bool _isStarPlayer=false;
- static bool _isXPlayer=false;
- static bool _isSuperFive=false;
- static bool _isChosenPlayer=false;
- static String _teamId;
- static int _playerType=1;
- static int _actionType;
+  static CreateTeamModel get instance{
+    if(_instance == null){
+      _instance = new CreateTeamModel();
+    }
+    return _instance;
+  }
+  static bool _isBatsman=true;
+  static bool _isBowler=false;
+  static bool _isWicketee=false;
+  static bool _isAllRounder=false;
+  static bool _isStarPlayer=false;
+  static bool _isXPlayer=false;
+  static bool _isSuperFive=false;
+  static bool _isChosenPlayer=false;
+  static String _teamId;
+  static int _playerType=1;
+  static int _actionType;
 
- List allPlayers=[];
- List batsman=[];
- List bowler=[];
- List allRounder=[];
- List wicketKeeper=[];
- List starPlayer=[];
- List xPlayer=[];
- List superFive=[];
- List chosenPlayer=[];
+  List allPlayers=[];
+  List batsman=[];
+  List bowler=[];
+  List allRounder=[];
+  List wicketKeeper=[];
+  List starPlayer=[];
+  List xPlayer=[];
+  List superFive=[];
+  List chosenPlayer=[];
 
 
- void resetAll() {
-   _isBatsman = false;
-   _isBowler = false;
-   _isWicketee = false;
-   _isAllRounder = false;
-   _isStarPlayer = false;
-   _isXPlayer = false;
-   _isSuperFive = false;
-   _isChosenPlayer = false;
- }
+  void resetAll() {
+    _isBatsman = false;
+    _isBowler = false;
+    _isWicketee = false;
+    _isAllRounder = false;
+    _isStarPlayer = false;
+    _isXPlayer = false;
+    _isSuperFive = false;
+    _isChosenPlayer = false;
+  }
 
- void setBatsman(bool isBatsman){_isBatsman = isBatsman; }
- void setBowler(bool isBowler){_isBowler = isBowler;}
- void setWicketee(bool isWicketee){_isWicketee = isWicketee;}
- void setAllRounder(bool isAllRounder){_isAllRounder = isAllRounder;}
- void setStarPlayer(bool starPlayer){_isStarPlayer = starPlayer;}
- void setXPlayer(bool xPlayer){_isXPlayer = xPlayer;}
- void setSuperFive(bool superFive){_isSuperFive = superFive;}
- void setChosenPlayer(bool choosenPlayer){_isChosenPlayer = choosenPlayer;}
- void setPlayerType(int playerType){_playerType = playerType;}
+  void setBatsman(bool isBatsman){_isBatsman = isBatsman; }
+  void setBowler(bool isBowler){_isBowler = isBowler;}
+  void setWicketee(bool isWicketee){_isWicketee = isWicketee;}
+  void setAllRounder(bool isAllRounder){_isAllRounder = isAllRounder;}
+  void setStarPlayer(bool starPlayer){_isStarPlayer = starPlayer;}
+  void setXPlayer(bool xPlayer){_isXPlayer = xPlayer;}
+  void setSuperFive(bool superFive){_isSuperFive = superFive;}
+  void setChosenPlayer(bool choosenPlayer){_isChosenPlayer = choosenPlayer;}
+  void setPlayerType(int playerType){_playerType = playerType;}
 
- get getBowler=>_isBowler;
- get getBatsman=>_isBatsman;
- get getWicketee=>_isWicketee;
- get getAllRounder=>_isAllRounder;
- get getStarPlayer=>_isStarPlayer;
- get getXPlayer=>_isXPlayer;
- get getSuperFive=>_isSuperFive;
- get getChosenPlayer=>_isChosenPlayer;
+  get getBowler=>_isBowler;
+  get getBatsman=>_isBatsman;
+  get getWicketee=>_isWicketee;
+  get getAllRounder=>_isAllRounder;
+  get getStarPlayer=>_isStarPlayer;
+  get getXPlayer=>_isXPlayer;
+  get getSuperFive=>_isSuperFive;
+  get getChosenPlayer=>_isChosenPlayer;
 
   void setActionType(int actionType){_actionType = actionType;}
   get getActionType=>_actionType;
   void setTeamId(String teamId){_teamId = teamId;}
   get getTeamId=>_teamId;
 
- void setChosenPlayerList() async{
+  void setChosenPlayerList() async{
 //   chosenPlayer = [{"playerId":"1428","playerIndex":"1","groupName":"Batsman","teamName":"Zim"}];
     GetSelectedPlayerDetail getSelectedPlayerDetail;
     getSelectedPlayerDetail = await GetSelectedPlayerModel.instance.getSelectedPlayer(_teamId);
@@ -82,7 +82,6 @@ class CreateTeamModel{
       chosenPlayer = [];
       for(int i=0;i<allPlayers.length;i++){
         if(getSelectedPlayerDetail.data.bt.id == allPlayers[i].id){
-          print(i);
           Map playerMap = new Map();
           playerMap['playerId'] = allPlayers[i].id;
           playerMap['playerIndex'] = i.toString();
@@ -91,7 +90,6 @@ class CreateTeamModel{
           chosenPlayer.add(playerMap);
         }
         if(getSelectedPlayerDetail.data.bw.id == allPlayers[i].id){
-          print(i);
 
           Map playerMap = new Map();
           playerMap['playerId'] = allPlayers[i].id;
@@ -101,8 +99,6 @@ class CreateTeamModel{
           chosenPlayer.add(playerMap);
         }
         if(getSelectedPlayerDetail.data.wk.id == allPlayers[i].id){
-          print(i);
-
           Map playerMap = new Map();
           playerMap['playerId'] = allPlayers[i].id;
           playerMap['playerIndex'] = i.toString();
@@ -121,8 +117,6 @@ class CreateTeamModel{
           chosenPlayer.add(playerMap);
         }
         if(getSelectedPlayerDetail.data.sp.id == allPlayers[i].id){
-          print(i);
-
           Map playerMap = new Map();
           playerMap['playerId'] = allPlayers[i].id;
           playerMap['playerIndex'] = i.toString();
@@ -131,18 +125,15 @@ class CreateTeamModel{
           chosenPlayer.add(playerMap);
         }
         if(getSelectedPlayerDetail.data.ss.id == allPlayers[i].id){
-          print(i);
 
           Map playerMap = new Map();
           playerMap['playerId'] = allPlayers[i].id;
           playerMap['playerIndex'] = i.toString();
           playerMap['groupName'] = "X Player";
-          playerMap['teamName'] = getSelectedPlayerDetail.data.wk.team;
+          playerMap['teamName'] = getSelectedPlayerDetail.data.ss.team;
           chosenPlayer.add(playerMap);
         }
         if(getSelectedPlayerDetail.data.p1.id == allPlayers[i].id){
-          print(i);
-
           Map playerMap = new Map();
           playerMap['playerId'] = allPlayers[i].id;
           playerMap['playerIndex'] = i.toString();
@@ -151,7 +142,6 @@ class CreateTeamModel{
           chosenPlayer.add(playerMap);
         }
         if(getSelectedPlayerDetail.data.p2.id == allPlayers[i].id){
-          print(i);
 
           Map playerMap = new Map();
           playerMap['playerId'] = allPlayers[i].id;
@@ -161,8 +151,6 @@ class CreateTeamModel{
           chosenPlayer.add(playerMap);
         }
         if(getSelectedPlayerDetail.data.p3.id == allPlayers[i].id){
-          print(i);
-
           Map playerMap = new Map();
           playerMap['playerId'] = allPlayers[i].id;
           playerMap['playerIndex'] = i.toString();
@@ -171,8 +159,6 @@ class CreateTeamModel{
           chosenPlayer.add(playerMap);
         }
         if(getSelectedPlayerDetail.data.p4.id == allPlayers[i].id){
-          print(i);
-
           Map playerMap = new Map();
           playerMap['playerId'] = allPlayers[i].id;
           playerMap['playerIndex'] = i.toString();
@@ -181,7 +167,6 @@ class CreateTeamModel{
           chosenPlayer.add(playerMap);
         }
         if(getSelectedPlayerDetail.data.p5.id == allPlayers[i].id){
-          print(i);
 
           Map playerMap = new Map();
           playerMap['playerId'] = allPlayers[i].id;
@@ -191,196 +176,195 @@ class CreateTeamModel{
           chosenPlayer.add(playerMap);
         }
       }
-      print(chosenPlayer);
     }
   }
 
- get getPlayerType=>_playerType;
- get getAllPlayerList=>allPlayers;
- get getAllRounderList=>allRounder;
- get getBatsmanList=>batsman;
- get getBowlerList =>bowler;
- get getWicketKeeperList=>wicketKeeper;
- get getStarPlayerList=>starPlayer;
- get getXPlayerList=>xPlayer;
- get getSuperFiveList=>superFive;
- get getChosenPlayerList=>chosenPlayer;
+  get getPlayerType=>_playerType;
+  get getAllPlayerList=>allPlayers;
+  get getAllRounderList=>allRounder;
+  get getBatsmanList=>batsman;
+  get getBowlerList =>bowler;
+  get getWicketKeeperList=>wicketKeeper;
+  get getStarPlayerList=>starPlayer;
+  get getXPlayerList=>xPlayer;
+  get getSuperFiveList=>superFive;
+  get getChosenPlayerList=>chosenPlayer;
 
- int getPlayerColor(int playerIndex, String groupName) {
-   for (int i = 0; i < chosenPlayer.length; i++) {
-     if (int.parse(chosenPlayer[i]['playerIndex']) == playerIndex &&
-         chosenPlayer[i]['groupName'] == groupName)
-       return 2;
-     else if (int.parse(chosenPlayer[i]['playerIndex']) == playerIndex)
-       return 1;
-   }
-   return 0;
- }
+  int getPlayerColor(int playerIndex, String groupName) {
+    for (int i = 0; i < chosenPlayer.length; i++) {
+      if (int.parse(chosenPlayer[i]['playerIndex']) == playerIndex &&
+          chosenPlayer[i]['groupName'] == groupName)
+        return 2;
+      else if (int.parse(chosenPlayer[i]['playerIndex']) == playerIndex)
+        return 1;
+    }
+    return 0;
+  }
 
- int getTeamPlayerCount(String teamName){
-   int count=0;
-   for(int i=0;i<chosenPlayer.length;i++)
-     if(chosenPlayer[i]['teamName'] == teamName)count++;
-     return count;
- }
+  int getTeamPlayerCount(String teamName){
+    int count=0;
+    for(int i=0;i<chosenPlayer.length;i++)
+      if(chosenPlayer[i]['teamName'] == teamName)count++;
+    return count;
+  }
 
 
- int getPlayerCount(String groupName) {
-   int count = 0;
-   for (int i = 0; i < chosenPlayer.length; i++)
-     if (chosenPlayer[i]['groupName'] == groupName) count++;
-   return count;
- }
+  int getPlayerCount(String groupName) {
+    int count = 0;
+    for (int i = 0; i < chosenPlayer.length; i++)
+      if (chosenPlayer[i]['groupName'] == groupName) count++;
+    return count;
+  }
 
- double getTotalCreditOfTeam() {
-   double credit = 0;
-   for (int i = 0; i < chosenPlayer.length; i++)
-     credit += double.parse(
-         allPlayers[int.parse(chosenPlayer[i]['playerIndex'])].credit);
-   return credit;
- }
+  double getTotalCreditOfTeam() {
+    double credit = 0;
+    for (int i = 0; i < chosenPlayer.length; i++)
+      credit += double.parse(
+          allPlayers[int.parse(chosenPlayer[i]['playerIndex'])].credit);
+    return credit;
+  }
 
- int selectPlayer(List playerList, int playerIndex, String groupName,
-     String teamName,int allowedSelection,int allowedTeamPlayer) {
-   int colorCode = getPlayerColor(playerIndex, groupName);
+  int selectPlayer(List playerList, int playerIndex, String groupName,
+      String teamName,int allowedSelection,int allowedTeamPlayer) {
+    int colorCode = getPlayerColor(playerIndex, groupName);
 
-   if (colorCode == 2) {
-     for (int i = 0; i < chosenPlayer.length; i++) {
-       if (playerIndex == int.parse(chosenPlayer[i]['playerIndex'])) {
-         chosenPlayer.removeAt(i);
-       }
-     }
-     //     deselect player
-     return 0;
-   } else if (colorCode == 1) {
+    if (colorCode == 2) {
+      for (int i = 0; i < chosenPlayer.length; i++) {
+        if (playerIndex == int.parse(chosenPlayer[i]['playerIndex'])) {
+          chosenPlayer.removeAt(i);
+        }
+      }
+      //     deselect player
+      return 0;
+    } else if (colorCode == 1) {
 //     Player already selected
-     return 3;
-   } else {
-     if (allowedSelection == getPlayerCount(groupName)) {
-       // show("that this many batsman already selected");
-       return 2;
-     }
-     else if(allowedTeamPlayer == getTeamPlayerCount(teamName)){
-       //show allowed selection for one team exhausted
-       return 5;
-     }
-     else if (getTotalCreditOfTeam() +
-         double.parse(allPlayers[playerIndex].credit) >
-         100) {
-       //show('credit limit exeed');
-       return 4;
-     } else {
-       //show('select that player and add it into chosenPlayer');
-       Map playerMap = new Map();
-       playerMap['playerId'] = allPlayers[playerIndex].id;
-       playerMap['playerIndex'] = playerIndex.toString();
-       playerMap['groupName'] = groupName;
-       playerMap['teamName'] = teamName;
-       chosenPlayer.add(playerMap);
-       return 1;
+      return 3;
+    } else {
+      if (allowedSelection == getPlayerCount(groupName)) {
+        // show("that this many batsman already selected");
+        return 2;
+      }
+      else if(allowedTeamPlayer == getTeamPlayerCount(teamName)){
+        //show allowed selection for one team exhausted
+        return 5;
+      }
+      else if (getTotalCreditOfTeam() +
+          double.parse(allPlayers[playerIndex].credit) >
+          100) {
+        //show('credit limit exeed');
+        return 4;
+      } else {
+        //show('select that player and add it into chosenPlayer');
+        Map playerMap = new Map();
+        playerMap['playerId'] = allPlayers[playerIndex].id;
+        playerMap['playerIndex'] = playerIndex.toString();
+        playerMap['groupName'] = groupName;
+        playerMap['teamName'] = teamName;
+        chosenPlayer.add(playerMap);
+        return 1;
 //       setState(() {});
-     }
-   }
- }
+      }
+    }
+  }
 
- Future getMatchTeam(String matchId, String team1name, String team2name) async {
-     http.Response response = await http.post("https://www.proxykhel.com/android/Createteam.php",body: {
-       "type":"getTeam",
-       "matchId":matchId,
-       "team1name":team1name,
-       "team2name":team2name,
-     });
-     if(response.statusCode == 200){
-       final res = json.decode(response.body);
-       if(res['success']==true){
-          CreateTeamDetails createTeamDetails = createTeamDetailsFromJson(response.body);
-          allPlayers=[];
-          batsman=[];
-          bowler=[];
-          allRounder=[];
-          wicketKeeper=[];
-          starPlayer=[];
-          xPlayer=[];
-          superFive=[];
+  Future getMatchTeam(String matchId, String team1name, String team2name) async {
+    http.Response response = await http.post("https://www.proxykhel.com/android/Createteam.php",body: {
+      "type":"getTeam",
+      "matchId":matchId,
+      "team1name":team1name,
+      "team2name":team2name,
+    });
+    if(response.statusCode == 200){
+      final res = json.decode(response.body);
+      if(res['success']==true){
+        CreateTeamDetails createTeamDetails = createTeamDetailsFromJson(response.body);
+        allPlayers=[];
+        batsman=[];
+        bowler=[];
+        allRounder=[];
+        wicketKeeper=[];
+        starPlayer=[];
+        xPlayer=[];
+        superFive=[];
 
-          if(_actionType == 1){
-            chosenPlayer=[];
-          }
-          else if(_actionType == 2 || _actionType == 3) {
-            setChosenPlayerList();
-          }
+        if(_actionType == 1){
+          chosenPlayer=[];
+        }
+        else if(_actionType == 2 || _actionType == 3) {
+          setChosenPlayerList();
+        }
 
-          allPlayers = createTeamDetails.data.supperSticker;
+        allPlayers = createTeamDetails.data.supperSticker;
 
-          for (int i = 0; i < createTeamDetails.data.batsman.length; i++) {
-            for (int j = 0; j < allPlayers.length; j++) {
-              if (createTeamDetails.data.batsman[i].id == allPlayers[j].id) {
-                batsman.add(j);
-              }
+        for (int i = 0; i < createTeamDetails.data.batsman.length; i++) {
+          for (int j = 0; j < allPlayers.length; j++) {
+            if (createTeamDetails.data.batsman[i].id == allPlayers[j].id) {
+              batsman.add(j);
             }
           }
+        }
 
-          for (int i = 0; i < createTeamDetails.data.bowler.length; i++) {
-            for (int j = 0; j < allPlayers.length; j++) {
-              if (createTeamDetails.data.bowler[i].id == allPlayers[j].id) {
-                bowler.add(j);
-              }
+        for (int i = 0; i < createTeamDetails.data.bowler.length; i++) {
+          for (int j = 0; j < allPlayers.length; j++) {
+            if (createTeamDetails.data.bowler[i].id == allPlayers[j].id) {
+              bowler.add(j);
             }
           }
-          for (int i = 0; i < createTeamDetails.data.wicketKeeper.length; i++) {
-            for (int j = 0; j < allPlayers.length; j++) {
-              if (createTeamDetails.data.wicketKeeper[i].id == allPlayers[j].id) {
-                wicketKeeper.add(j);
-              }
+        }
+        for (int i = 0; i < createTeamDetails.data.wicketKeeper.length; i++) {
+          for (int j = 0; j < allPlayers.length; j++) {
+            if (createTeamDetails.data.wicketKeeper[i].id == allPlayers[j].id) {
+              wicketKeeper.add(j);
             }
           }
-          for (int i = 0; i < createTeamDetails.data.allRounder.length; i++) {
-            for (int j = 0; j < allPlayers.length; j++) {
-              if (createTeamDetails.data.allRounder[i].id == allPlayers[j].id) {
-                allRounder.add(j);
-              }
+        }
+        for (int i = 0; i < createTeamDetails.data.allRounder.length; i++) {
+          for (int j = 0; j < allPlayers.length; j++) {
+            if (createTeamDetails.data.allRounder[i].id == allPlayers[j].id) {
+              allRounder.add(j);
             }
           }
-          for (int i = 0; i < createTeamDetails.data.supperSticker.length; i++) {
-            for (int j = 0; j < allPlayers.length; j++) {
-              if (createTeamDetails.data.supperSticker[i].id == allPlayers[j].id) {
-                starPlayer.add(j);
-              }
+        }
+        for (int i = 0; i < createTeamDetails.data.supperSticker.length; i++) {
+          for (int j = 0; j < allPlayers.length; j++) {
+            if (createTeamDetails.data.supperSticker[i].id == allPlayers[j].id) {
+              starPlayer.add(j);
             }
           }
+        }
 
-          for (int i = 0; i < createTeamDetails.data.supperSticker.length; i++) {
-            for (int j = 0; j < allPlayers.length; j++) {
-              if (createTeamDetails.data.supperSticker[i].id == allPlayers[j].id) {
-                xPlayer.add(j);
-              }
+        for (int i = 0; i < createTeamDetails.data.supperSticker.length; i++) {
+          for (int j = 0; j < allPlayers.length; j++) {
+            if (createTeamDetails.data.supperSticker[i].id == allPlayers[j].id) {
+              xPlayer.add(j);
             }
           }
-          for (int i = 0; i < createTeamDetails.data.supperSticker.length; i++) {
-            for (int j = 0; j < allPlayers.length; j++) {
-              if (createTeamDetails.data.supperSticker[i].id == allPlayers[j].id) {
-                superFive.add(j);
-              }
+        }
+        for (int i = 0; i < createTeamDetails.data.supperSticker.length; i++) {
+          for (int j = 0; j < allPlayers.length; j++) {
+            if (createTeamDetails.data.supperSticker[i].id == allPlayers[j].id) {
+              superFive.add(j);
             }
           }
-          return createTeamDetailsFromJson(response.body);
-       }
-       else{
-         return null;
-       }
-     }else{
-       return null;
-     }
+        }
+        return createTeamDetailsFromJson(response.body);
+      }
+      else{
+        return null;
+      }
+    }else{
+      return null;
+    }
 
- }
+  }
 
- Future<dynamic> updateTeam(
-     String matchId,
-     String contestId,
-     String creadit,
-     String country1,
-     String country2,
-     ) async {
+  Future<dynamic> updateTeam(
+      String matchId,
+      String contestId,
+      String creadit,
+      String country1,
+      String country2,
+      ) async {
 
     int batsmanId,bowlerId,WKId, allrounderId,starplayerId,xplayerId;
 
@@ -389,35 +373,35 @@ class CreateTeamModel{
     List country2Players=[];
     List elevenPlayers=[];
 
-   String userId = await SavedPref.instance.getUserId();
-   for(int i=0;i<CreateTeamModel.instance.getChosenPlayerList.length;i++){
-     if(chosenPlayer[i]['groupName'] == 'Batsman'){
+    String userId = await SavedPref.instance.getUserId();
+    for(int i=0;i<CreateTeamModel.instance.getChosenPlayerList.length;i++){
+      if(chosenPlayer[i]['groupName'] == 'Batsman'){
         batsmanId = int.parse(chosenPlayer[i]['playerId']);
-     }
-     else if(chosenPlayer[i]['groupName'] == 'Bowler'){
+      }
+      else if(chosenPlayer[i]['groupName'] == 'Bowler'){
         bowlerId = int.parse(chosenPlayer[i]['playerId']);
 
-     }
-     else if(chosenPlayer[i]['groupName'] == 'Wicket Keeper'){
+      }
+      else if(chosenPlayer[i]['groupName'] == 'Wicket Keeper'){
         WKId = int.parse(chosenPlayer[i]['playerId']);
 
-     }
-     else if(chosenPlayer[i]['groupName'] == 'All Rounder'){
+      }
+      else if(chosenPlayer[i]['groupName'] == 'All Rounder'){
         allrounderId = int.parse(chosenPlayer[i]['playerId']);
 
-     }
-     else if(chosenPlayer[i]['groupName'] == 'Star Player'){
+      }
+      else if(chosenPlayer[i]['groupName'] == 'Star Player'){
         starplayerId = int.parse(chosenPlayer[i]['playerId']);
 
-     }
-     else if(chosenPlayer[i]['groupName'] == 'X Player'){
+      }
+      else if(chosenPlayer[i]['groupName'] == 'X Player'){
         xplayerId = (int.parse(chosenPlayer[i]['playerId']));
 
-     }
-     else if(chosenPlayer[i]['groupName'] == 'Super Five'){
-       superFive.add(int.parse(chosenPlayer[i]['playerId']));
-     }
-   }
+      }
+      else if(chosenPlayer[i]['groupName'] == 'Super Five'){
+        superFive.add(int.parse(chosenPlayer[i]['playerId']));
+      }
+    }
 
     for(int i=0;i<CreateTeamModel.instance.getChosenPlayerList.length;i++){
       if(chosenPlayer[i]['teamName'] == country1){
@@ -431,129 +415,129 @@ class CreateTeamModel{
     }
 
 
-   http.Response response = await http.post("https://www.proxykhel.com/android/EditTeam.php",
-       body: {
-         "type":"updateTeam",
-         "teamId":_teamId,
-         "matchId":matchId.toString(),
-         "contestId":contestId.toString(),
-         "userId":userId.toString(),
-         "batsman":batsmanId.toString(),
-         "bowler":bowlerId.toString(),
-         "allrounder":allrounderId.toString(),
-         "wicketkeeper":WKId.toString(),
-         "manofthematch":starplayerId.toString(),
-         "superstriker":xplayerId.toString(),
-         "credit":creadit.toString(),
-         "player_session":superFive.toString(),
-         "country1_session":country1Players.toString(),
-         "country2_session":country2Players.toString(),
-         "match_session":elevenPlayers.toString()
-       }
-   );
-   if(response.statusCode == 200){
-     final res = json.decode(response.body);
-     if(res['success']=='true' && res['msg']=='ok'){
-       return true;
-     }
-     else{
-       return false;
-     }
-   }
-   else{
-     return false;
-   }
- }
+    http.Response response = await http.post("https://www.proxykhel.com/android/EditTeam.php",
+        body: {
+          "type":"updateTeam",
+          "teamId":_teamId,
+          "matchId":matchId.toString(),
+          "contestId":contestId.toString(),
+          "userId":userId.toString(),
+          "batsman":batsmanId.toString(),
+          "bowler":bowlerId.toString(),
+          "allrounder":allrounderId.toString(),
+          "wicketkeeper":WKId.toString(),
+          "manofthematch":starplayerId.toString(),
+          "superstriker":xplayerId.toString(),
+          "credit":creadit.toString(),
+          "player_session":superFive.toString(),
+          "country1_session":country1Players.toString(),
+          "country2_session":country2Players.toString(),
+          "match_session":elevenPlayers.toString()
+        }
+    );
+    if(response.statusCode == 200){
+      final res = json.decode(response.body);
+      if(res['success']=='true' && res['msg']=='ok'){
+        return true;
+      }
+      else{
+        return false;
+      }
+    }
+    else{
+      return false;
+    }
+  }
 
- Future<dynamic> saveTeam(
-     String matchId,
-     String contestId,
-     String creadit,
-     String country1,
-     String country2,
-     ) async {
+  Future<dynamic> saveTeam(
+      String matchId,
+      String contestId,
+      String creadit,
+      String country1,
+      String country2,
+      ) async {
 
-   int batsmanId,bowlerId,WKId, allrounderId,starplayerId,xplayerId;
+    int batsmanId,bowlerId,WKId, allrounderId,starplayerId,xplayerId;
 
-   List superFive=[];
-   List country1Players=[];
-   List country2Players=[];
-   List elevenPlayers=[];
+    List superFive=[];
+    List country1Players=[];
+    List country2Players=[];
+    List elevenPlayers=[];
 
-   String userId = await SavedPref.instance.getUserId();
-   for(int i=0;i<CreateTeamModel.instance.getChosenPlayerList.length;i++){
-     if(chosenPlayer[i]['groupName'] == 'Batsman'){
-       batsmanId = int.parse(chosenPlayer[i]['playerId']);
-     }
-     else if(chosenPlayer[i]['groupName'] == 'Bowler'){
-       bowlerId = int.parse(chosenPlayer[i]['playerId']);
+    String userId = await SavedPref.instance.getUserId();
+    for(int i=0;i<CreateTeamModel.instance.getChosenPlayerList.length;i++){
+      if(chosenPlayer[i]['groupName'] == 'Batsman'){
+        batsmanId = int.parse(chosenPlayer[i]['playerId']);
+      }
+      else if(chosenPlayer[i]['groupName'] == 'Bowler'){
+        bowlerId = int.parse(chosenPlayer[i]['playerId']);
 
-     }
-     else if(chosenPlayer[i]['groupName'] == 'Wicket Keeper'){
-       WKId = int.parse(chosenPlayer[i]['playerId']);
+      }
+      else if(chosenPlayer[i]['groupName'] == 'Wicket Keeper'){
+        WKId = int.parse(chosenPlayer[i]['playerId']);
 
-     }
-     else if(chosenPlayer[i]['groupName'] == 'All Rounder'){
-       allrounderId = int.parse(chosenPlayer[i]['playerId']);
+      }
+      else if(chosenPlayer[i]['groupName'] == 'All Rounder'){
+        allrounderId = int.parse(chosenPlayer[i]['playerId']);
 
-     }
-     else if(chosenPlayer[i]['groupName'] == 'Star Player'){
-       starplayerId = int.parse(chosenPlayer[i]['playerId']);
+      }
+      else if(chosenPlayer[i]['groupName'] == 'Star Player'){
+        starplayerId = int.parse(chosenPlayer[i]['playerId']);
 
-     }
-     else if(chosenPlayer[i]['groupName'] == 'X Player'){
-       xplayerId = (int.parse(chosenPlayer[i]['playerId']));
+      }
+      else if(chosenPlayer[i]['groupName'] == 'X Player'){
+        xplayerId = (int.parse(chosenPlayer[i]['playerId']));
 
-     }
-     else if(chosenPlayer[i]['groupName'] == 'Super Five'){
-       superFive.add(int.parse(chosenPlayer[i]['playerId']));
-     }
-   }
+      }
+      else if(chosenPlayer[i]['groupName'] == 'Super Five'){
+        superFive.add(int.parse(chosenPlayer[i]['playerId']));
+      }
+    }
 
-   for(int i=0;i<CreateTeamModel.instance.getChosenPlayerList.length;i++){
-     if(chosenPlayer[i]['teamName'] == country1){
-       country1Players.add(int.parse(chosenPlayer[i]['playerId']));
-       elevenPlayers.add(int.parse(chosenPlayer[i]['playerId']));
-     }
-     else if(chosenPlayer[i]['teamName'] == country2){
-       country2Players.add(int.parse(chosenPlayer[i]['playerId']));
-       elevenPlayers.add(int.parse(chosenPlayer[i]['playerId']));
-     }
-   }
+    for(int i=0;i<CreateTeamModel.instance.getChosenPlayerList.length;i++){
+      if(chosenPlayer[i]['teamName'] == country1){
+        country1Players.add(int.parse(chosenPlayer[i]['playerId']));
+        elevenPlayers.add(int.parse(chosenPlayer[i]['playerId']));
+      }
+      else if(chosenPlayer[i]['teamName'] == country2){
+        country2Players.add(int.parse(chosenPlayer[i]['playerId']));
+        elevenPlayers.add(int.parse(chosenPlayer[i]['playerId']));
+      }
+    }
 
 
-   http.Response response = await http.post("https://www.proxykhel.com/android/Createteam.php",
-       body: {
-         "type":"saveTeam",
-         "matchId":matchId.toString(),
-         "contestId":contestId.toString(),
-         "userId":userId.toString(),
-         "batsman":batsmanId.toString(),
-         "bowler":bowlerId.toString(),
-         "allrounder":allrounderId.toString(),
-         "wicketkeeper":WKId.toString(),
-         "manofthematch":starplayerId.toString(),
-         "superstriker":xplayerId.toString(),
-         "credit":creadit.toString(),
-         "player_session":superFive.toString(),
-         "country1_session":country1Players.toString(),
-         "country2_session":country2Players.toString(),
-         "match_session":elevenPlayers.toString()
-       }
-   );
-   if(response.statusCode == 200){
-     final res = json.decode(response.body);
-     if(res['success']=='true' && res['msg']=='ok'){
-       return true;
-     }
-     else{
-       return false;
-     }
-   }
-   else{
-     return false;
-   }
- }
+    http.Response response = await http.post("https://www.proxykhel.com/android/Createteam.php",
+        body: {
+          "type":"saveTeam",
+          "matchId":matchId.toString(),
+          "contestId":contestId.toString(),
+          "userId":userId.toString(),
+          "batsman":batsmanId.toString(),
+          "bowler":bowlerId.toString(),
+          "allrounder":allrounderId.toString(),
+          "wicketkeeper":WKId.toString(),
+          "manofthematch":starplayerId.toString(),
+          "superstriker":xplayerId.toString(),
+          "credit":creadit.toString(),
+          "player_session":superFive.toString(),
+          "country1_session":country1Players.toString(),
+          "country2_session":country2Players.toString(),
+          "match_session":elevenPlayers.toString()
+        }
+    );
+    if(response.statusCode == 200){
+      final res = json.decode(response.body);
+      if(res['success']=='true' && res['msg']=='ok'){
+        return true;
+      }
+      else{
+        return false;
+      }
+    }
+    else{
+      return false;
+    }
+  }
 
 
 

@@ -23,7 +23,6 @@ class GetContestDetailModel{
       "type":"getContestDetail",
       "contestId": _contestId
     });
-
     if(response.statusCode == 200){
       final res = json.decode(response.body);
       if(res['success'] == true){

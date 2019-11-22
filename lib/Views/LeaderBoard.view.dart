@@ -229,6 +229,7 @@ class _LeaderBoardState extends State<LeaderBoard> {
                               itemBuilder: (context,index){
                                 return InkWell(
                                   onTap:(){
+
                                     ViewTeamModel.instance.setTeamId(snapshot.data.data[index].teamdata.id);
                                     Navigator.push(context,SlideLeftRoute(widget: ViewTeamPoint()));
                                   },
@@ -241,7 +242,6 @@ class _LeaderBoardState extends State<LeaderBoard> {
                                       children: <Widget>[
                                         new Text("${index + 1}"),
                                         new Text("${snapshot.data.data[index].teamdata.teamname}"),
-//                                      new Text("${snapshot.data.data[index].totalPoints}"),
                                         new Text("${snapshot.data.data[index].totalPoints}"),
                                       ],
                                     ),

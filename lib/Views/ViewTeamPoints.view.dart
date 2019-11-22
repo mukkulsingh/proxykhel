@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:proxykhel/Model/GroundPoint.model.dart';
 import 'package:proxykhel/Model/ViewTeam.model.dart';
 
 class ViewTeamPoint extends StatelessWidget {
@@ -24,10 +25,11 @@ class _ViewteamPointState extends State<ViewteamPoint> {
   static bool _isPageLoading;
   static bool _dataFound;
   ViewTeamDetails viewTeamDetails;
-
+  GroundPointDetail groundPoint;
   Future loadViewTeamData()async{
     viewTeamDetails = await ViewTeamModel.instance.getViewTeam();
-    if(viewTeamDetails != null){
+    groundPoint = await GroundPointModel.instance.getGroundPoint();
+    if(viewTeamDetails != null && groundPoint != null){
       setState(() {
         _isPageLoading = false;
         _dataFound = true;
@@ -124,7 +126,7 @@ class _ViewteamPointState extends State<ViewteamPoint> {
                         ),
                         new Container(
                           margin: EdgeInsets.only(top: 2.0),
-                          child: new Text("0.0",style: TextStyle(color: Colors.white),),
+                          child: new Text("${groundPoint.data[0].wk}",style: TextStyle(color: Colors.white),),
                         )
 
                       ],
@@ -151,7 +153,7 @@ class _ViewteamPointState extends State<ViewteamPoint> {
                             child: new Text("${viewTeamDetails.data.sp.playerName}",style: TextStyle(backgroundColor: Colors.white),),
                           ),
                           new Container(
-                            child: new Text("0.0",style: TextStyle(color: Colors.white),),
+                            child: new Text("${groundPoint.data[0].sp}",style: TextStyle(color: Colors.white),),
                           )
 
                         ],
@@ -171,7 +173,7 @@ class _ViewteamPointState extends State<ViewteamPoint> {
                             child: new Text("${viewTeamDetails.data.bt.playerName}",style: TextStyle(backgroundColor: Colors.white)),
                           ),
                           new Container(
-                            child: new Text("0.0",style: TextStyle(color: Colors.white),),
+                            child: new Text("${groundPoint.data[0].bt}",style: TextStyle(color: Colors.white),),
                           ),
 
                         ],
@@ -193,7 +195,7 @@ class _ViewteamPointState extends State<ViewteamPoint> {
                             child: new Text("${viewTeamDetails.data.ss.playerName}",style: TextStyle(backgroundColor: Colors.white),),
                           ),
                           new Container(
-                            child: new Text("0.0",style: TextStyle(color: Colors.white),),
+                            child: new Text("${groundPoint.data[0].sp}",style: TextStyle(color: Colors.white),),
                           )
                         ],
                       ),
@@ -215,7 +217,7 @@ class _ViewteamPointState extends State<ViewteamPoint> {
                           child: new Text("${viewTeamDetails.data.p1.playerName}",style: TextStyle(backgroundColor: Colors.white),),
                         ),
                         new Container(
-                          child: new Text("0.0",style: TextStyle(color: Colors.white),),
+                          child: new Text("${groundPoint.data[0].p1}",style: TextStyle(color: Colors.white),),
                         )
                       ],
                     ),
@@ -233,7 +235,7 @@ class _ViewteamPointState extends State<ViewteamPoint> {
                           child: new Text("${viewTeamDetails.data.p2.playerName}",style: TextStyle(backgroundColor: Colors.white),),
                         ),
                         new Container(
-                          child: new Text("0.0",style: TextStyle(color: Colors.white),),
+                          child: new Text("${groundPoint.data[0].p2}",style: TextStyle(color: Colors.white),),
                         )
 
                       ],
@@ -250,7 +252,7 @@ class _ViewteamPointState extends State<ViewteamPoint> {
                           child: new Text("${viewTeamDetails.data.p3.playerName}",style: TextStyle(backgroundColor: Colors.white),),
                         ),
                         new Container(
-                          child: new Text("0.0",style: TextStyle(color: Colors.white),),
+                          child: new Text("${groundPoint.data[0].p3}",style: TextStyle(color: Colors.white),),
                         )
 
                       ],
@@ -273,7 +275,7 @@ class _ViewteamPointState extends State<ViewteamPoint> {
                           child: new Text("${viewTeamDetails.data.p4.playerName}",style: TextStyle(backgroundColor: Colors.white),),
                         ),
                         new Container(
-                          child: new Text("0.0",style: TextStyle(color: Colors.white),),
+                          child: new Text("${groundPoint.data[0].p4}",style: TextStyle(color: Colors.white),),
                         )
                       ],
                     ),
@@ -289,7 +291,7 @@ class _ViewteamPointState extends State<ViewteamPoint> {
                           child: new Text("${viewTeamDetails.data.p5.playerName}",style: TextStyle(backgroundColor: Colors.white),),
                         ),
                         new Container(
-                          child: new Text("0.0",style: TextStyle(color: Colors.white),),
+                          child: new Text("${groundPoint.data[0].p5}",style: TextStyle(color: Colors.white),),
                         )
 
                       ],

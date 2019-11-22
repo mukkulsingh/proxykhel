@@ -35,8 +35,9 @@ class _GeneralPointsViewState extends State<GeneralPointsView> {
                 color: Colors.deepOrange,
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold,
-
-              ),)),
+              ),
+              )
+          ),
           Container(
             color: Colors.grey[200],
             height: 45.0,
@@ -65,7 +66,7 @@ class _GeneralPointsViewState extends State<GeneralPointsView> {
                   return new Center(
                     child: new Column(
                       children: <Widget>[
-                        new Text("Error fetching data${snapshot.error}"),
+                        new Text("Error fetching data"),
                         new OutlineButton(onPressed: (){
                           setState(() {
 
@@ -123,6 +124,7 @@ class _GeneralPointsViewState extends State<GeneralPointsView> {
                   }else{
                     return new ListView.builder(
                       shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
                         itemCount: snapshot.data.data.length,
                         itemBuilder: (context,index){
                           return InkWell(
