@@ -5,7 +5,8 @@ class ViewTeamPoint extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("TEAM PREVIEW",style: TextStyle(fontSize: 16.0, color: Colors.white)),  iconTheme: IconThemeData(
+      appBar: AppBar(
+        title: Text("TEAM PREVIEW",style: TextStyle(fontSize: 16.0, color: Colors.white)),  iconTheme: IconThemeData(
         color: Colors.white,
       ),),
       body:ViewteamPoint(),

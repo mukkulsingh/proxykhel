@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:proxykhel/Model/LeaderBoard.model.dart';
+import 'package:proxykhel/Model/ViewTeam.model.dart';
+import 'package:proxykhel/Views/ViewTeamPoints.view.dart';
 import './../Constants/slideTransitions.dart';
 import './wallet.view.dart';
 import './../Model/logout.model.dart';
@@ -225,18 +227,24 @@ class _LeaderBoardState extends State<LeaderBoard> {
                             return new ListView.builder(
                               itemCount: snapshot.data.data.length,
                               itemBuilder: (context,index){
-                                return new Container(
-                                  margin: EdgeInsets.only(top:1.0),
-                                  height: 40.0,
-                                  color: Colors.grey[300],
-                                  child: new Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                    children: <Widget>[
-                                      new Text("${index + 1}"),
-                                      new Text("${snapshot.data.data[index].teamdata.teamname}"),
+                                return InkWell(
+                                  onTap:(){
+                                    ViewTeamModel.instance.setTeamId(snapshot.data.data[index].teamdata.id);
+                                    Navigator.push(context,SlideLeftRoute(widget: ViewTeamPoint()));
+                                  },
+                                  child: new Container(
+                                    margin: EdgeInsets.only(top:1.0),
+                                    height: 40.0,
+                                    color: Colors.grey[300],
+                                    child: new Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                      children: <Widget>[
+                                        new Text("${index + 1}"),
+                                        new Text("${snapshot.data.data[index].teamdata.teamname}"),
 //                                      new Text("${snapshot.data.data[index].totalPoints}"),
-                                      new Text("${snapshot.data.data[index].totalPoints}"),
-                                    ],
+                                        new Text("${snapshot.data.data[index].totalPoints}"),
+                                      ],
+                                    ),
                                   ),
                                 );
                               },

@@ -22,7 +22,6 @@ class ViewTeamModel{
       "type":"getViewTeam",
       "teamId":_teamId.toString(),
     });
-
     if(response.statusCode == 200){
       final res = json.decode(response.body);
       if(res['success']==true){

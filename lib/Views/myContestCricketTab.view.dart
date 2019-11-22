@@ -228,7 +228,7 @@ class _MyContestCricketTabState extends State<MyContestCricketTab> {
                                                           new SizedBox(
                                                             height: 20.0,
                                                           ),
-                                                          new Text(convertDateFromString(difference),style: TextStyle(fontSize: 12.0,color: Colors.deepOrange,fontWeight: FontWeight.w900),),
+                                                          new Text("Live",style: TextStyle(fontSize: 12.0,color: Colors.deepOrange,fontWeight: FontWeight.w900),),
                                                         ],
                                                       ),
                                                       new Column(
