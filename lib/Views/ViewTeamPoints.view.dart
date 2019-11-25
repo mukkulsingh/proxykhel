@@ -107,8 +107,24 @@ class _ViewteamPointState extends State<ViewteamPoint> {
 //            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               new Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
+                  new Container(
+                    margin: EdgeInsets.only(top: 10.0),
+                    child: new Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        new Text("Total Points: ${groundPoint.data[0].totalPoints}",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold)),
+
+//                        new Container(
+//                          margin: EdgeInsets.only(top: 2.0),
+//                          child: new Text("${groundPoint.data[0].totalPoints}",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
+//                        )
+
+                      ],
+                    ),
+                  ),
+
 
                   new Container(
                     margin: EdgeInsets.only(top: 10.0),
@@ -128,6 +144,21 @@ class _ViewteamPointState extends State<ViewteamPoint> {
                           margin: EdgeInsets.only(top: 2.0),
                           child: new Text("${groundPoint.data[0].wk}",style: TextStyle(color: Colors.white),),
                         )
+
+                      ],
+                    ),
+                  ),
+                  new Container(
+                    margin: EdgeInsets.only(top: 10.0),
+                    child: new Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        new Text("Extra: ${groundPoint.data[0].ext == null?"0":groundPoint.data[0].ext}",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold)),
+
+//                        new Container(
+//                          margin: EdgeInsets.only(top: 2.0),
+//                          child: new Text("",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
+//                        )
 
                       ],
                     ),
@@ -195,7 +226,7 @@ class _ViewteamPointState extends State<ViewteamPoint> {
                             child: new Text("${viewTeamDetails.data.ss.playerName}",style: TextStyle(backgroundColor: Colors.white),),
                           ),
                           new Container(
-                            child: new Text("${groundPoint.data[0].sp}",style: TextStyle(color: Colors.white),),
+                            child: new Text("${groundPoint.data[0].ss}",style: TextStyle(color: Colors.white),),
                           )
                         ],
                       ),
@@ -293,7 +324,6 @@ class _ViewteamPointState extends State<ViewteamPoint> {
                         new Container(
                           child: new Text("${groundPoint.data[0].p5}",style: TextStyle(color: Colors.white),),
                         )
-
                       ],
                     ),
                   ),
@@ -316,7 +346,7 @@ class _ViewteamPointState extends State<ViewteamPoint> {
                           child: new Text("${viewTeamDetails.data.bw.playerName}",style: TextStyle(backgroundColor: Colors.white),),
                         ),
                         new Container(
-                          child: new Text("0.0",style: TextStyle(color: Colors.white),),
+                          child: new Text("${groundPoint.data[0].bw}",style: TextStyle(color: Colors.white),),
                         )
                       ],
                     ),
@@ -335,7 +365,7 @@ class _ViewteamPointState extends State<ViewteamPoint> {
                           child: new Text("${viewTeamDetails.data.ar.playerName}",style: TextStyle(backgroundColor: Colors.white),),
                         ),
                         new Container(
-                          child: new Text("0.0",style: TextStyle(color: Colors.white),),
+                          child: new Text("${groundPoint.data[0].ar}",style: TextStyle(color: Colors.white),),
                         )
 
                       ],

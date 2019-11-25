@@ -46,7 +46,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-
   Future<bool> initiateFacebookLogin() async {
     var facebookLogin = FacebookLogin();
     var facebookLoginResult =
@@ -81,6 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
     _isTextObsecured = true;
     _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
       setState(() {
+        print(_currentUser);
         _currentUser = account;
       });
     });
@@ -89,6 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
 
   Future<int> _handleSignIn() async {
+//    print(_googleSignIn.hashCode);
     try {
       await _googleSignIn.signIn();
       String email = _googleSignIn.currentUser.email;
@@ -98,14 +99,13 @@ class _LoginScreenState extends State<LoginScreen> {
       List<String> s = _googleSignIn.currentUser.displayName.split(new RegExp('\\s+'));
       String firstName = s[0];
       int num = await Model.instance.googleLogin(uId, email, fullName, picture, firstName);
+      print(num);
       return num;
 
     } catch (error) {
     }
+    return 0;
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {

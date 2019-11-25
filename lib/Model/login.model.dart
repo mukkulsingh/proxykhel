@@ -96,6 +96,7 @@ class Model{
     });
     if(response.statusCode == 200){
       final res = json.decode(response.body);
+      print(res);
       if(res == null){
         return  0;
       }

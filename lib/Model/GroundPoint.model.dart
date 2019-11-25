@@ -17,6 +17,10 @@ class GroundPointModel{
   
   Future getGroundPoint() async {
     String userid  = await SavedPref.instance.getUserId();
+    print(LeaderBoardModel.instance.getMatchId);
+    print(LeaderBoardModel.instance.getContestId);
+    print(ViewTeamModel.instance.getTeamId);
+
     http.Response response = await http.post("https://www.proxykhel.com/android/score.php",body:{
       "type":"getContestGroundScore",
       "matchId":LeaderBoardModel.instance.getMatchId,

@@ -15,6 +15,7 @@ class LogoutModel{
   void logoutRequest() async {
     final pref = await SharedPreferences.getInstance();
       _googleSignIn.disconnect();
+      _googleSignIn.signOut();
     pref.clear();
   }
 }
